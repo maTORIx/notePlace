@@ -28,6 +28,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
 gem 'slim-rails'
 gem 'paperclip', '~> 5.0.0'
+gem 'ridgepole'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
