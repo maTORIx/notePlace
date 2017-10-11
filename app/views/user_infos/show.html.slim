@@ -1,0 +1,12 @@
+h1 UserInfos#show
+p Find me in app/views/user_infos/show.html.slim
+h4 = @user_info.name
+= @user_info.icon.url
+ul
+  li
+    p description
+    p 
+      = @user_info.description
+  li 
+    p hometown
+    p = @user_info.hometown
