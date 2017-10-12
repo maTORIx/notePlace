@@ -36,3 +36,12 @@ create_table "organizations", force: :cascade, options: "ENGINE=InnoDB DEFAULT C
   t.text "description"
   t.index ["name"], name: "index_organizations_on_name", unique: true
 end
+
+create_table "members", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.integer "organization_id", null: false
+  t.integer "user_id", null: false
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+
+  t.index [:user_id, :organization_id], unique: true
+end

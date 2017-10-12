@@ -1,7 +1,7 @@
 class UserInfosController < ApplicationController
-  # def index
-    
-  # end
+  def index
+    @user_infos = UserInfo.all
+  end
 
   def show
     @user_info = UserInfo.find(params[:id])

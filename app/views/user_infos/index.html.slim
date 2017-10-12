@@ -1,2 +1,4 @@
 h1 UserInfos#index
 p Find me in app/views/user_infos/index.html.slim
+- @user_infos.each do |user_info|
+  = link_to user_info.name, user_info
