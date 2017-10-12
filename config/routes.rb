@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :user_infos
+  resources :user_infos, :path => "users", :except => [:create, :new, :destroy]
 
   get 'home/index'
 
