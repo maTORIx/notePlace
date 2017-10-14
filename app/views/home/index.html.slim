@@ -6,7 +6,7 @@ div#app
       .mdl-layout__header-row
         // Title
         a href="/"
-          img.notePlaceIcon alt="notePlace" src="http://matorixx.com/notePlace.png"
+          img.notePlace-icon alt="notePlace" src="http://matorixx.com/notePlace.png"
         //- if you want hide title when small screen. use this !!
         //- .mdl-layout--large-screen-only
         span.mdl-layout-title NotePlace
@@ -15,7 +15,7 @@ div#app
         nav.mdl-navigation
           - if user_signed_in?
             button#demo-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.marginR10
-              img.user_icon alt="S" src= @current_user.user_info.icon.url
+              img.notePlace-user-icon alt="S" src= @current_user.user_info.icon.url
           - else
             = link_to "login", new_user_session_path, class: "mdl-navigation__link"
           
