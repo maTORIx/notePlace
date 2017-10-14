@@ -29,6 +29,8 @@ gem 'devise'
 gem 'slim-rails'
 gem 'carrierwave', '~> 1.0'
 gem 'ridgepole'
+gem 'webpacker', github: 'rails/webpacker'
+gem 'gon'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

@@ -18,7 +18,7 @@ class OrganizationsController < ApplicationController
     organization_params = params.require(:organization).permit(:name, :description, :icon, :image)
     @organization = Organization.create(organization_params)
     Member.create(user_id: current_user.id, organization_id: @organization.id)
-    redirect_to @organization
+    redirect_to @organization 
   end
 
   def edit

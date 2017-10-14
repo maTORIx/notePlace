@@ -4,12 +4,17 @@ class UserInfosController < ApplicationController
   end
 
   def show
-    @user_info = UserInfo.find(params[:id])
-    @user_info_json = {
+    @user_info = UserInfo.find_by(user_id: params[:id])
+    user_info_json = {
+                        id: @user_info.user_id,
                         name: @user_info.name,
                         icon: @user_info.icon.url,
                         hometown: @user_info.hometown,
                       }.to_json
+    respond_to do |format|
+      format.html
+      format.json { render json: user_info_json}
+    end
   end
 
   def edit
