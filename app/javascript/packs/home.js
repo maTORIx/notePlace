@@ -7,10 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
       user : {},
     }
   })
-
-  fetch("/users/" + gon.user_id + ".json").then((resp) => {
-    return resp.text();
-  }).then((data) => {
-    app.user = JSON.parse(data)
-  })
+  if(gon.user_id) {
+    fetch("/users/" + gon.user_id + ".json").then((resp) => {
+      return resp.text();
+    }).then((data) => {
+      app.user = JSON.parse(data)
+    })
+  }
 })

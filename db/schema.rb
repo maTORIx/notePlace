@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171012060825) do
+ActiveRecord::Schema.define(version: 20171017021411) do
 
   create_table "members", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "organization_id", null: false
     t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "organization_id"], name: "index_members_on_user_id_and_organization_id", unique: true
+  end
+
+  create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "file_name", null: false
+    t.binary "file", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

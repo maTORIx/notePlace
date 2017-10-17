@@ -5,6 +5,10 @@ class UserInfosController < ApplicationController
 
   def show
     @user_info = UserInfo.find_by(user_id: params[:id])
+    if params[:format] == "html" || !params[:format]
+      gon.user_id = current_user.id
+    end
+
     user_info_json = {
                         id: @user_info.user_id,
                         name: @user_info.name,

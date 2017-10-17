@@ -1,1 +1,27 @@
-h1 html!!
+div#app
+  = include_gon
+  = javascript_pack_tag 'user_info.js'
+  .mdl-layout.mdl-js-layout.mdl-layout--fixed-header.notePlace-header
+    header.mdl-layout__header
+      .mdl-layout__header-row
+        // Title
+        a href="/"
+          img.notePlace-icon alt="notePlace" src="http://matorixx.com/notePlace.png"
+        //- if you want hide title when small screen. use this !!
+        //- .mdl-layout--large-screen-only
+        span.mdl-layout-title NotePlace
+        .mdl-layout-spacer
+
+        nav.mdl-navigation
+          - if user_signed_in?
+            button#demo-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.marginR10
+              img.notePlace-user-icon(alt="S" v-bind:src="user.icon")
+          - else
+            = link_to "login", new_user_session_path, class: "mdl-navigation__link"
+          
+          ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='demo-menu-lower-left')
+            a (v-bind:href="'/users/' + user.id" class="mdl-menu__item") Your Account
+            a (v-bind:href="'/users/' + user.id + '/edit'" class="mdl-menu__item") Settings
+            = link_to "logout", destroy_user_session_path, class: "mdl-menu__item", method: "delete"
+  .notePlace-header-space
+  

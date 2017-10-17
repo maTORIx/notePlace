@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'note_files/:id', to: "note_files#show"
+
+  resources :notes, except: [:index]
+
   resources :user_infos, path: "users", except: [:create, :new, :destroy]
 
   resources :organizations,path: "org", except: [:delete], param: :name

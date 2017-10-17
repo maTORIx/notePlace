@@ -1,0 +1,11 @@
+= form_for @note, remote: false do |f|
+  p
+    = f.label :title, "title"
+    br
+    = f.text_field :title
+  p
+    = f.label :note, "file"
+    br
+    = f.file_field :note
+  p
+    = f.submit

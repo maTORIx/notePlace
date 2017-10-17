@@ -45,3 +45,11 @@ create_table "members", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET
 
   t.index [:user_id, :organization_id], unique: true
 end
+
+create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.string "note", null: false
+  t.string "title", null: false
+  t.integer "user_id", null: false
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+end
