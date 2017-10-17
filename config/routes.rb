@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :subscribers, except: ["edit", "update"]
+
+  resources :scopes, except: ["edit", "update"]
+
+  resources :members, except: ["edit", "update"]
+
   get 'note_files/:id', to: "note_files#show"
 
   resources :notes, except: [:index]

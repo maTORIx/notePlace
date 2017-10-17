@@ -68,4 +68,6 @@ create_table "scopes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=
   t.integer "note_id", null: false
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
+
+  t.index [:org_id, :note_id], unique: true
 end
