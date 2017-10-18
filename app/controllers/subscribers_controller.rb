@@ -18,4 +18,19 @@ class SubscribersController < ApplicationController
     @subscriber.destroy
     redirect_to root
   end
+
+  def search
+    @subscribers_json = {}.to_json
+    if params[:from] == "user"
+      subscribers = Subscriber.find_by(user_id: params[:search_id])
+      @subscribers_json = subscribers.map {|data| data.as_json}
+    elsif params[:from] == "org"
+      subscribers = Subscriber.find_by(organization_id: params[:search_id])
+      @subscribers_json = subscribers.map {|data| data.as_json}
+    end
+    
+    respond_to do |format|
+      format.json {render json: @subscribers_json}
+    end
+  end
 end

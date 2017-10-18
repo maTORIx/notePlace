@@ -1,9 +1,13 @@
 Rails.application.routes.draw do
-  resources :subscribers, except: ["edit", "update"]
+  resources :subscribers, except: ["edit", "update", "new"] do
+    collection do
+      get "search/:from/:search_id", to: "subscribers#search"
+    end
+  end
 
-  resources :scopes, except: ["edit", "update"]
+  resources :scopes, except: ["edit", "update", "new"]
 
-  resources :members, except: ["edit", "update"]
+  resources :members, except: ["edit", "update", "new"]
 
   get 'note_files/:id', to: "note_files#show"
 
