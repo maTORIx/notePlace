@@ -64,10 +64,19 @@ create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=u
 end
 
 create_table "scopes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-  t.integer "org_id", null: false
+  t.integer "organization_id", null: false
   t.integer "note_id", null: false
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
 
-  t.index [:org_id, :note_id], unique: true
+  t.index [:organization_id, :note_id], unique: true
+end
+
+create_table "member_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.integer "organization_id", null: false
+  t.integer "user_id", null: false
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+  
+  t.index ["organization_id", "user_id"], unique: true
 end

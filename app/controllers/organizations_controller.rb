@@ -5,6 +5,16 @@ class OrganizationsController < ApplicationController
 
   def show
     @organization = Organization.find_by(name: params[:name])
+    @json = JSON.generate({id: @organization.id,
+                           name: @organization.name,
+                           image: @organization.image.url,
+                           icon: @organization.icon.url,
+                           description: @organization.description
+                          })
+    respond_to do |format|
+      format.html
+      format.json {render json: @json}
+    end
   end
   
   def new
@@ -31,5 +41,24 @@ class OrganizationsController < ApplicationController
     @organization.update(organization_params)
     redirect_to @organization
   end
-  
+
+  def search
+    @org = Organization.find_by(name: params[:name])
+    @json = "[]"
+    if params[:type] == "notes"
+      notes = @org.notes.map {|data| {id: data.id, title: data.title, user_id: data.user_id}}
+      @json = JSON.generate(notes)
+    elsif ["subscriber_users", "member_users", "member_request_users"].include? params[:type]
+      data = @org.send(params[:type]).map do |data|
+        info = data.user_info
+        {id: data.id, name: info.name, description: info.description, icon: info.icon.url}
+      end
+      @json = JSON.generate(data)
+    end
+
+    respond_to do |format|
+      format.html { render json: @json}
+      format.json { render json: @json}
+    end
+  end
 end

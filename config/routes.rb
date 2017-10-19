@@ -1,21 +1,29 @@
 Rails.application.routes.draw do
-  resources :subscribers, except: ["edit", "update", "new"] do
-    collection do
-      get "search/:from/:search_id", to: "subscribers#search"
-    end
-  end
+  resources :subscribers, except: ["edit", "update", "new"]
 
   resources :scopes, except: ["edit", "update", "new"]
 
   resources :members, except: ["edit", "update", "new"]
 
-  get 'note_files/:id', to: "note_files#show"
+  resources :member_requests, except: ["edit", "update", "new"]
 
-  resources :notes, except: [:index]
+  resources :notes, except: [:index] do
+    member do
+      get "file", to: "notes#files"
+    end
+  end
 
-  resources :user_infos, path: "users", except: [:create, :new, :destroy]
+  resources :user_infos, path: "users", except: [:create, :new, :destroy] do
+    member do
+      get ":type", to: "user_infos#search"
+    end
+  end
 
-  resources :organizations,path: "org", except: [:delete], param: :name
+  resources :organizations, path: "org", except: [:delete], param: :name do
+    member do
+      get ":type", to: "organizations#search"
+    end
+  end
 
   root "home#index"
 

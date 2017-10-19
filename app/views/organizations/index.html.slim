@@ -1,4 +1,4 @@
 h1 UserInfos#index
 p Find me in app/views/organization/index.html.slim
 - @organizations.each do |org|
-  =link_to org.name , org
+  p = link_to org.name , "/org/#{org.name}"

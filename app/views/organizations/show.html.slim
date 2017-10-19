@@ -4,3 +4,5 @@ image src= @organization.icon.url width="50" height="50"
 
 h5 description
 p = @organization.description
+
+p = link_to "subscribe", subscribers_url(params: { subscriber: { organization_id: @organization.id } }), method: :post
