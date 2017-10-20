@@ -4,10 +4,15 @@ class NotesController < ApplicationController
     note_json = {
                   id: @note.id,
                   title: @note.title,
+                  user_id: @note.user_id
                 }.to_json
+    if current_user  && [nil, "html"].include?(params[:format])
+      gon.user_id = current_user.id
+      gon.note_id = @note.id
+    end
     respond_to do |format|
       format.html
-      format.json { render json: note_json}
+      format.json { render json: note_json }
     end
   end
 

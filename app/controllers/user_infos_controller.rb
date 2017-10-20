@@ -13,6 +13,7 @@ class UserInfosController < ApplicationController
                         id: @user_info.user_id,
                         name: @user_info.name,
                         icon: @user_info.icon.url,
+                        description: @user_info.description,
                         hometown: @user_info.hometown,
                       })
     respond_to do |format|

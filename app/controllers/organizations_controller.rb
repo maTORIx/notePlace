@@ -11,6 +11,10 @@ class OrganizationsController < ApplicationController
                            icon: @organization.icon.url,
                            description: @organization.description
                           })
+    if current_user && [nil, "html"].include?(params[:format])
+      gon.user_id = current_user.id
+      gon.organization_id = @organization.id
+    end
     respond_to do |format|
       format.html
       format.json {render json: @json}

@@ -14,14 +14,35 @@ div#app
 
         nav.mdl-navigation
           - if user_signed_in?
-            button#demo-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.marginR10
-              img.notePlace-user-icon(alt="S" v-bind:src="user.icon")
+            button.mdl-button.mdl-js-button.marginR10
+              img#user-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.notePlace-user-icon(alt="S" v-bind:src="user.icon")
           - else
             = link_to "login", new_user_session_path, class: "mdl-navigation__link"
           
-          ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='demo-menu-lower-left')
+          ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='user-menu-lower-left')
             a (v-bind:href="'/users/' + user.id" class="mdl-menu__item") Your Account
             a (v-bind:href="'/users/' + user.id + '/edit'" class="mdl-menu__item") Settings
             = link_to "logout", destroy_user_session_path, class: "mdl-menu__item", method: "delete"
   .notePlace-header-space
-  = "{{user}}"
+  .mdl-grid
+    .mdl-cell.mdl-cell--4-col
+      p a
+    .mdl-cell.mdl-cell--4-col
+      p b
+    .mdl-cell.mdl-cell--4-col
+      .mdl-card.mdl-shadow--2dp.notePlace-card.notePlace-card-scroll
+        .mdl-card__title.notePlace-card-header
+          img.notePlace-user-icon(alt="S" v-bind:src="user.icon")
+          h2.mdl-card__title-text.notePlace-card-header-text = "{{user.name}}"
+        div.mdl-card__supporting-text.notePlace-card-text
+          p = "{{user.description}}"
+          p = "Home Town: {{user.hometown}}"
+      .mdl-card.mdl-shadow--2dp.notePlace-card.notePlace-card-scroll
+        .mdl-card__title.notePlace-card-header
+          button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--fab.mdl-button--mini-fab.notePlace-button-circle
+            a(href="/notes/new")
+              p +
+          h2.mdl-card__title-text.notePlace-card-header-text Note
+        div.mdl-card__supporting-text
+          p this is a test card for debug
+  
