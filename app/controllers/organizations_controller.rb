@@ -50,7 +50,7 @@ class OrganizationsController < ApplicationController
     @org = Organization.find_by(name: params[:name])
     @json = "[]"
     if params[:type] == "notes"
-      notes = @org.notes.map {|data| {id: data.id, title: data.title, user_id: data.user_id}}
+      notes = @org.notes.map {|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
       @json = JSON.generate(notes)
     elsif ["subscriber_users", "member_users", "member_request_users"].include? params[:type]
       data = @org.send(params[:type]).map do |data|

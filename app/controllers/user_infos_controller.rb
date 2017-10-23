@@ -37,7 +37,7 @@ class UserInfosController < ApplicationController
     @user = User.find(params[:id])
     @json = "[]"
     if params[:type] == "notes"
-      notes = @user.notes.map {|data| {id: data.id, title: data.title, user_id: data.user_id}}
+      notes = @user.notes.map {|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
       @json = JSON.generate(notes)
     elsif ["subscriber_organizations", "member_organizations", "member_request_organizations"].include? params[:type]
       data = @user.send(params[:type]).map {|data| {id: data.id, name: data.name, description: data.description, icon: data.icon.url}}

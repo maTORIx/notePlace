@@ -3,6 +3,10 @@ body {
   font-family: Arial;
 }
 
+p {
+  word-wrap: break-word;
+}
+
 .notePlace-user-icon {
   width: 35px;
   height: 35px;
@@ -29,35 +33,65 @@ body {
   height: 55px;
 }
 
-.notePlace-card {
-  width: 96%;
+.notePlace-info-card {
+  width: 90%;
+  min-width: 250px;
   margin: 10px;
-  min-width: 200px;
+  height: 40%;
+}
+
+.notePlace-default-card {
+  width: 90%;
+  min-width: 230px;
+  margin: 10px auto;
+  height: auto;
+  min-height: 60px;
+  max-height: 250px;
 }
 
 .notePlace-card-scroll {
-  heights: 40%;
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
-.notePlace-card-header {
+.notePlace-card-info-header {
   background-color: rgb(64, 81, 180);
-  height: 60px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.notePlace-card-default-header {
+  background-color: #a9d0d3;
+  height: 40px;
 }
 
 .notePlace-card-header-text {
   margin: auto 0 auto 10px;
   color: white;
   font-family: Arial;
+  text-align: center;
+  font-size: 24px;
+  height: auto;
+  width: auto;
+  min-height: 0px;
 }
 
 .notePlace-card-text {
+  width: 90%;
+  margin: auto 5px;
   color: black;
 }
 
 .notePlace-button-circle {
-  margin: auto 0 auto 10px;
+  margin: auto 0;
   bottom: 5px;
   color: white;
   font-weight: bold;
   text-align: center;
+  width: 35px;
+  height: 35px;
+  min-width: 0px;
+  min-height: 0px;
+  border-radius: 50%;
 }

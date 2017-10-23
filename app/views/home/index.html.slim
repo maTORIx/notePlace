@@ -4,7 +4,6 @@ div#app
   .mdl-layout.mdl-js-layout.mdl-layout--fixed-header.notePlace-header
     header.mdl-layout__header
       .mdl-layout__header-row
-        // Title
         a href="/"
           img.notePlace-icon(alt="notePlace" src="http://matorixx.com/notePlace.png")
         //- if you want hide title when small screen. use this !!
@@ -28,21 +27,29 @@ div#app
     .mdl-cell.mdl-cell--4-col
       p a
     .mdl-cell.mdl-cell--4-col
-      p b
-    .mdl-cell.mdl-cell--4-col
-      .mdl-card.mdl-shadow--2dp.notePlace-card.notePlace-card-scroll
-        .mdl-card__title.notePlace-card-header
+      .mdl-card.mdl-shadow--2dp.notePlace-info-card.notePlace-card-scroll
+        .mdl-card__title.notePlace-card-info-header
           img.notePlace-user-icon(alt="S" v-bind:src="user.icon")
           h2.mdl-card__title-text.notePlace-card-header-text = "{{user.name}}"
         div.mdl-card__supporting-text.notePlace-card-text
           p = "{{user.description}}"
           p = "Home Town: {{user.hometown}}"
-      .mdl-card.mdl-shadow--2dp.notePlace-card.notePlace-card-scroll
-        .mdl-card__title.notePlace-card-header
-          button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--fab.mdl-button--mini-fab.notePlace-button-circle
-            a(href="/notes/new")
-              p +
+    .mdl-cell.mdl-cell--4-col
+      .mdl-card.mdl-shadow--2dp.notePlace-info-card.notePlace-card-scroll
+        .mdl-card__title.notePlace-card-info-header
+          img.notePlace-user-icon(alt="S" v-bind:src="user.icon")
+          h2.mdl-card__title-text.notePlace-card-header-text = "{{user.name}}"
+        .mdl-card__supporting-text.notePlace-card-text
+          p = "{{user.description}}"
+          p = "Home Town: {{user.hometown}}"
+      .mdl-card.mdl-shadow--2dp.notePlace-info-card
+        .mdl-card__title.notePlace-card-info-header
+          button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--fab.notePlace-button-circle +
           h2.mdl-card__title-text.notePlace-card-header-text Note
-        div.mdl-card__supporting-text
-          p this is a test card for debug
+        .notePlace-card-scroll
+          .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="note in user_notes")
+            .mdl-card__title.notePlace-card-default-header
+              a.notePlace-card-header-text(v-bind:href="'notes/' + note.id") = "{{note.title}}"
+            div.mdl-card__supporting-text.notePlace-card-text.notePlace-card-scroll
+              p(v-html="parseHTML(note.description)")
   

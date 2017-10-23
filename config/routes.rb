@@ -9,19 +9,19 @@ Rails.application.routes.draw do
 
   resources :notes, except: [:index] do
     member do
-      get "file", to: "notes#file"
+      get "file", to: "notes#files"
     end
   end
 
   resources :user_infos, path: "users", except: [:create, :new, :destroy] do
     member do
-      get ":type", to: "user_infos#search"
+      get "info/:type", to: "user_infos#search"
     end
   end
 
   resources :organizations, path: "org", except: [:delete], param: :name do
     member do
-      get "full", to: "organizations#search"
+      get "info/:type", to: "organizations#search"
     end
   end
 
