@@ -24,32 +24,24 @@ div#app
             = link_to "logout", destroy_user_session_path, class: "mdl-menu__item", method: "delete"
   .notePlace-header-space
   .mdl-grid
-    .mdl-cell.mdl-cell--4-col
+    .mdl-cell.mdl-cell--3-col
       p a
-    .mdl-cell.mdl-cell--4-col
-      .mdl-card.mdl-shadow--2dp.notePlace-info-card.notePlace-card-scroll
-        .mdl-card__title.notePlace-card-info-header
-          img.notePlace-user-icon(alt="S" v-bind:src="user.icon")
-          h2.mdl-card__title-text.notePlace-card-header-text = "{{user.name}}"
-        div.mdl-card__supporting-text.notePlace-card-text
-          p = "{{user.description}}"
-          p = "Home Town: {{user.hometown}}"
-    .mdl-cell.mdl-cell--4-col
-      .mdl-card.mdl-shadow--2dp.notePlace-info-card.notePlace-card-scroll
-        .mdl-card__title.notePlace-card-info-header
-          img.notePlace-user-icon(alt="S" v-bind:src="user.icon")
-          h2.mdl-card__title-text.notePlace-card-header-text = "{{user.name}}"
-        .mdl-card__supporting-text.notePlace-card-text
-          p = "{{user.description}}"
-          p = "Home Town: {{user.hometown}}"
-      .mdl-card.mdl-shadow--2dp.notePlace-info-card
-        .mdl-card__title.notePlace-card-info-header
-          button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--fab.notePlace-button-circle +
-          h2.mdl-card__title-text.notePlace-card-header-text Note
-        .notePlace-card-scroll
-          .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="note in user_notes")
-            .mdl-card__title.notePlace-card-default-header
-              a.notePlace-card-header-text(v-bind:href="'notes/' + note.id") = "{{note.title}}"
-            div.mdl-card__supporting-text.notePlace-card-text.notePlace-card-scroll
-              p(v-html="parseHTML(note.description)")
+    .mdl-cell.mdl-cell--9-col
+      //- .mdl-card.mdl-shadow--2dp.notePlace-info-card.notePlace-card-scroll
+      //-   .mdl-card__title.notePlace-card-info-header
+      //-     img.notePlace-user-icon(alt="S" v-bind:src="user.icon")
+      //-     h2.mdl-card__title-text.notePlace-card-header-text = "{{user.name}}"
+      //-   .mdl-card__supporting-text.notePlace-card-text
+      //-     p = "{{user.description}}"
+      //-     p = "Home Town: {{user.hometown}}"
+      //- .mdl-card.mdl-shadow--2dp.notePlace-info-card
+      //-   .mdl-card__title.notePlace-card-info-header
+      //-     button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--fab.notePlace-button-circle +
+      //-     div.mdl-card__title-text.notePlace-card-header-text Note
+      //-   .notePlace-card-scroll
+      //-     .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="note in user_notes")
+      //-       .mdl-card__title.notePlace-card-default-header
+      //-         a.notePlace-card-header-text(v-bind:href="'notes/' + note.id") = "{{note.title}}"
+      //-       div.notePlace-card-text.notePlace-card-scroll
+      //-         p(v-html="parseHTML(note.description)")
   
