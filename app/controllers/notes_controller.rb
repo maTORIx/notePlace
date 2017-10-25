@@ -4,7 +4,9 @@ class NotesController < ApplicationController
     note_json = {
                   id: @note.id,
                   title: @note.title,
-                  user_id: @note.user_id
+                  user_id: @note.user_id,
+                  description: @note.description,
+                  filename: @note.note.file.filename
                 }.to_json
     if current_user  && [nil, "html"].include?(params[:format])
       gon.user_id = current_user.id
@@ -46,7 +48,6 @@ class NotesController < ApplicationController
   def file
     @note = Note.find(params[:id])
     full_path = @note.note.current_path
-    image = File.binread(full_path)
-    send_data image, :disposition => 'inline'
+    send_file full_path, file_name: @note.note.file.filename
   end
 end

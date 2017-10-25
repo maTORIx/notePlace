@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :notes, except: [:index] do
     member do
-      get "file", to: "notes#files"
+      get "file", to: "notes#file"
     end
   end
 

@@ -39,6 +39,15 @@ class UserInfosController < ApplicationController
     if params[:type] == "notes"
       notes = @user.notes.map {|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
       @json = JSON.generate(notes)
+    elsif params[:type] == "timeline"
+      orgs = @user.subscriber_organizations
+      result = []
+      orgs.each do |org|
+        org.notes.each do |data|
+          result.push({id: data.id, title: data.title, description: data.description, user_id: data.user_id})
+        end
+      end
+      @json = JSON.generate(result)
     elsif ["subscriber_organizations", "member_organizations", "member_request_organizations"].include? params[:type]
       data = @user.send(params[:type]).map {|data| {id: data.id, name: data.name, description: data.description, icon: data.icon.url}}
       @json = JSON.generate(data)

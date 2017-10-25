@@ -14,6 +14,10 @@ p {
   border: solid 1px black;
 }
 
+.notePlace-ground {
+  display: flex;
+}
+
 .marginL10 {
   margin-left: 10px;
 }
@@ -22,11 +26,16 @@ p {
   margin-right: 10px;
 }
 
+
 .notePlace-icon {
   width: 40px;
   height: 40px;
   float: left;
   margin-right: 10px;
+}
+
+.notePlace-header {
+  min-width: 400px;
 }
 
 .notePlace-header-space {
@@ -36,18 +45,73 @@ p {
 .notePlace-info-card {
   width: 90%;
   min-width: 250px;
-  margin: 10px;
+  margin: 10px auto;
   height: auto;
   max-height: 40%;
+  margin: 10px auto;
+  
+  .notePlace-card-header {
+    background-color: rgb(64, 81, 180);
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .notePlace-card-header-text {
+      font-family: Arial;
+      font-size: 24px;
+      color: white;
+    }
+  }
+
+  .notePlace-card-body {
+    margin: 10px auto;
+    width: 90%;
+  }
+}
+
+.notePlace-note-card {
+  width: 94%;
+  margin: 10px auto;
+  background-color: #f4f4f4;
+  height: auto;
+}
+
+.notePlace-note-body-card {
+  width: 90%;
+  margin: 10px auto;
+}
+
+.notePlace-ground-card {
+  margin: 10px auto;
+  min-width: 400px;
+  width: 70%;
+  height: auto;
+  background-color: #f4f4f4;
+  // display: block;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  flex-flow: row wrap;
+
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.grid-item {
+  float: left;
 }
 
 .notePlace-default-card {
-  width: 90%;
-  min-width: 230px;
-  margin: 10px auto;
+  margin: 5px 5px;
   height: auto;
-  min-height: 60px;
-  max-height: 250px;
+  min-height: 10px;
+  width: 200px;
+  flex-basis: auto;
+  flex-grow: 1;
 }
 
 .notePlace-card-scroll {
@@ -55,40 +119,30 @@ p {
   overflow-y: scroll;
 }
 
-.notePlace-card-info-header {
-  background-color: rgb(64, 81, 180);
-  height: 50px;
-}
-
 .notePlace-card-default-header {
   background-color: #a9d0d3;
   height: 40px;
 }
 
-.notePlace-card-header-text {
-  margin: auto 0 auto 10px;
-  color: white;
-  font-family: Arial;
-  text-align: center;
-  font-size: 24px;
+.notePlace-card-text-field {
+  margin: 5px auto;
   min-height: 0px;
+  width: 94%;
+  color: black;
+  font-family: Arial;
 }
 
-.notePlace-card-text {
+.notePlace-card-header-text {
   width: 90%;
   margin: 5px;
   color: black;
 }
 
-.notePlace-button-circle {
-  margin: auto 0;
-  bottom: 5px;
-  color: white;
-  font-weight: bold;
-  text-align: center;
-  width: 35px;
-  height: 35px;
-  min-width: 0px;
-  min-height: 0px;
-  border-radius: 50%;
+.notePlace-user-info-field {
+  display: flex;
+  align-items: center;
+  background-color: #efeaea;
+  .notePlace-user-icon {
+    margin: 0px 10px 0px 10px;
+  }
 }

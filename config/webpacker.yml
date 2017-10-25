@@ -12,7 +12,11 @@ default: &default
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
-
+  
+  module:
+    loaders:
+      - test: masonry-layout
+        loader: imports-loader
   extensions:
     - .coffee
     - .erb
