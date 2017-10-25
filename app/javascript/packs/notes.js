@@ -100,6 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
       var note_body = document.querySelector("#note_body")
       switch (app.note_extension) {
         case "pdf":
+          var url = URL.createObjectURL(app.noteFile)
+          var iframe = document.createElement("iframe")
+          iframe.src = url + "#view=fit&toolbar=0&navpanes=0"
+          iframe.height = String(window.parent.screen.height - 200) + "px"
+          note_body.appendChild(iframe)
           return
         case "md":
           note_body.innerHTML = marked(app.noteFile)
