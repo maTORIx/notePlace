@@ -20,6 +20,9 @@ class NotesController < ApplicationController
 
   def new
     @note = Note.new
+    if current_user  && [nil, "html"].include?(params[:format])
+      gon.user_id = current_user.id
+    end
   end
 
   def create
@@ -29,7 +32,11 @@ class NotesController < ApplicationController
   end
   
   def edit
-     @note = Note.find(params[:id])
+    @note = Note.find(params[:id])
+    if current_user  && [nil, "html"].include?(params[:format])
+      gon.user_id = current_user.id
+      gon.note_id = @note.id
+    end
   end
   
   def update
@@ -42,12 +49,33 @@ class NotesController < ApplicationController
   def destory
     @note = Note.find(params[:id])
     @note.destory
-    redirect_to root
+    redirect_to "/"
   end
 
   def file
     @note = Note.find(params[:id])
     full_path = @note.note.current_path
     send_file full_path, file_name: @note.note.file.filename
+  end
+
+  def info
+    @note = Note.find(params[:id])
+    @json = "[]"
+    if params[:type] == "organizations"
+      data = @note.organizations.map do |org|
+        {id: org.id, name: org.name, description: org.description, icon: org.icon.url}
+      end
+      @json = JSON.generate(data)
+    elsif params[:type] == "scopes"
+      data = @note.scopes.map do |scope|
+        {id: scope.id, note_id: scope.note_id, organization_id: scope.organization_id}
+      end
+      @json = JSON.generate(data)
+    end
+
+    respond_to do |format|
+      format.html { render json: @json}
+      format.json { render json: @json}
+    end
   end
 end

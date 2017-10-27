@@ -22,11 +22,13 @@ div#app
             a (v-bind:href="'/users/' + user.id" class="mdl-menu__item") Your Account
             a (v-bind:href="'/users/' + user.id + '/edit'" class="mdl-menu__item") Settings
             = link_to "logout", destroy_user_session_path, class: "mdl-menu__item", method: "delete"
-  .notePlace-header-space
-  .notePlace-note-card
-    .mdl-card.mdl-shadow--2dp.notePlace-info-card
-      .notePlace-card-header
-        .notePlace-card-header-text= "{{note.title}}"
-      .notePlace-card-body
-        p(v-html="parseHTML(note.description)")
-    .mdl-card.mdl-shadow--2dp.notePlace-note-body-card#note_body
+            
+    .notePlace-note-card
+      .mdl-card.mdl-shadow--2dp.notePlace-info-card
+        .notePlace-card-header
+          img#user-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="author.icon" v-on:click="redirectTo('/users/' + author.id)")
+          .notePlace-card-header-text= "{{note.title}}"
+          button.mdl-button.mdl-js-button.notePlace-button(v-if="user.id == author.id" v-on:click="redirectTo('/notes/' + note.id + '/edit')") edit
+        .notePlace-card-body
+          p(v-html="parseHTML(note.description)")
+      .mdl-card.mdl-shadow--2dp.notePlace-note-body-card#note_body

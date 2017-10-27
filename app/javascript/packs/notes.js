@@ -39,10 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
           return note_users[0]
         }
       },
-      redirectTo: function(note) {
-        location.href = `/notes/${note.id}`
+      redirectTo: function(url) {
+        location.href = url
         return
-      }
+      },
     },
     computed: {
       note_extension : function() {

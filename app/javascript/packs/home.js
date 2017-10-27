@@ -1,8 +1,19 @@
 import Vue from 'vue/dist/vue.min.js'
-import Masonry from "masonry-layout/dist/masonry.pkgd.js"
+import marked from 'marked/marked.min.js'
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("hello")
+  //marked settings
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false
+  });
+
   var app = new Vue({
     el: '#app',
     data: {
@@ -13,18 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     methods: {
       parseHTML: function(src) {
-        var result = src.replace(/[&'`"<>]/g, function(match) {
-          return {
-            '&': '&amp;',
-            "'": '&#x27;',
-            '`': '&#x60;',
-            '"': '&quot;',
-            '<': '&lt;',
-            '>': '&gt;',
-          }[match]
-        });
-        result = result.split("\n").join("<br>")
-        console.log(result)
+        var result = marked(src)
         return result
       },
       getUser: function(note) {
@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
           return note_users[0]
         }
       },
-      redirectTo: function(note) {
-        location.href = `/notes/${note.id}`
+      redirectTo: function(url) {
+        location.href = url
         return
       }
     },

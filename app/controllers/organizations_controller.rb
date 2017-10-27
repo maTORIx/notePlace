@@ -46,7 +46,7 @@ class OrganizationsController < ApplicationController
     redirect_to @organization
   end
 
-  def search
+  def info
     @org = Organization.find_by(name: params[:name])
     @json = "[]"
     if params[:type] == "notes"

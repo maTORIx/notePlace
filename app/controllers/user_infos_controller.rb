@@ -33,7 +33,7 @@ class UserInfosController < ApplicationController
     redirect_to @user_info
   end
 
-  def search
+  def info
     @user = User.find(params[:id])
     @json = "[]"
     if params[:type] == "notes"

@@ -8,12 +8,17 @@ class ScopesController < ApplicationController
   end
 
   def create
-    scope_params = params.require(:scope).permit(:note_id)
+    p "-----------------"
+    p params
+    scope_params = params.require(:scope).permit(:note_id, :organization_id)
     @note =  Note.find(scope_params[:note_id])
+    @org = Organization.find_by(id: scope_params[:organization_id])
     if current_user.id != @note.user_id
       render :forbidden
+    elsif @org == nil
+      render :forbidden
     end
-    @scope = @note.scope.create(scope_params)
+    @scope = Scope.create(scope_params)
     redirect_to @scope
   end
 
@@ -21,25 +26,6 @@ class ScopesController < ApplicationController
     @scope = Scope.find(params[:id])
     if current_user.id == @scope.note.user.id
     @scope.destroy
-    redirect_to root
-  end
-
-  def search
-    @scopes_json = "[]"
-    if params[:from] == "note_id"
-      scopes = Scope.where(user_id: params[:search_id])
-      if scopes != nil
-        @scopes_json = "[" + scopes.map {|data| data.as_json}.join(",") + "]"
-      end
-    elsif params[:from] == "org_id"
-      scopes = Scope.where(organization_id: params[:search_id])
-      if scopes != nil
-        @scopes_json = "[" + scopes.map {|data| data.as_json}.join(",") + "]"
-      end
-    end
-    respond_to do |format|
-      format.json {render json: @scopes_json}
-      format.json {render json: @scopes_json}
     end
   end
 end

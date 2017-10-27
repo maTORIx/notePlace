@@ -1,3 +1,30 @@
-h1 Notes#edit
-p Find me in app/views/notes/edit.html.slim
-= render "form"
+div#app
+  = include_gon
+  = javascript_pack_tag 'note_edit.js'
+  div.mdl-layout.mdl-js-layout.mdl-layout--fixed-header
+    header.mdl-layout__header
+      .mdl-layout__header-row
+        a href="/"
+          img.notePlace-icon(alt="notePlace" src="http://matorixx.com/notePlace.png")
+        //- if you want hide title when small screen. use this !!
+        //- .mdl-layout--large-screen-only
+        span.mdl-layout-title NotePlace
+        .mdl-layout-spacer
+
+        nav.mdl-navigation
+          - if user_signed_in?
+            button.mdl-button.mdl-js-button.marginR10
+              img#user-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.notePlace-user-icon(alt="S" v-bind:src="user.icon")
+          - else
+            = link_to "login", new_user_session_path, class: "mdl-navigation__link"
+          
+          ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='user-menu-lower-left')
+            a (v-bind:href="'/users/' + user.id" class="mdl-menu__item") Your Account
+            a (v-bind:href="'/users/' + user.id + '/edit'" class="mdl-menu__item") Settings
+            = link_to "logout", destroy_user_session_path, class: "mdl-menu__item", method: "delete"
+    .notePlace-note-card
+      .mdl-card.mdl-shadow--2dp.notePlace-info-card
+        .notePlace-card-header
+          .notePlace-card-header-text edit
+        .notePlace-card-body
+          = render "form"
