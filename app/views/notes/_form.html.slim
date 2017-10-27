@@ -4,21 +4,21 @@ div.notePlace-center
     input.mdl-textfield__input(autocomplete="on" list="orglist" v-model="input_scope_name")
     datalist#orglist
       option(v-bind:value="org.name" v-for="org in orgs")
-  button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent(v-on:click="addScope(input_scope_name)") add
+  button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent(v-on:click="addScopeData(input_scope_name)") add
 br
 span.mdl-chip.mdl-chip--deletable(v-for="scope in scopes")
   span.mdl-chip__text = "{{scope.name}}"
-  button.mdl-chip__action(style="font-size: 18px;" v-on:click="deleteScope(scope)") ×
-= form_for @note, remote: false do |f|
+  button.mdl-chip__action(style="font-size: 18px;" v-on:click="deleteScopeData(scope)") ×
+form(v-on:submit="submitNote" name="note" id="form")
   div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-    = f.label :title, "title", class: "mdl-textfield__label"
-    = f.text_field :title, class: "mdl-textfield__input"
+    label.mdl-textfield__label title
+    input.mdl-textfield__input(v-model="form.title" name="title")
   br
   div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-    = f.label :description, "description", class: "mdl-textfield__label"
-    = f.text_area :description, class: "mdl-textfield__input"
+    label.mdl-textfield__label description
+    textarea.mdl-textfield__input(v-model="form.description" name="description")
   
   p 
-    = f.file_field :note
+    input(type="file" v-on:change="selectedFile" name="note")
   p
-    = f.submit
+    button(type="submit") send

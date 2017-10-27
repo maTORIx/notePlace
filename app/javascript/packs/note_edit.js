@@ -2,6 +2,7 @@ import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
 
 document.addEventListener('DOMContentLoaded', () => {
+  var original_scopes = [];
   //marked settings
   marked.setOptions({
     renderer: new marked.Renderer(),
@@ -30,9 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
     data: {
       "user" : {},
       "note" : [],
-      "scopes" : [{name: "user"}],
+      "scopes" : [],
+      "scopes_change": {add: [], delete: []},
       "orgs" : [],
-      "input_scope_name": ""
+      "input_scope_name": "",
+      "form": {title: "", description: "", note: null}
     },
     methods: {
       parseHTML: function(src) {
@@ -43,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         location.href = `/notes/${note.id}`
         return
       },
-      addScope: function(org_name) {
+      addScopeData: function(org_name) {
         var searched_orgs = this.orgs.filter(function(org, idx, users) {
           return org.name === org_name
         })
@@ -51,6 +54,23 @@ document.addEventListener('DOMContentLoaded', () => {
           return
         }
         var org = searched_orgs[0]
+        if (!(this.scopes.includes(org))) {
+          this.scopes.push(org)
+          if(this.scopes_change.delete.includes(org)) {
+            this.scopes_change.delete.splice(this.scopes_change.delete.indexOf(org), 1)
+          }
+          this.scopes_change.add.push(org)
+        }
+      },
+      deleteScopeData: function(organization) {
+        this.scopes.splice(app.scopes.indexOf(organization), 1)
+        if(this.scopes_change.add.includes(organization)) {
+          this.scopes_change.add.splice(this.scopes_change.add.indexOf(organization), 1)
+        }
+        this.scopes_change.delete.push(organization)
+      },
+      addScope: function(org) {
+        console.log(this.note)
         fetch("/scopes", {
           method: 'POST',
           credentials: 'same-origin',
@@ -59,14 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
               'X-CSRF-Token': getCsrfToken()
           },
           body: JSON.stringify({"scope":{
-                                  "note_id": gon.note_id,
+                                  "note_id": this.note.id,
                                   "organization_id": org.id
                                 }
           })
-        }).then((resp) => {
-          if(resp.status >= 200 && resp.status < 300) {
-            getNoteInfo()
-          }
         })
       },
       deleteScope: function(organization) {
@@ -90,29 +106,82 @@ document.addEventListener('DOMContentLoaded', () => {
                 'X-CSRF-Token': getCsrfToken()
             },
           })
+        })
+      },
+      submitNote: function(event) {
+        event.preventDefault();
+        if(gon.note_id) {
+          this.updateNote()
+        } else {
+          this.createNote()
+        }
+      },
+      createNote: function() {
+        var formData = new FormData()
+        formData.append("note",this.form.note)
+        formData.append("title",this.form.title)
+        formData.append("description",this.form.description)
+        formData.append("permit",true)
+        fetch("/notes", {
+          method: "POST",
+          credentials: 'same-origin',
+          headers: {
+              'X-CSRF-Token': getCsrfToken()
+          },
+          body: formData
         }).then((resp) => {
-          if(resp.status >= 200 && resp.status < 300) {
-            getNoteInfo()
-            console.log(resp.text);
+          if (resp.status >= 200 && resp.status <= 300) {
+            return resp.text()
+          } else {
+            throw "Can not send data"
+          }
+        }).then((data) => {
+          this.note = JSON.parse(data)
+          this.updateScope()
+        })
+      },
+      updateNote: function() {
+        var formData = new FormData()
+        formData.append("note",this.form.note)
+        formData.append("title",this.form.title)
+        formData.append("description",this.form.description)
+        formData.append("permit",true)
+        fetch("/notes/" + gon.note_id, {
+          method: "PUT",
+          credentials: 'same-origin',
+          headers: {
+              'X-CSRF-Token': getCsrfToken()
+          },
+          body: formData
+        }).then((resp) => {
+          if (resp.status >= 200 && resp.status <= 300) {
+            this.updateScope()
+          } else {
+            throw "Can not send data"
           }
         })
-      }
+      },
+      updateScope: function() {
+        for(var scope of this.scopes_change.add) {
+          console.log(scope)
+          this.addScope(scope);
+        }
+
+        for(var scope of this.scopes_change.delete) {
+          this.deleteScope(scope);
+        }
+      },
+      selectedFile: function(e) {
+        // 選択された File の情報を保存しておく
+        let file = e.target.files[0];
+        this.form.note = file;
+      },
     },
     computed: {
       candidate_orgs: function() {
         return []
       }
     },
-    watch: {
-      notes: {
-        handler: function(val) {
-          this.$nextTick(function() {
-            console.log("update")
-          })
-        },
-        deep: true
-      },
-    }
   })
 
   function getUserInfo() {
@@ -133,11 +202,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getNoteInfo() {
     if(gon.note_id) {
-      fetch(`/notes/${gon.note_id}/info/organizations`).then((resp) => {
+      fetch(`/notes/${gon.note_id}.json`).then((resp) => {
         return resp.text()
       }).then((data) => {
-        var member_orgs = JSON.parse(data)
-        app.scopes = member_orgs
+        app.form = JSON.parse(data)
+        app.note = JSON.parse(data)
+        return fetch(`/notes/${gon.note_id}/info/organizations`)
+      }).then((resp) => {
+        return resp.text()
+      }).then((data) => {
+        var orgs = JSON.parse(data)
+        app.scopes = orgs
       })
     }
   }

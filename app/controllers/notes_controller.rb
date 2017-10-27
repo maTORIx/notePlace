@@ -26,9 +26,9 @@ class NotesController < ApplicationController
   end
 
   def create
-    note_params = params.require(:note).permit(:note, :title, :description)
+    note_params = params.permit(:title, :description, :note)
     @note = current_user.notes.create(note_params)
-    redirect_to @note
+    render json: JSON.generate({id: @note.id, title: @note.title, description: @note.description})
   end
   
   def edit
@@ -40,10 +40,10 @@ class NotesController < ApplicationController
   end
   
   def update
-    note_params = params.require(:note).permit(:note, :title, :description)
+    note_params = params.permit(:title, :description, :note)
     @note = Note.find(params[:id])
     @note.update(note_params)
-    redirect_to @note
+    render json: JSON.generate({id: @note.id, title: @note.title, description: @note.description})
   end
   
   def destory
