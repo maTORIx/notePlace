@@ -41,6 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
       redirectTo: function(url) {
         location.href = url
         return
+      },
+      addTimeline: function() {
+        var show_length = this.timeline.length + 100
+        if (this.notes.length < 100) {
+          show_length = this.notes.length - 1
+        }
+        for(var i = this.timeline.length; i < show_length; i++) {
+          var note = this.notes[i]
+          note["user"] = this.getUser(app.notes[i])
+          app.timeline.push(note)
+        }
+        return
       }
     },
     watch: {
@@ -54,46 +66,50 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     }
   })
-  if(gon.user_id) {
-    fetch("/users/" + gon.user_id + ".json").then((resp) => {
-      return resp.text();
-    }).then((data) => {
-      app.user = JSON.parse(data)
-    })
-    fetch("/users/" + gon.user_id + "/info/notes.json").then((resp) => {
-      return resp.text();
-    }).then((data) => {
-      var notes = JSON.parse(data)
-      app.notes = notes
 
-      var user_ids = notes.map(function(data){
-        return data.user_id
+  function getUserInfo() {
+    if(gon.user_id) {
+      fetch("/users/" + gon.user_id + ".json").then((resp) => {
+        return resp.text();
+      }).then((data) => {
+        app.user = JSON.parse(data)
       })
-      
-      user_ids = user_ids.filter(function(x, i, self) {
-        return self.indexOf(x) === i
-      })
+      fetch("/users/" + gon.user_id + "/info/timeline.json").then((resp) => {
+        return resp.text();
+      }).then((data) => {
+        var notes = JSON.parse(data)
+        app.notes = notes
 
-      var urls = user_ids.map(function(user_id) {
-        return `/users/${user_id}.json`
-      })
-
-      return Promise.all(urls.map((url) => {
-        return fetch(url).then((resp) => {
-          return resp.text()
+        var user_ids = notes.map(function(data){
+          return data.user_id
         })
-      }))
-    }).then((texts) => {
-      console.log(texts)
-      var users = texts.map(function(data) {
-        return JSON.parse(data)
+        
+        user_ids = user_ids.filter(function(x, i, self) {
+          return self.indexOf(x) === i
+        })
+
+        var urls = user_ids.map(function(user_id) {
+          return `/users/${user_id}.json`
+        })
+
+        return Promise.all(urls.map((url) => {
+          return fetch(url).then((resp) => {
+            return resp.text()
+          })
+        }))
+      }).then((texts) => {
+        console.log(texts)
+        var users = texts.map(function(data) {
+          return JSON.parse(data)
+        })
+        app.users = users
+        app.notes = app.notes.sort(function(note1, note2) {
+          return note2.id > note1.id
+        })
+        app.timeline = []
+        app.addTimeline()
       })
-      app.users = users
-      var timeline = app.notes
-      for(var i = 0; i < app.notes.length; i++) {
-        timeline[i]["user"] = app.getUser(app.notes[i])
-      }
-      app.timeline = timeline
-    })
+    }
   }
+  getUserInfo()
 })

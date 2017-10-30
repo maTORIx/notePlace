@@ -7,6 +7,7 @@ class UserInfosController < ApplicationController
     @user_info = UserInfo.find_by(user_id: params[:id])
     if params[:format] == "html" || !params[:format]
       gon.user_id = current_user.id
+      gon.show_user_id = params[:id]
     end
 
     user_info_json = JSON.generate({
@@ -39,6 +40,7 @@ class UserInfosController < ApplicationController
     if params[:type] == "notes"
       notes = @user.notes.map {|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
       @json = JSON.generate(notes)
+    
     elsif params[:type] == "timeline"
       orgs = @user.subscriber_organizations
       result = []

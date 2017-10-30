@@ -130,7 +130,7 @@ textarea {
   margin: 5px 5px;
   height: auto;
   min-height: 10px;
-  width: 200px;
+  width: 96%;
   flex-basis: auto;
   flex-grow: 1;
 
@@ -140,9 +140,26 @@ textarea {
   }
 }
 
-.notePlace-card-scroll {
-  max-height: 100%;
-  overflow-y: scroll;
+.notePlace-scroll-card {
+  height: 200px;
+  
+  .notePlace-card-header {
+    background-color: #a9d0d3;
+    height: 40px;
+
+    .notePlace-card-header-text {
+      width: 90%;
+      margin: 5px;
+      color: black;
+    }
+  }
+
+  .notePlace-card-body {
+    height: 150px;
+    overflow-y: scroll;
+    margin: 10px auto;
+    width: 90%;
+  }
 }
 
 .notePlace-card-default-header {
@@ -176,4 +193,13 @@ textarea {
 .notePlace-center {
   display: flex;
   align-items: center;
+}
+
+.notePlace-under {
+  bottom: 0px;
+}
+
+.notePlace-width-100 {
+  width: 96%;
+  margin: 0 auto;
 }

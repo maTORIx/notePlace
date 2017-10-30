@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "note" : {title: "John Doe", description: "none"},
       "author": {},
       "noteFile": "",
+      "scopes" : [],
     },
     methods: {
       parseHTML: function(src) {
@@ -80,6 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then((data) => {
       var author = JSON.parse(data);
       app.author = author;
+      return fetch(`/notes/${gon.note_id}/info/organizations`)
+    }).then((resp) => {
+      return resp.text()
+    }).then((data) => {
+      app.scopes = JSON.parse(data);
       return fetch("/notes/" + gon.note_id + "/file")
     }).then((resp) => {
       var extension = app.note.filename.split(".").pop();

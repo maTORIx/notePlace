@@ -31,4 +31,8 @@ div#app
           button.mdl-button.mdl-js-button.notePlace-button(v-if="user.id == author.id" v-on:click="redirectTo('/notes/' + note.id + '/edit')") edit
         .notePlace-card-body
           p(v-html="parseHTML(note.description)")
+          div.notePlace-center
+            label Scope
+            span.mdl-chip.marginL10(v-for="scope in scopes")
+              span.mdl-chip__text= "{{scope.name}}"
       .mdl-card.mdl-shadow--2dp.notePlace-note-body-card#note_body

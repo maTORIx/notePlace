@@ -110,11 +110,15 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       submitNote: function(event) {
         event.preventDefault();
-        if(gon.note_id) {
-          this.updateNote()
-        } else {
-          this.createNote()
-        }
+        return new Promise((resolve, reject) => {
+          if(gon.note_id) {
+            return this.updateNote()
+          } else {
+            return this.createNote()
+          }
+        }).then(() => {
+          location.href(`notes/${this.note.id}`)
+        })
       },
       createNote: function() {
         var formData = new FormData()
