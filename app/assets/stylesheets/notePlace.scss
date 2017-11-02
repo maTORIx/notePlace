@@ -20,6 +20,12 @@ textarea {
   resize: both;
 }
 
+form {
+  width: 90%;
+  margin: 0 auto;
+  background-color: white;
+}
+
 .notePlace-user-icon {
   width: 35px;
   height: 35px;
@@ -27,18 +33,13 @@ textarea {
   border: solid 1px black;
 }
 
+.notePlace-organization-image {
+  width: 100%;
+}
+
 .notePlace-ground {
-  display: flex;
+  // display: flex;
 }
-
-.marginL10 {
-  margin-left: 10px;
-}
-
-.marginR10 {
-  margin-right: 10px;
-}
-
 
 .notePlace-icon {
   width: 40px;
@@ -55,13 +56,6 @@ textarea {
   height: 55px;
 }
 
-.notePlace-button {
-  border: 2px solid white;
-  color: white;
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
 .notePlace-info-card {
   width: 90%;
   min-width: 250px;
@@ -76,6 +70,7 @@ textarea {
     width: 100%;
     display: flex;
     align-items: center;
+    overflow-x: scroll;
 
     .notePlace-card-header-text {
       font-family: Arial;
@@ -87,6 +82,12 @@ textarea {
   .notePlace-card-body {
     margin: 10px auto;
     width: 90%;
+  }
+}
+
+.notePlace-info-card.notePlace-info-organization-card {
+  .notePlace-card-header {
+    background-color: #d36308;
   }
 }
 
@@ -109,7 +110,7 @@ textarea {
   width: 70%;
   height: auto;
   background-color: #f4f4f4;
-  // display: block;
+
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -122,15 +123,11 @@ textarea {
   justify-content: flex-start;
 }
 
-.grid-item {
-  float: left;
-}
-
 .notePlace-default-card {
   margin: 5px 5px;
   height: auto;
   min-height: 10px;
-  width: 96%;
+  width: 200px;
   flex-basis: auto;
   flex-grow: 1;
 
@@ -167,13 +164,7 @@ textarea {
   height: 40px;
 }
 
-.notePlace-card-text-field {
-  margin: 5px auto;
-  min-height: 0px;
-  width: 94%;
-  color: black;
-  font-family: Arial;
-}
+
 
 .notePlace-card-header-text {
   width: 90%;
@@ -190,6 +181,18 @@ textarea {
   }
 }
 
+.notePlace-card-text-field {
+  margin: 5px auto;
+  min-height: 0px;
+  width: 94%;
+  color: black;
+  font-family: Arial;
+}
+
+.notePlace-info-button:hover {
+  opacity: 0.8;
+}
+
 .notePlace-center {
   display: flex;
   align-items: center;
@@ -202,4 +205,94 @@ textarea {
 .notePlace-width-100 {
   width: 96%;
   margin: 0 auto;
+}
+
+.marginL10 {
+  margin-left: 10px;
+}
+
+.marginR10 {
+  margin-right: 10px;
+}
+
+.notePlace-button {
+  width: auto;
+  height: 40px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: Arial;
+  font-weight: bold;
+  margin-right: 5px;
+  margin-left: 5px;
+  border: 2px solid white;
+}
+
+.notePlace-button.notePlace-button-large {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.notePlace-button.notePlace-button-primary {
+  background-color: #2276bf;
+  color: white;
+  border: 0;
+}
+
+.notePlace-button.notePlace-button-success {
+  background-color: #2bce2b;
+  color: white;
+}
+
+.notePlace-button.notePlace-button-default {
+  background-color: white;
+  color: black;
+}
+
+.notePlace-button.notePlace-button-skeleton-white {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.notePlace-button.notePlace-button-skeleton-black {
+  background-color: transparent;
+  border: 2px solid black;
+  color: black;
+}
+
+.notePlace-info-button {
+  color: white;
+  margin: 5px;
+
+  label {
+    font-size: 8px;
+  }
+  .notePlace-button-text {
+    font-weight: bold;
+  }
+}
+
+.notePlace-second-header {
+  width: 100%;
+  height: auto;
+  font-weight: bold;
+  font-size: 34px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.notePlace-second-header.notePlace-second-header-success {
+  background-color: #2276bf;
+  color: white
+}
+
+.notePlace-second-header.notePlace-second-header-primary {
+  background-color: #2bce2b;
+  color: white;
+}
+
+.notePlace-second-header.notePlace-second-header-danger {
+  background-color: red;
+  color: white;
 }

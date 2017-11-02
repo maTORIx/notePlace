@@ -13,7 +13,7 @@ class OrganizationsController < ApplicationController
                           })
     if current_user && [nil, "html"].include?(params[:format])
       gon.user_id = current_user.id
-      gon.organization_id = @organization.id
+      gon.organization_name = @organization.name
     end
     respond_to do |format|
       format.html
@@ -36,12 +36,14 @@ class OrganizationsController < ApplicationController
   end
 
   def edit
+    gon.user_id = current_user.id
     @organization = Organization.find_by(name: params[:name])
   end
 
   def update
     @organization = Organization.find_by(name: params[:name])
     organization_params = params.require(:organization).permit(:name, :description, :icon, :image)
+    # @organization.update(organization_params)
     @organization.update(organization_params)
     redirect_to @organization
   end
@@ -58,6 +60,13 @@ class OrganizationsController < ApplicationController
         {id: data.id, name: info.name, description: info.description, icon: info.icon.url}
       end
       @json = JSON.generate(data)
+    end
+
+    if ["html", nil].include?(params[:format]) && ["member", "subscriber"].include?(params[:type])
+      gon.user_id = current_user.id
+      gon.organization_name = @org.name
+      gon.type = params[:type]
+      return render "users"
     end
 
     respond_to do |format|

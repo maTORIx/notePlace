@@ -1,6 +1,6 @@
 div#app
   = include_gon
-  = javascript_pack_tag 'organization.js'
+  = javascript_pack_tag 'organization_users.js'
   .mdl-layout.mdl-js-layout.mdl-layout--fixed-header.notePlace-header
     header.mdl-layout__header
       .mdl-layout__header-row
@@ -33,22 +33,26 @@ div#app
       .notePlace-card-header-text= "{{organization.name}}"
       div.notePlace-info-button(v-on:click="redirectTo('/org/' + organization.name + '/info/member')")
         label Member
-        .notePlace-button-text="{{organization.members.length}}" 
+        .notePlace-button-text="{{organization.members.length}}"
+      div.notePlace-info-button(v-on:click="redirectTo('/org/' + organization.name + '/info/request')")
+        label Subscriber
+        .notePlace-button-text="{{organization.member_requests.length}}"  
       div.notePlace-info-button(v-on:click="redirectTo('/org/' + organization.name + '/info/subscriber')")
         label Subscriber
-        .notePlace-button-text="{{organization.subscribers.length}}" 
+        .notePlace-button-text="{{organization.subscribers.length}}"
       button.notePlace-button.notePlace-button-success(v-if="isSubscriber()" v-on:click="unsubscribe(organization)") subscribe
       button.notePlace-button.notePlace-button-skeleton-white(v-else v-on:click="subscribe(organization)") subscribe
+      button.notePlace-button.notePlace-button-skeleton-white(v-on:click="redirectTo('/org/' + organization.name)") back
       button.notePlace-button.notePlace-button-skeleton-white(v-if="isMember()" v-on:click="redirectTo('/org/' + organization.name + '/edit')") edit
     .notePlace-card-body
       p(v-html="parseHTML(organization.description)")
-
+  
   .notePlace-ground
     .mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
-      .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="note in timeline")
-        .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
-          h5 = "{{note.title}}"
-          p(v-html="parseHTML(note.description)")
-        .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
-          img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
-          div = "{{note.user.name}}"
+      .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="user in targetUsers" v-on:click="redirectTo('/users/' + user.id)")
+        .notePlace-user-info-field
+          img.notePlace-user-icon(alt="Not Found" v-bind:src="user.icon")
+          div = "{{user.name}}"
+        .notePlace-card-text-field
+          p(v-html="parseHTML(user.description)")
+        

@@ -112,12 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         return new Promise((resolve, reject) => {
           if(gon.note_id) {
-            return this.updateNote()
+            resolve(this.updateNote())
           } else {
-            return this.createNote()
+            resolve(this.createNote())
           }
         }).then(() => {
-          location.href(`notes/${this.note.id}`)
+          location.href = `/notes/${this.note.id}`
+          return
         })
       },
       createNote: function() {

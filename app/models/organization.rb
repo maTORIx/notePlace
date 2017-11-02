@@ -9,4 +9,9 @@ class Organization < ApplicationRecord
   has_many :notes, through: :scopes
   mount_uploader :icon, OrgIconUploader
   mount_uploader :image, OrgImageUploader
+
+  def to_param
+    name
+  end
+
 end

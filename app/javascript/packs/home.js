@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       addTimeline: function() {
         var show_length = this.timeline.length + 100
         if (this.notes.length < 100) {
-          show_length = this.notes.length - 1
+          show_length = this.notes.length
         }
         for(var i = this.timeline.length; i < show_length; i++) {
           var note = this.notes[i]

@@ -1,6 +1,6 @@
 div#app
   = include_gon
-  = javascript_pack_tag 'user.js'
+  = javascript_pack_tag 'user_orgs.js'
   .mdl-layout.mdl-js-layout.mdl-layout--fixed-header.notePlace-header
     header.mdl-layout__header
       .mdl-layout__header-row
@@ -26,7 +26,7 @@ div#app
   .notePlace-header-space
   .mdl-card.mdl-shadow--2dp.notePlace-info-card
     .notePlace-card-header
-      img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="show_user.icon")
+      img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="show_user.icon" v-on:click="redirectTo('/users/' + show_user.id)")
       .notePlace-card-header-text= "{{show_user.name}}"
       div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/info/member')")
         label belonging
@@ -35,17 +35,15 @@ div#app
         label Subscribe
         .notePlace-button-text="{{show_user.subscribers.length}}" 
       button.notePlace-button.notePlace-button-skeleton-white(v-if="user.id == show_user.id" v-on:click="redirectTo('/users/' + show_user.id + '/edit')") edit
+      button.notePlace-button.notePlace-button-skeleton-white(v-on:click="redirectTo('/users/' + show_user.id)") back
     .notePlace-card-body
       p(v-html="parseHTML(show_user.description)")
 
-  .mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
-    button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-on:click="redirectTo('/notes/new')") Add Note
-    .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="note in timeline")
-      .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
-        h5 = "{{note.title}}"
-        p(v-html="parseHTML(note.description)")
-      .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
-        img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
-        div = "{{note.user.name}}"
-  button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="timeline.length != notes.length" v-on:click="addTimeline()") Read More
-  div(v-else) Readed all notes
+  .mdl-card.mdl-shadow--2dp.notePlace-ground-card
+    .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="org in organizations" v-on:click="redirectTo('/org/' + org.name)")
+      img(v-bind:src="org.image" style="width: 100%" alt="No Image")
+      .notePlace-card-header.notePlace-center
+        img.notePlace-icon.notePlace-user-icon(v-bind:src="org.icon" alt="NoImage")
+        .notePlace-card-header-text="{{org.name}}"
+      .notePlace-card-text-field(v-on:click="redirectTo('/org/' + org.id)")
+        p(v-html="parseHTML(org.description)")
