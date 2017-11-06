@@ -31,10 +31,13 @@ div#app
     .notePlace-card-header
       img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="organization.icon")
       .notePlace-card-header-text= "{{organization.name}}"
-      div.notePlace-info-button(v-on:click="redirectTo('/org/' + organization.name + '/info/member')")
+      div.notePlace-info-button(v-on:click="redirectTo('/org/' + organization.name + '/members')")
         label Member
         .notePlace-button-text="{{organization.members.length}}" 
-      div.notePlace-info-button(v-on:click="redirectTo('/org/' + organization.name + '/info/subscriber')")
+      div.notePlace-info-button(v-on:click="redirectTo('/org/' + organization.name + '/member_requests')" v-if="isMember()")
+        label MemberRequests
+        .notePlace-button-text="{{organization.member_requests.length}}"
+      div.notePlace-info-button(v-on:click="redirectTo('/org/' + organization.name + '/subscribers')")
         label Subscriber
         .notePlace-button-text="{{organization.subscribers.length}}" 
       button.notePlace-button.notePlace-button-success(v-if="isSubscriber()" v-on:click="unsubscribe(organization)") subscribe

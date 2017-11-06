@@ -202,6 +202,10 @@ form {
   bottom: 0px;
 }
 
+.notePlace-float-right {
+  float: right;
+}
+
 .notePlace-width-100 {
   width: 96%;
   margin: 0 auto;
@@ -240,6 +244,11 @@ form {
 
 .notePlace-button.notePlace-button-success {
   background-color: #2bce2b;
+  color: white;
+}
+
+.notePlace-button.notePlace-button-danger {
+  background-color: #ea3535;
   color: white;
 }
 

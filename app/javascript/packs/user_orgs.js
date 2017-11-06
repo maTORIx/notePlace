@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
   var app = new Vue({
     el: '#app',
     data: {
-      "user" : {name: "none", icon: ""},
+      "user" : {id: undefined, name: "none", icon: ""},
       "organizations": [],
-      "show_user": {name: "none", description: "none", members: [], subscribers: []},
+      "show_user": {id: undefined, name: "none", description: "none", members: [], subscribers: []},
     },
     methods: {
       parseHTML: function(src) {
@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         location.href = url
         return
       },
+      isCurrentUser: function() {
+        return this.user.id == this.show_user.id
+      }
     },
   })
 

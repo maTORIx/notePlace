@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "notes" : [],
       "users": [],
       "timeline": [],
-      "organization": {name: "none", description: "none", members: [], subscribers: []},
+      "organization": {name: "none", description: "none", members: [],member_requests: [], subscribers: []},
     },
     methods: {
       parseHTML: function(src) {
@@ -213,6 +213,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return resp.text()
       }).then((data) => {
         organization["subscribers"] = JSON.parse(data)
+        return fetch(`/org/${gon.organization_name}/info/member_requests_users.json`)
+      }).then((resp) => {
+        return resp.text()
+      }).then((data) => {
+        organization["member_requests"] = JSON.parse(data)
       }).then(() => {
         app.organization = organization
       })

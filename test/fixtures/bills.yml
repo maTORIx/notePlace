@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: 
+  column: 
+  company_id: 1
+
+two:
+  name: 
+  column: 
+  company_id: 1

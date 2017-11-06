@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   resources :organizations, path: "org", except: [:delete], param: :name do
     member do
       get "info/:type", to: "organizations#info"
+      get "members", to: "organizations#showMembers"
+      get "member_requests", to: "organizations#showMemberRequests"
+      get "subscribers", to: "organizations#showSubscribers"
     end
   end
 

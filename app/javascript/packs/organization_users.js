@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     data: {
       "user" : {name: "none", description: "none", members: [], subscribers: []},
       "users": [],
-      "organization": {name: "none", description: "none", members: [], subscribers: []},
+      "organization": {name: "none", description: "none", members: [], subscribers: [], member_requests:[]},
+      
     },
     methods: {
       parseHTML: function(src) {
@@ -44,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
         var organizations = this.user.members.filter(function(data) {
           return gon.organization_name == data.name
         })
-        console.log(organizations)
         return organizations.length === 1
       },
       isSubscriber: function() {
@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch("/users/" + gon.user_id + ".json").then((resp) => {
         return resp.text()
       }).then((data) => {
-        console.log(data)
         user = JSON.parse(data)
         return fetch("/users/" + gon.user_id + "/info/member_organizations.json")
       }).then((resp) => {
@@ -159,12 +158,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return resp.text()
       }).then((data) => {
         organization["subscribers"] = JSON.parse(data)
+        return fetch(`/org/${gon.organization_name}/info/member_requests_users.json`)
+      }).then((resp) => {
+        return resp.text()
+      }).then((data) => {
+        organization["member_requests"] = JSON.parse(data)
       }).then(() => {
         app.organization = organization
       })
     }
   }
 
+  function getTargetUsers() {
+    if(gon.organization_name) {
+      fetch(`/org/${gon.organization_name}/info/${gon.type}_users.json`).then((resp) => {
+        return resp.text()
+      }).then((data) => {
+        app.users = JSON.parse(data)
+      })
+    }
+  }
+
   getUserInfo()
   getOrganizationInfo()
+  getTargetUsers()
 })

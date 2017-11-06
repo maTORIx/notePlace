@@ -53,6 +53,7 @@ div#app
         .notePlace-user-info-field
           img.notePlace-user-icon(alt="Not Found" v-bind:src="user.icon")
           div = "{{user.name}}"
+          button.notePlace-button.notePlace-button-danger delete
         .notePlace-card-text-field
           p(v-html="parseHTML(user.description)")
         

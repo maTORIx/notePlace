@@ -43,7 +43,6 @@ class OrganizationsController < ApplicationController
   def update
     @organization = Organization.find_by(name: params[:name])
     organization_params = params.require(:organization).permit(:name, :description, :icon, :image)
-    # @organization.update(organization_params)
     @organization.update(organization_params)
     redirect_to @organization
   end
@@ -62,16 +61,33 @@ class OrganizationsController < ApplicationController
       @json = JSON.generate(data)
     end
 
-    if ["html", nil].include?(params[:format]) && ["member", "subscriber"].include?(params[:type])
-      gon.user_id = current_user.id
-      gon.organization_name = @org.name
-      gon.type = params[:type]
-      return render "users"
-    end
-
     respond_to do |format|
       format.html { render json: @json}
       format.json { render json: @json}
     end
+  end
+
+  def showMembers
+    @org = Organization.find_by(name: params[:name])
+    gon.user_id = current_user.id
+    gon.organization_name = @org.name
+    gon.type = "member"
+    render "users"
+  end
+  
+  def showMemberRequests
+    @org = Organization.find_by(name: params[:name])
+    gon.user_id = current_user.id
+    gon.organization_name = @org.name
+    gon.type = "member_request"
+    render "users"
+  end
+  
+  def showSubscribers
+    @org = Organization.find_by(name: params[:name])
+    gon.user_id = current_user.id
+    gon.organization_name = @org.name
+    gon.type = "subscriber"
+    render "member_requests"
   end
 end
