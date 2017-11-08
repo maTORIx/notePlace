@@ -35,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
       "scopes_change": {add: [], delete: []},
       "orgs" : [],
       "input_scope_name": "",
-      "form": {title: "", description: "", note: null}
+      "form": {title: "", description: "", note: null, markdown: ""},
+      "isFile": true
     },
     methods: {
       parseHTML: function(src) {
@@ -111,6 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
       submitNote: function(event) {
         event.preventDefault();
         return new Promise((resolve, reject) => {
+          if(!this.isFile) {
+            var blob = new Blob([this.form.markdown], {"type": "text/plain"});
+            var fileOfBlob = new File([blob], "note.md")
+            this.form.note = fileOfBlob
+          }
           if(gon.note_id) {
             resolve(this.updateNote())
           } else {
@@ -185,6 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
     computed: {
       candidate_orgs: function() {
         return []
+      },
+      markedText: function() {
+        return marked(this.form.markdown)
       }
     },
   })
@@ -218,7 +227,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }).then((data) => {
         var orgs = JSON.parse(data)
         app.scopes = orgs
-      })
+        return fetch(`/notes/${gon.note_id}/file`)
+      }).then((resp) => {
+        var extension = app.note.filename.split(".").pop();
+
+        // check extension
+        switch (extension) {
+          case "md":
+            return resp.text();
+          default:
+            return ""
+        }
+      }).then((data) => {
+        app.form.markdown = data
+      }) 
     }
   }
 

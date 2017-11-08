@@ -17,12 +17,14 @@
     button.notePlace-button.notePlace-button-skeleton-white(v-on:click="redirectTo('/users/' + show_user.id)") back
   .notePlace-card-body
     p(v-html="parseHTML(show_user.description)")
-
+    
 .mdl-card.mdl-shadow--2dp.notePlace-ground-card
-  .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="org in organizations" v-on:click="redirectTo('/org/' + org.name)")
-    img(v-bind:src="org.image" style="width: 100%" alt="No Image")
+  .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="org in organizations")
+    img(v-bind:src="org.image" style="width: 100%" alt="No Image" v-on:click="redirectTo('/org/' + org.name)")
     .notePlace-card-header.notePlace-center
-      img.notePlace-icon.notePlace-user-icon(v-bind:src="org.icon" alt="NoImage")
-      .notePlace-card-header-text="{{org.name}}"
-    .notePlace-card-text-field(v-on:click="redirectTo('/org/' + org.id)")
+      img.notePlace-icon.notePlace-user-icon(v-bind:src="org.icon" alt="NoImage" v-on:click="redirectTo('/org/' + org.name)")
+      .notePlace-card-header-text(v-on:click="redirectTo('/org/' + org.name)")="{{org.name}}"
+      button.notePlace-button.notePlace-button-success(v-on:click="addMember(org)") join
+      button.notePlace-button.notePlace-button-danger(v-on:click="deleteMemberRequest(org)") cancel
+    .notePlace-card-text-field(v-on:click="redirectTo('/org/' + org.name)")
       p(v-html="parseHTML(org.description)")

@@ -1,45 +1,19 @@
-div#app
-  = include_gon
-  = javascript_pack_tag 'simple_form.js'
-  .mdl-layout.mdl-js-layout.mdl-layout--fixed-header.notePlace-header
-    header.mdl-layout__header
-      .mdl-layout__header-row
-        a href="/"
-          img.notePlace-icon(alt="notePlace" src="http://matorixx.com/notePlace.png")
-        //- if you want hide title when small screen. use this !!
-        //- .mdl-layout--large-screen-only
-        span.mdl-layout-title NotePlace
-        .mdl-layout-spacer
-
-        nav.mdl-navigation
-          - if user_signed_in?
-            button.mdl-button.mdl-js-button.marginR10
-              img#user-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.notePlace-user-icon(alt="S" v-bind:src="user.icon")
-          - else
-            = link_to "login", new_user_session_path, class: "mdl-navigation__link"
-          
-          ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='user-menu-lower-left')
-            a (v-bind:href="'/users/' + user.id" class="mdl-menu__item") Your Account
-            a (v-bind:href="'/users/' + user.id + '/edit'" class="mdl-menu__item") Settings
-            a (href="/notes/new" class="mdl-menu__item") New Note
-            = link_to "logout", destroy_user_session_path, class: "mdl-menu__item", method: "delete"
-
-    .notePlace-second-header.notePlace-second-header-success edit
-    .notePlace-ground
-      = form_for @organization, remote: false, html: {id: "#{@organization.name}"} do |f|
-        div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-          = f.label :name, "name", class: "mdl-textfield__label"
-          = f.text_field :name, class: "mdl-textfield__input"
-        div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-          = f.label :description, "description", class: "mdl-textfield__label"
-          = f.text_area :description, class: "mdl-textfield__input"
-        div
-          = f.label :icon, "icon"
-          = f.file_field :icon
-        br
-        div
-          = f.label :icon, "image"
-          = f.file_field :image
-        br
-        p
-          = f.submit
+= javascript_pack_tag 'simple_form.js'
+.notePlace-second-header.notePlace-second-header-success edit
+.notePlace-ground
+  = form_for @organization, remote: false, html: {id: "#{@organization.name}"} do |f|
+    div.mdl-textfield.mdl-js-textfield
+      = f.text_field :name, class: "mdl-textfield__input", required: true, placeholder: "name"
+    div.mdl-textfield.mdl-js-textfield
+      = f.label :description, "description", class: "mdl-textfield__label"
+      = f.text_area :description, class: "mdl-textfield__input", placeholder: "description"
+    div
+      = f.label :icon, "icon"
+      = f.file_field :icon
+    br
+    div
+      = f.label :icon, "image"
+      = f.file_field :image
+    br
+    p
+      = f.submit

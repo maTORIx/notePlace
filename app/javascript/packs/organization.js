@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return resp.text()
       }).then((data) => {
         organization["subscribers"] = JSON.parse(data)
-        return fetch(`/org/${gon.organization_name}/info/member_requests_users.json`)
+        return fetch(`/org/${gon.organization_name}/info/member_request_users.json`)
       }).then((resp) => {
         return resp.text()
       }).then((data) => {

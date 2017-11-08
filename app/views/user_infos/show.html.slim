@@ -1,51 +1,29 @@
-div#app
-  = include_gon
-  = javascript_pack_tag 'user.js'
-  .mdl-layout.mdl-js-layout.mdl-layout--fixed-header.notePlace-header
-    header.mdl-layout__header
-      .mdl-layout__header-row
-        a href="/"
-          img.notePlace-icon(alt="notePlace" src="http://matorixx.com/notePlace.png")
-        //- if you want hide title when small screen. use this !!
-        //- .mdl-layout--large-screen-only
-        span.mdl-layout-title NotePlace
-        .mdl-layout-spacer
+= javascript_pack_tag 'user.js'
+.mdl-card.mdl-shadow--2dp.notePlace-info-card
+  .notePlace-card-header
+    img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="show_user.icon")
+    .notePlace-card-header-text= "{{show_user.name}}"
+    div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/members')")
+      label Belonging
+      .notePlace-button-text="{{show_user.members.length}}"
+    div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/member_requests')" v-if="isCurrentUser()")
+      label MemberRequests
+      .notePlace-button-text="{{show_user.member_requests.length}}" 
+    div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/subscribers')")
+      label Subscribe
+      .notePlace-button-text="{{show_user.subscribers.length}}" 
+    button.notePlace-button.notePlace-button-skeleton-white(v-if="user.id == show_user.id" v-on:click="redirectTo('/users/' + show_user.id + '/edit')") edit
+  .notePlace-card-body
+    p(v-html="parseHTML(show_user.description)")
 
-        nav.mdl-navigation
-          - if user_signed_in?
-            button.mdl-button.mdl-js-button.marginR10
-              img#user-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.notePlace-user-icon(alt="S" v-bind:src="user.icon")
-          - else
-            = link_to "login", new_user_session_path, class: "mdl-navigation__link"
-          
-          ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='user-menu-lower-left')
-            a (v-bind:href="'/users/' + user.id" class="mdl-menu__item") Your Account
-            a (v-bind:href="'/users/' + user.id + '/edit'" class="mdl-menu__item") Settings
-            a (href="/notes/new" class="mdl-menu__item") New Note
-            = link_to "logout", destroy_user_session_path, class: "mdl-menu__item", method: "delete"
-  .notePlace-header-space
-  .mdl-card.mdl-shadow--2dp.notePlace-info-card
-    .notePlace-card-header
-      img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="show_user.icon")
-      .notePlace-card-header-text= "{{show_user.name}}"
-      div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/info/member')")
-        label belonging
-        .notePlace-button-text="{{show_user.members.length}}" 
-      div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/info/subscriber')")
-        label Subscribe
-        .notePlace-button-text="{{show_user.subscribers.length}}" 
-      button.notePlace-button.notePlace-button-skeleton-white(v-if="user.id == show_user.id" v-on:click="redirectTo('/users/' + show_user.id + '/edit')") edit
-    .notePlace-card-body
-      p(v-html="parseHTML(show_user.description)")
-
-  .mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
-    button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-on:click="redirectTo('/notes/new')") Add Note
-    .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="note in timeline")
-      .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
-        h5 = "{{note.title}}"
-        p(v-html="parseHTML(note.description)")
-      .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
-        img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
-        div = "{{note.user.name}}"
-  button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="timeline.length != notes.length" v-on:click="addTimeline()") Read More
-  div(v-else) Readed all notes
+.mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
+  button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-on:click="redirectTo('/notes/new')" v-if="isCurrentUser()") Add Note
+  .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="note in timeline")
+    .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
+      h5 = "{{note.title}}"
+      p(v-html="parseHTML(note.description)")
+    .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
+      img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
+      div = "{{note.user.name}}"
+button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="timeline.length != notes.length" v-on:click="addTimeline()") Read More
+div(v-else) Readed all notes

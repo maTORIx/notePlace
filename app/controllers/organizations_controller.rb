@@ -59,6 +59,9 @@ class OrganizationsController < ApplicationController
         {id: data.id, name: info.name, description: info.description, icon: info.icon.url}
       end
       @json = JSON.generate(data)
+    elsif ["members", "subscribers", "member_requests"].include?(params[:type])
+      data = @org.send(params[:type]).map {|data| {id: data.id, organization_id: data.organization_id, user_id: data.user_id}}
+      @json = JSON.generate(data)
     end
 
     respond_to do |format|
@@ -72,7 +75,7 @@ class OrganizationsController < ApplicationController
     gon.user_id = current_user.id
     gon.organization_name = @org.name
     gon.type = "member"
-    render "users"
+    render "members"
   end
   
   def showMemberRequests
@@ -80,7 +83,7 @@ class OrganizationsController < ApplicationController
     gon.user_id = current_user.id
     gon.organization_name = @org.name
     gon.type = "member_request"
-    render "users"
+    render "member_requests"
   end
   
   def showSubscribers
@@ -88,6 +91,6 @@ class OrganizationsController < ApplicationController
     gon.user_id = current_user.id
     gon.organization_name = @org.name
     gon.type = "subscriber"
-    render "member_requests"
+    render "subscribers"
   end
 end

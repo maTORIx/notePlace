@@ -54,21 +54,38 @@ class UserInfosController < ApplicationController
     elsif ["subscriber_organizations", "member_organizations", "member_request_organizations"].include? params[:type]
       data = @user.send(params[:type]).map {|data| {id: data.id, name: data.name, description: data.description, icon: data.icon.url, image: data.image.url}}
       @json = JSON.generate(data)
-    elsif ["members", "subscribers"].include?(params[:type]) && params[:format] == "json"
+    elsif ["members", "subscribers", "member_requests"].include?(params[:type]) && params[:format] == "json"
       data = @user.send(params[:type]).map{|data| {id: data.id, user_id: data.user_id, organization_id: data.organization_id}}
       @json = JSON.generate(data)
-    end
-
-    if ["html", nil].include?(params[:format]) && ["member", "subscriber"].include?(params[:type])
-      gon.user_id = current_user.id
-      gon.show_user_id = @user.id
-      gon.type = params[:type]
-      return render "organizations"
     end
 
     respond_to do |format|
       format.html { render json: @json}
       format.json { render json: @json}
     end
+  end
+
+  def showMembers
+    @user = User.find(params[:id])
+    gon.user_id = current_user.id
+    gon.show_user_id = @user.id
+    gon.type = "member"
+    render "organizations"
+  end
+  
+  def showMemberRequests
+    @user = User.find(params[:id])
+    gon.user_id = current_user.id
+    gon.show_user_id = @user.id
+    gon.type = "member_request"
+    render "member_requests"
+  end
+  
+  def showSubscribers
+    @user = User.find(params[:id])
+    gon.user_id = current_user.id
+    gon.show_user_id = @user.id
+    gon.type = "subscriber"
+    render "organizations"
   end
 end

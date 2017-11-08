@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "user" : {name: "none", description: "none", members: [], subscribers: []},
       "users": [],
       "organization": {name: "none", description: "none", members: [], subscribers: [], member_requests:[]},
-      
+      "form": {user_email: ""},
     },
     methods: {
       parseHTML: function(src) {
@@ -104,6 +104,94 @@ document.addEventListener('DOMContentLoaded', () => {
             throw "Internal server error"
           }
         })
+      },
+      sendMemberRequest: function(event) {
+        event.preventDefault();
+        this.addMemberRequest(this.form.user_email)
+      },
+      addMemberRequest: function(user_email) {
+        fetch("/member_requests", {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': getCsrfToken()
+          },
+          body: JSON.stringify({"member_request":{
+                                  "user_email": user_email,
+                                  "organization_id": this.organization.id
+                                }
+          })
+        }).then((resp) => {
+          if (resp.status >= 200 && resp.status <= 300) {
+            getUserInfo()
+          } else {
+            window.alert("Internal Server Error")
+            throw "Internal server error"
+          }
+        })
+      },
+      deleteMemberRequest: function(user) {
+        fetch(`/org/${gon.organization_name}/info/member_requests`).then((resp) => {
+          return resp.text()
+        }).then((data) => {
+          var member_requests_data = JSON.parse(data)
+
+          var member_request_data = member_requests_data.filter(function(data) {
+            return data.user_id == user.id
+          })
+          if(member_request_data.length !== 1) {
+            throw "User not found"
+          }
+
+          member_request_data = member_request_data[0]
+
+          return fetch(`/member_requests/${member_request_data.id}`, {
+            method: 'DELETE',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': getCsrfToken()
+            }
+          })
+        }).then((resp) => {
+          if (resp.status >= 200 && resp.status <= 300) {
+          } else {
+            window.alert("Internal Server Error")
+            throw "Internal server error"
+          }
+        })
+      },
+      deleteMember: function(user) {
+        fetch(`/org/${gon.organization_name}/info/members.json`).then((resp) => {
+          return resp.text()
+        }).then((data) => {
+          var members_data = JSON.parse(data)
+          var member_data = members_data.filter(function(data) {
+            return data.user_id == user.id
+          })
+          if(member_data.length !== 1) {
+            throw "User not found"
+          }
+
+          member_data = member_data[0]
+
+
+          return fetch(`/members/${member_data.id}`, {
+            method: 'DELETE',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': getCsrfToken()
+            }
+          })
+        }).then((resp) => {
+          if (resp.status >= 200 && resp.status <= 300) {
+          } else {
+            window.alert("Internal Server Error")
+            throw "Internal server error"
+          }
+        })
       }
     },
     computed: {
@@ -158,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return resp.text()
       }).then((data) => {
         organization["subscribers"] = JSON.parse(data)
-        return fetch(`/org/${gon.organization_name}/info/member_requests_users.json`)
+        return fetch(`/org/${gon.organization_name}/info/member_request_users.json`)
       }).then((resp) => {
         return resp.text()
       }).then((data) => {

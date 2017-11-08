@@ -19,21 +19,13 @@
     button.notePlace-button.notePlace-button-skeleton-white(v-if="isMember()" v-on:click="redirectTo('/org/' + organization.name + '/edit')") edit
   .notePlace-card-body
     p(v-html="parseHTML(organization.description)")
-    .mdl-card.mdl-shadow--2dp.notePlace-info-card
-      .notePlace-card-header
-        .notePlace-card-header-text Send MemberRequest
-      form.notePlace-card-body(v-on:submit="sendMemberRequest")
-        .mdl-textfield.mdl-js-textfield
-          input.mdl-textfield__input#user_email(type="email" placeholder="info@example.com" v-model="form.user_email")
-        button.notePlace-button.notePlace-button-primary.notePlace-button-large(type="submit") send
 
 .notePlace-ground
   .mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
-    .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="user in users")
+    .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="user in users" v-on:click="redirectTo('/users/' + user.id)")
       .notePlace-user-info-field
-        img.notePlace-user-icon(alt="Not Found" v-bind:src="user.icon" v-on:click="redirectTo('/users/' + user.id)")
+        img.notePlace-user-icon(alt="Not Found" v-bind:src="user.icon")
         div = "{{user.name}}"
-        button.notePlace-button.notePlace-button-danger(v-on:click="deleteMemberRequest(user)") delete
-      .notePlace-card-text-field(v-on:click="redirectTo('/users/' + user.id)")
+      .notePlace-card-text-field
         p(v-html="parseHTML(user.description)")
-      
+        

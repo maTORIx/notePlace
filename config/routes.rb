@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   resources :user_infos, path: "users", except: [:create, :new, :destroy] do
     member do
       get "info/:type", to: "user_infos#info"
+      get "members", to: "user_infos#showMembers"
+      get "member_requests", to: "user_infos#showMemberRequests"
+      get "subscribers", to: "user_infos#showSubscribers"
     end
   end
 

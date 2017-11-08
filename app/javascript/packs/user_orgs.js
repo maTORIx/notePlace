@@ -14,12 +14,23 @@ document.addEventListener('DOMContentLoaded', () => {
     smartypants: false
   });
 
+  const getCsrfToken = () => {
+    const metas = document.getElementsByTagName('meta');
+    for (let meta of metas) {
+      if (meta.getAttribute('name') === 'csrf-token') {
+        console.log(meta.getAttribute('content'));
+        return meta.getAttribute('content');
+      }
+    }
+    return '';
+  }
+
   var app = new Vue({
     el: '#app',
     data: {
       "user" : {id: undefined, name: "none", icon: ""},
       "organizations": [],
-      "show_user": {id: undefined, name: "none", description: "none", members: [], subscribers: []},
+      "show_user": {id: undefined, name: "none", description: "none", members: [], subscribers: [], member_requests: []},
     },
     methods: {
       parseHTML: function(src) {
@@ -31,7 +42,74 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       isCurrentUser: function() {
         return this.user.id == this.show_user.id
-      }
+      },
+      addMember: function(org) {
+        fetch(`/users/${gon.show_user_id}/info/member_requests.json`).then((resp) => {
+          return resp.text()
+        }).then((data) => {
+          var member_requests_data = JSON.parse(data);
+          console.log(member_requests_data)
+
+          var member_request_data = member_requests_data.filter(function(data) {
+            return data.organization_id == org.id
+          })
+          if(member_request_data.length !== 1) {
+            throw "Request not found"
+          }
+
+          member_request_data = member_request_data[0]
+
+          return fetch(`/members`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': getCsrfToken()
+            },
+            body: JSON.stringify({member: {request_id: member_request_data.id}})
+          })
+        }).then((resp) => {
+          if (resp.status >= 200 && resp.status <= 300) {
+          } else {
+            window.alert("Internal Server Error")
+            throw "Internal server error"
+          }
+        })
+      },
+      deleteMemberRequest: function(org) {
+        fetch(`/users/${gon.user_id}/info/member_requests.json`).then((resp) => {
+          return resp.text()
+        }).then((data) => {
+          var member_requests_data = JSON.parse(data);
+          console.log(member_requests_data)
+
+          var member_request_data = member_requests_data.filter(function(data) {
+            return data.organization_id == org.id
+          })
+          if(member_request_data.length !== 1) {
+            throw "Request not found"
+          }
+
+          member_request_data = member_request_data[0]
+
+          return fetch(`/member_requests/${member_request_data.id}`, {
+            method: 'DELETE',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': getCsrfToken()
+            }
+          })
+        }).then((resp) => {
+          if (resp.status >= 200 && resp.status <= 300) {
+            this.organizations.splice(this.organizations.indexOf(org), 1)
+          } else {
+            throw "Internal server error"
+          }
+        }).catch((err) => {
+          window.alert(err.toString())
+        })
+      },
     },
   })
 
@@ -62,6 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return resp.text()
       }).then((data) => {
         show_user["subscribers"] = JSON.parse(data)
+        return fetch(`/users/${gon.show_user_id}/info/member_request_organizations`)
+      }).then((resp) => {
+        return resp.text()
+      }).then((data) => {
+        show_user["member_requests"] = JSON.parse(data)
       }).then(() => {
         app.show_user = show_user
       })

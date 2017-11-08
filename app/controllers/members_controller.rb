@@ -22,9 +22,8 @@ class MembersController < ApplicationController
   def destroy
     @member = Member.find(params[:id])
     org = Organization.find_by(id: @member.organization_id)
-    if org != nil && org.member_users.include? current_user
+    if org != nil && org.member_users.include?(current_user)
       @member.destroy
     end
-    redirect_to root
   end
 end
