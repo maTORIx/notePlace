@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/elastic/elasticsearch-rails.git
+  revision: 22b698aa3f4138db6ec1d1a082e8cd24f8132224
+  branch: 5.x
+  specs:
+    elasticsearch-model (5.0.1)
+      activesupport (> 3)
+      elasticsearch (~> 5)
+      hashie
+    elasticsearch-rails (5.0.1)
+
+GIT
   remote: https://github.com/rails/webpacker.git
   revision: a56584f9286d112914c12aa9f24a8aaadcc3decf
   specs:
@@ -79,8 +90,18 @@ GEM
       responders
       warden (~> 1.2.3)
     diffy (3.2.0)
+    elasticsearch (5.0.4)
+      elasticsearch-api (= 5.0.4)
+      elasticsearch-transport (= 5.0.4)
+    elasticsearch-api (5.0.4)
+      multi_json
+    elasticsearch-transport (5.0.4)
+      faraday
+      multi_json
     erubi (1.7.0)
     execjs (2.7.0)
+    faraday (0.13.1)
+      multipart-post (>= 1.2, < 3)
     ffi (1.9.18)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
@@ -88,6 +109,7 @@ GEM
       actionpack (>= 3.0)
       multi_json
       request_store (>= 1.0)
+    hashie (3.5.6)
     i18n (0.8.6)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
@@ -113,6 +135,7 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.10.3)
     multi_json (1.12.2)
+    multipart-post (2.0.0)
     mysql2 (0.4.9)
     nio4r (2.1.0)
     nokogiri (1.8.1)
@@ -225,6 +248,8 @@ DEPENDENCIES
   capybara (~> 2.13)
   carrierwave (~> 1.0)
   devise
+  elasticsearch-model!
+  elasticsearch-rails!
   gon
   jbuilder (~> 2.5)
   letter_opener
