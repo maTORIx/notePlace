@@ -50,7 +50,8 @@ class UserInfosController < ApplicationController
           result.push({id: data.id, title: data.title, description: data.description, user_id: data.user_id})
         end
       end
-      @json = JSON.generate(result)
+
+      @json = JSON.generate(result.uniq)
     elsif ["subscriber_organizations", "member_organizations", "member_request_organizations"].include? params[:type]
       data = @user.send(params[:type]).map {|data| {id: data.id, name: data.name, description: data.description, icon: data.icon.url, image: data.image.url}}
       @json = JSON.generate(data)

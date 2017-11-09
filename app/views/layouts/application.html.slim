@@ -22,9 +22,22 @@ html
             .mdl-layout-spacer
 
             nav.mdl-navigation
+
+              button.mdl-button.mdl-js-button.mdl-button--icon(v-on:click="redirectTo('/')")
+                i.material-icons home
+              
+              button.mdl-button.mdl-js-button.mdl-button--icon(v-on:click="redirectTo('/users/' + user.id)")
+                i.material-icons account_box
+              
+              button.mdl-button.mdl-js-button.mdl-button--icon(v-on:click="redirectTo('/notes/new')")
+                i.material-icons note_add
+              
+              button.mdl-button.mdl-js-button.mdl-button--icon(v-on:click="redirectTo('/users/' + user.id + '/edit')")
+                i.material-icons settings
+
               - if user_signed_in?
-                button.mdl-button.mdl-js-button.marginR10
-                  img#user-menu-lower-left.mdl-button.mdl-js-button.mdl-button--icon.notePlace-user-icon(alt="S" v-bind:src="user.icon")
+                button#user-menu-lower-left.mdl-button.mdl-js-button.marginR10.mdl-button--icon
+                  i.material-icons more_vert
               - else
                 = link_to "login", new_user_session_path, class: "mdl-navigation__link"
               
@@ -34,8 +47,9 @@ html
                 a (href="/notes/new" class="mdl-menu__item") New Note
                 a(href="/org/new" class="mdl-menu__item") New Organization
                 = link_to "logout", destroy_user_session_path, class: "mdl-menu__item", method: "delete"
+
         .mdl-layout__drawer
-          .notePlace-info-card
+          .notePlace-info-card.notePlace-info-user-card
             .notePlace-card-body
               .notePlace-center(v-on:click="redirectTo(`/users/${user.id}`)")
                 img.notePlace-icon.notePlace-user-icon(v-bind:src="user.icon")
@@ -48,5 +62,5 @@ html
           nav.mdl-navigation
             a.mdl-navigation__link(v-bind:href="'/org/' + org.name" v-for="org in user.subscribers")= "{{org.name}}"
         main.mdl-layout__content
-        .page-content
-          = yield
+          .page-content
+            = yield

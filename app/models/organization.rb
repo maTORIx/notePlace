@@ -9,9 +9,29 @@ class Organization < ApplicationRecord
   has_many :notes, through: :scopes
   mount_uploader :icon, OrgIconUploader
   mount_uploader :image, OrgImageUploader
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   def to_param
     name
   end
 
+  settings do
+    mappings dynamic: "false" do
+      indexes :name, type: "string", analyzer: "kuromoji"
+      indexes :description, type: "text", analyzer: "kuromoji"
+    end
+  end
+
+  def self.search(query)
+    __elasticsearch__.search({
+      query: {
+        multi_match: {
+          fields: %w(name description),
+          fuzziness: "AUTO",
+          query: query
+        }
+      }
+    })
+  end
 end

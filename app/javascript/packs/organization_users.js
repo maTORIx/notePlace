@@ -209,24 +209,28 @@ document.addEventListener('DOMContentLoaded', () => {
     var user = {}
     if(gon.user_id) {
       fetch("/users/" + gon.user_id + ".json").then((resp) => {
-        return resp.text()
+        return resp.text();
       }).then((data) => {
         user = JSON.parse(data)
-        return fetch("/users/" + gon.user_id + "/info/member_organizations.json")
+        return fetch(`/users/${gon.user_id}/info/member_organizations`)
       }).then((resp) => {
         return resp.text()
       }).then((data) => {
         user["members"] = JSON.parse(data)
-        return fetch("/users/" + gon.user_id + "/info/subscriber_organizations.json")
+        return fetch(`/users/${gon.user_id}/info/subscriber_organizations`)
       }).then((resp) => {
         return resp.text()
       }).then((data) => {
         user["subscribers"] = JSON.parse(data)
+        return fetch(`/users/${gon.user_id}/info/member_request_organizations`)
+      }).then((resp) => {
+        return resp.text()
+      }).then((data) => {
+        user["member_requests"] = JSON.parse(data)
       }).then(() => {
         app.user = user
       })
     }
-    return
   }
 
   function getOrganizationInfo() {

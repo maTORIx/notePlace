@@ -32,6 +32,17 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :search, only: [:index] do
+    collection do
+      get "organizations/:text", to: "search#searchOrganizations"
+      get "users/:text", to: "search#searchUsers"
+      get "notes/:text", to: "search#searchNotes"
+      get "organizations", to: "search#organizations"
+      get "users", to: "search#users"
+      get "notes", to: "search#notes"
+    end
+  end
+
   root "home#index"
 
   devise_for :users, path: "auth"
