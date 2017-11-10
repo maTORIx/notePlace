@@ -20,7 +20,7 @@
 
 .mdl-card.mdl-shadow--2dp.notePlace-ground-card
   .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="org in organizations" v-on:click="redirectTo('/org/' + org.name)")
-    img(v-bind:src="org.image" style="width: 100%" alt="No Image")
+    img(v-bind:src="org.image" style="width: 100%" alt="N")
     .notePlace-card-header.notePlace-center
       img.notePlace-icon.notePlace-user-icon(v-bind:src="org.icon" alt="NoImage")
       .notePlace-card-header-text="{{org.name}}"

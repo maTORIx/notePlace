@@ -18,7 +18,7 @@ class Organization < ApplicationRecord
 
   settings do
     mappings dynamic: "false" do
-      indexes :name, type: "string", analyzer: "kuromoji"
+      indexes :title, type: "string", analyzer: "kuromoji"
       indexes :description, type: "text", analyzer: "kuromoji"
     end
   end
@@ -27,7 +27,7 @@ class Organization < ApplicationRecord
     __elasticsearch__.search({
       query: {
         multi_match: {
-          fields: %w(name description),
+          fields: %w(title description),
           fuzziness: "AUTO",
           query: query
         }

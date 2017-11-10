@@ -4,11 +4,13 @@
   .notePlace-card-header
     img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="author.icon" v-on:click="redirectTo('/users/' + author.id)")
     .notePlace-card-header-text= "{{note.title}}"
-    button.notePlace-button.notePlace-button-skeleton-white(v-if="user.id == author.id" v-on:click="redirectTo('/notes/' + note.id + '/edit')") edit
+    nav.mdl-navigation
+    button.mdl-button.mdl-js-button.mdl-button--icon(v-on:click="redirectTo('/notes/' + note.id + '/edit')")
+      i.material-icons.notePlace-material-icon-white mode_edit
   .notePlace-card-body
     p(v-html="parseHTML(note.description)")
     div.notePlace-center
-      label Scope
+      i.material-icons visibility
       span.mdl-chip.marginL10.mdl-chip--contact(v-for="scope in scopes" v-on:click="redirectTo('/org/' + scope.name)")
         img.mdl-chip__contact(v-bind:src="scope.icon")
         span.mdl-chip__text= "{{scope.name}}"

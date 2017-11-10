@@ -12,6 +12,10 @@ input {
   min-width: 300px;
 }
 
+.header {
+  width: 20%;
+}
+
 textarea {
   max-height: 100%;
   min-height: 100px;
@@ -88,7 +92,7 @@ form {
   margin: 10px auto;
   
   .notePlace-card-header {
-    background-color: rgb(64, 81, 180);
+    background-color: rgb(121,85,72);
     height: 50px;
     width: 100%;
     display: flex;
@@ -108,9 +112,32 @@ form {
   }
 }
 
-.notePlace-info-card.notePlace-info-user-card {
-  background-color: #282828;
+.notePlace-material-icon-white {
   color: white;
+}
+
+.notePlace-material-icon-black {
+  color: black;
+}
+
+.notePlace-info-user-card {
+  background-color: rgb(121,85,72);
+  color: white;
+
+  .notePlace-card-header {
+    background-color: rgb(121,85,72);
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow-x: scroll;
+
+    .notePlace-card-header-text {
+      font-family: Arial;
+      font-size: 24px;
+      color: white;
+    }
+  }
 }
 
 .notePlace-info-card.notePlace-info-organization-card {
@@ -215,6 +242,22 @@ form {
   width: 94%;
   color: black;
   font-family: Arial;
+}
+
+.notePlace-header-search {
+  float: left;
+  .notePlace-search-text {
+    background-color: white;
+    border-radius: 5px;
+    width: 70%;
+    min-width: 0px;
+    height: 24px;
+    font-size: 14px;
+    opacity: 0.4
+  }
+  .notePlace-search-button {
+    margin: 0 5px;
+  }
 }
 
 .notePlace-info-button:hover {

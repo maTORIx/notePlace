@@ -1,26 +1,35 @@
 class SearchController < ApplicationController
-  def searchOrganizations
-    @orgs = Organization.search(params[:text]).results.results
-    data = @orgs.map do |org|
-      {id: org.id, name: org.name, description: org.description, icon: org.icon.url, image: org.image.url}
+  def organizations
+    if(params[:format] == "json")
+      @orgs = Organization.search(params[:text]).results.results
+      data = @orgs.map{|data| {id: data.id, name: data.name, description: data.description, icon: data.icon.url, image: data.image.url}}
+      render json: JSON.generate(data)
+    else
+      gon.user_id = current_user.id
+      gon.search_text = params[:text]
     end
-    render json: JSON.generate(data)
   end
   
-  def searchUsers
-    @users = UserInfo.search(params[:text]).results.results
-    data = @users.map do |user|
-      {id: user.id, name: user.name, description: user.description, icon: user.icon.url}
+  def users
+
+    if(params[:format] == "json")
+      @users = UserInfo.search(params[:text]).results.results
+      data = @users.map{|data| {id: data.id, name: data.name, description: data.description, icon: data.icon.url}}
+      render json: JSON.generate(data)
+    else
+      gon.user_id = current_user.id
+      gon.search_text = params[:text]
     end
-    render :json => JSON.generate(data)
   end
   
-  def searchNotes
-    @notes = Note.search(params[:text]).results.results
-    data = @notes.map do |note|
-      {id: note.id, title: note.title, description: note.description, user_id: note.user_id}
+  def notes
+    if(params[:format] == "json")
+      @notes = Note.search(params[:text]).results.results
+      data = @notes.map{|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
+      render json: JSON.generate(data)
+    else
+      gon.user_id = current_user.id
+      gon.search_text = params[:text]
     end
-    render json: JSON.generate(data)
   end
-  
 end

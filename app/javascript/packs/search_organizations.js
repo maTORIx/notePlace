@@ -14,12 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
     smartypants: false
   });
 
+  const getCsrfToken = () => {
+    const metas = document.getElementsByTagName('meta');
+    for (let meta of metas) {
+      if (meta.getAttribute('name') === 'csrf-token') {
+        console.log(meta.getAttribute('content'));
+        return meta.getAttribute('content');
+      }
+    }
+    return '';
+  }
+
   var app = new Vue({
     el: '#app',
     data: {
-      "user" : {name: "none", description: "none", members: [], subscribers: []},
+      "user" : {id: undefined, name: "none", icon: ""},
+      "organizations": [],
+      "search_text": gon.search_text,
     },
     methods: {
+      parseHTML: function(src) {
+        return marked(src)
+      },
       redirectTo: function(url) {
         location.href = url
         return
@@ -55,5 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function getOrganizations() {
+    if(gon.search_text) {
+      fetch(`/search/organizations.json/${gon.search_text}`).then((resp) => {
+        return resp.text()
+      }).then((data) => {
+        app.organizations = JSON.parse(data);
+      })
+    }
+  }
   getUserInfo()
+  getOrganizations()
 })

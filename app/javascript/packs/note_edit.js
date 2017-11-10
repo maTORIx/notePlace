@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         var result 
         return result
       },
-      redirectTo: function(note) {
-        location.href = `/notes/${note.id}`
+      redirectTo: function(url) {
+        location.href = url
         return
       },
       addScopeData: function(org_name) {

@@ -2,7 +2,7 @@ import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
 
 document.addEventListener('DOMContentLoaded', () => {
-  // marked settings
+  //marked settings
   marked.setOptions({
     renderer: new marked.Renderer(),
     gfm: true,
@@ -14,17 +14,39 @@ document.addEventListener('DOMContentLoaded', () => {
     smartypants: false
   });
 
-  var app = new Vue({
-    el: '#app',
+  var header = new Vue({
+    el: '#header',
     data: {
-      "user" : {name: "none", description: "none", members: [], subscribers: []},
+      "header_search_text" : "",
+      "user": {id: null, name: "John Doe", description: "none", members: [], member_requests: [], subscribers: []}
     },
     methods: {
+      search: function() {
+        location.href = `/search/notes/${this.header_search_text}`
+      },
       redirectTo: function(url) {
         location.href = url
-        return
-      },
+      }
+    }
+  })
+
+  var header_drawer = new Vue({
+    el: '#header_drawer',
+    data: {
+      "user": {id: null, name: "John Doe", description: "none", members: [], member_requests: [], subscribers: []}
     },
+    methods: {
+      parseHTML: function(src) {
+        var result = marked(src)
+        return result
+      },
+      search: function() {
+        location.href = `/search/notes/${this.search_text}`
+      },
+      redirectTo: function(url) {
+        location.href = url
+      }
+    }
   })
 
   function getUserInfo() {
@@ -50,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }).then((data) => {
         user["member_requests"] = JSON.parse(data)
       }).then(() => {
-        app.user = user
+        header.user = user
+        header_drawer.user = user
       })
     }
   }

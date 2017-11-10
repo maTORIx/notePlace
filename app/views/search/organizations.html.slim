@@ -1,0 +1,14 @@
+= javascript_pack_tag 'search_organizations.js'
+.mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
+  .mdl-tabs__tab-bar
+    a.mdl-tabs__tab(v-bind:href="'/search/notes/' + search_text") Notes
+    a.mdl-tabs__tab(v-bind:href="'/search/users/' + search_text") Users
+    a.mdl-tabs__tab(v-bind:href="'/search/organizations/' + search_text") Organizations
+.mdl-card.mdl-shadow--2dp.notePlace-ground-card
+  .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="org in organizations" v-on:click="redirectTo('/org/' + org.name)")
+    img(v-bind:src="org.image" style="width: 100%" alt="No Image")
+    .notePlace-card-header.notePlace-center
+      img.notePlace-icon.notePlace-user-icon(v-bind:src="org.icon" alt="NoImage")
+      .notePlace-card-header-text="{{org.name}}"
+    .notePlace-card-text-field(v-on:click="redirectTo('/org/' + org.id)")
+      p(v-html="parseHTML(org.description)")

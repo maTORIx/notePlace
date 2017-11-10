@@ -1,0 +1,15 @@
+= javascript_pack_tag 'search_users.js'
+.mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
+  .mdl-tabs__tab-bar
+    a.mdl-tabs__tab(v-bind:href="'/search/notes/' + search_text") Notes
+    a.mdl-tabs__tab(v-bind:href="'/search/users/' + search_text") Users
+    a.mdl-tabs__tab(v-bind:href="'/search/organizations/' + search_text") Organizations
+.notePlace-ground
+  .mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
+    h3(v-if="users.length == 0") Not Found
+    .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="user in users" v-on:click="redirectTo('/users/' + user.id)" v-else)
+      .notePlace-user-info-field
+        img.notePlace-user-icon(alt="Not Found" v-bind:src="user.icon")
+        div = "{{user.name}}"
+      .notePlace-card-text-field
+        p(v-html="parseHTML(user.description)")

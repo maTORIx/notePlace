@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "notes" : [],
       "users": [],
       "timeline": [],
-      "show_user": {name: "none", description: "none", members: [], subscribers: [],member_requests: []},
+      "search_text": gon.search_text,
     },
     methods: {
       parseHTML: function(src) {
@@ -89,36 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function getShowUserInfo() {
-    var show_user = {}
-    if(gon.show_user_id) {
-      fetch("/users/" + gon.show_user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        show_user = JSON.parse(data)
-        return fetch(`/users/${gon.show_user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        show_user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.show_user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        show_user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.show_user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        show_user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.show_user = show_user
-      })
-    }
-  }
-
   function getNote() {
-    fetch("/users/" + gon.show_user_id + "/info/notes.json").then((resp) => {
+    fetch("/search/notes.json/" + gon.search_text).then((resp) => {
       return resp.text();
     }).then((data) => {
     var notes = JSON.parse(data)
@@ -156,6 +128,5 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
   getUserInfo()
-  getShowUserInfo()
   getNote()
 })
