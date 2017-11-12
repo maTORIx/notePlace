@@ -9,7 +9,8 @@ html
     = javascript_include_tag 'application.js'
     = javascript_pack_tag "header.js"
     = include_gon
-    
+  
+  #load-bar.mdl-progress.mdl-js-progress.mdl-progress__indeterminate
   body
     div
       .mdl-layout.mdl-js-layout.mdl-layout--fixed-header.mdl-layout--fixed-drawer
@@ -57,7 +58,7 @@ html
                 img.notePlace-icon.notePlace-user-icon(v-bind:src="user.icon")
                 h4 ="{{user.name}}"
               
-              p(v-html="user.description")
+              p(v-html="parseHTML(user.description)")
           span.mdl-layout-title Belongs
           nav.mdl-navigation
             a.mdl-navigation__link(v-bind:href="'/org/' + org.name" v-for="org in user.members")= "{{org.name}}"

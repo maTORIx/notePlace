@@ -1,7 +1,26 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
 
+
 document.addEventListener('DOMContentLoaded', () => {
+
+  var body = document.body
+  var load_bar = document.querySelector("#load-bar")
+  body.style.display = "none"
+  window.setTimeout(function() {
+    body.style.display = "block"
+    load_bar.style.display = "none"
+  }, 400)
+
+  //localStrage
+  var user = localStorage.getItem(user)
+  if(user) {
+    console.log(user)
+    user = JSON.parse(user)
+  } else {
+    user = {id: null, name: "", description: "", members: [], member_requests: [], subscribers: []}
+  }
+
   //marked settings
   marked.setOptions({
     renderer: new marked.Renderer(),
@@ -18,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     el: '#header',
     data: {
       "header_search_text" : "",
-      "user": {id: null, name: "John Doe", description: "none", members: [], member_requests: [], subscribers: []}
+      "user": user
     },
     methods: {
       search: function() {
@@ -26,14 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       redirectTo: function(url) {
         location.href = url
-      }
+      },
     }
   })
 
   var header_drawer = new Vue({
     el: '#header_drawer',
     data: {
-      "user": {id: null, name: "John Doe", description: "none", members: [], member_requests: [], subscribers: []}
+      "user": user
     },
     methods: {
       parseHTML: function(src) {
@@ -45,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       redirectTo: function(url) {
         location.href = url
-      }
+      },
     }
   })
 
@@ -74,9 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }).then(() => {
         header.user = user
         header_drawer.user = user
+        localStorage.setItem("user", JSON.stringify(user))
       })
     }
   }
 
   getUserInfo()
+
 })

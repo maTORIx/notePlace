@@ -5,7 +5,8 @@
     a.mdl-tabs__tab(v-bind:href="'/search/users/' + search_text") Users
     a.mdl-tabs__tab(v-bind:href="'/search/organizations/' + search_text") Organizations
 .mdl-card.mdl-shadow--2dp.notePlace-ground-card
-  .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="org in organizations" v-on:click="redirectTo('/org/' + org.name)")
+  h3(v-if="organizations.length == 0") Not Found
+  .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="org in organizations" v-on:click="redirectTo('/org/' + org.name)" v-else)
     img(v-bind:src="org.image" style="width: 100%" alt="No Image")
     .notePlace-card-header.notePlace-center
       img.notePlace-icon.notePlace-user-icon(v-bind:src="org.icon" alt="NoImage")

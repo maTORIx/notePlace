@@ -187,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
           })
         }).then((resp) => {
           if (resp.status >= 200 && resp.status <= 300) {
+            this.organization.members.splice(this.organization.members.indexOf(user), 1)
           } else {
             window.alert("Internal Server Error")
             throw "Internal server error"

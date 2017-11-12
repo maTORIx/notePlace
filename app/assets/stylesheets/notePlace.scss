@@ -290,6 +290,10 @@ form {
   margin-right: 10px;
 }
 
+.marginLR {
+  margin: 0 5px;
+}
+
 .notePlace-button {
   width: auto;
   height: 40px;
@@ -300,6 +304,16 @@ form {
   margin-right: 5px;
   margin-left: 5px;
   border: 2px solid white;
+}
+.notePlace-material-button {
+  margin: 0 auto;
+}
+
+.notePlace-button-large {
+  width: 98%;
+  background-color: rgb(255,171,64);
+  margin: 0 1%;
+  border-radius: 5px;
 }
 
 .notePlace-button.notePlace-button-large {

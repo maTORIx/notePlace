@@ -12,7 +12,8 @@
     div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/subscribers')")
       label Subscribe
       .notePlace-button-text="{{show_user.subscribers.length}}" 
-    button.notePlace-button.notePlace-button-skeleton-white(v-if="user.id == show_user.id" v-on:click="redirectTo('/users/' + show_user.id + '/edit')") edit
+    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginLR(v-if="user.id == show_user.id" v-on:click="redirectTo('/users/' + show_user.id + '/edit')")
+      i.material-icons edit
   .notePlace-card-body
     p(v-html="parseHTML(show_user.description)")
 

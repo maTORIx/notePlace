@@ -6,7 +6,8 @@
     a.mdl-tabs__tab(v-bind:href="'/search/organizations/' + search_text") Organizations
 .notePlace-ground
   .mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
-    .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="note in timeline")
+    h3(v-if="notes.length == 0") Not Found
+    .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="note in timeline" v-else)
       .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
         h5 = "{{note.title}}"
         p(v-html="parseHTML(note.description)")
