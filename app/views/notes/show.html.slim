@@ -5,8 +5,8 @@
     img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="author.icon" v-on:click="redirectTo('/users/' + author.id)")
     .notePlace-card-header-text= "{{note.title}}"
     nav.mdl-navigation
-    button.mdl-button.mdl-js-button.mdl-button--icon(v-on:click="redirectTo('/notes/' + note.id + '/edit')")
-      i.material-icons.notePlace-material-icon-white mode_edit
+    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginLR(v-on:click="redirectTo('/notes/' + note.id + '/edit')")
+      i.material-icons edit
   .notePlace-card-body
     p(v-html="parseHTML(note.description)")
     div.notePlace-center
