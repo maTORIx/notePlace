@@ -53,12 +53,11 @@ html
 
         .mdl-layout__drawer#header_drawer
           .notePlace-info-user-card
+            .notePlace-card-header(v-on:click="redirectTo(`/users/${user.id}`)")
+              img.notePlace-icon.notePlace-user-icon(v-bind:src="user.icon")
+              h4 ="{{user.name}}"
             .notePlace-card-body
-              .notePlace-center(v-on:click="redirectTo(`/users/${user.id}`)")
-                img.notePlace-icon.notePlace-user-icon(v-bind:src="user.icon")
-                h4 ="{{user.name}}"
-              
-              p(v-html="parseHTML(user.description)")
+              div(v-html="parseHTML(user.description)")
           span.mdl-layout-title Belongs
           nav.mdl-navigation
             a.mdl-navigation__link(v-bind:href="'/org/' + org.name" v-for="org in user.members")= "{{org.name}}"
@@ -67,4 +66,6 @@ html
             a.mdl-navigation__link(v-bind:href="'/org/' + org.name" v-for="org in user.subscribers")= "{{org.name}}"
         main.mdl-layout__content#app
           .page-content
+            button#notePlace-note-create-button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect(v-on:click="redirectTo('/notes/new')")
+              i.material-icons edit
             = yield

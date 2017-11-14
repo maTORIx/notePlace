@@ -1,0 +1,9 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+create_table "member_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.integer "organization_id", null: false
+  t.integer "user_id", null: false
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+  t.index ["organization_id", "user_id"], name: "index_member_requests_on_organization_id_and_user_id", unique: true
+end

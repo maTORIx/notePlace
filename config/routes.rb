@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :organizations, path: "org", except: [:delete], param: :name do
+  resources :organizations, path: "org", except: [:delete, :index], param: :name do
     member do
       get "info/:type", to: "organizations#info"
       get "members", to: "organizations#showMembers"

@@ -16,6 +16,18 @@ class Organization < ApplicationRecord
     name
   end
 
+  def isMember(user)
+    self.member_users.include?(user)
+  end
+
+  def isSubscriber(user)
+    self.subscriber_users.include?(user)
+  end
+  
+  def isMemberRequestedUser(user)
+    self.member_request_users.include?(user)
+  end
+
   settings do
     mappings dynamic: "false" do
       indexes :title, type: "string", analyzer: "kuromoji"

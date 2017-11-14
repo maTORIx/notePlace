@@ -1,17 +1,20 @@
 class NotesController < ApplicationController
   def show
-    @note = Note.find(params[:id])
-    note_json = {
-                  id: @note.id,
-                  title: @note.title,
-                  user_id: @note.user_id,
-                  description: @note.description,
-                  filename: @note.note.file.filename
-                }.to_json
     if current_user  && [nil, "html"].include?(params[:format])
       gon.user_id = current_user.id
-      gon.note_id = @note.id
+      gon.note_id = params[:id]
     end
+
+    @note = Note.find(params[:id])
+    note_json = JSON.generate({
+                id: @note.id,
+                title: @note.title,
+                user_id: @note.user_id,
+                secret: @note.secret,
+                subscriber_only: @note.subscriber_only,
+                description: @note.description,
+                filename: @note.note.file.filename
+              })
     respond_to do |format|
       format.html
       format.json { render json: note_json }
@@ -26,24 +29,31 @@ class NotesController < ApplicationController
   end
 
   def create
-    note_params = params.permit(:title, :description, :note)
+    note_params = params.permit(:title, :description, :note, :secret, :subscriber_only)
     @note = current_user.notes.create(note_params)
     render json: JSON.generate({id: @note.id, title: @note.title, description: @note.description})
   end
   
   def edit
     @note = Note.find(params[:id])
-    if current_user  && [nil, "html"].include?(params[:format])
+    if(@note.user_id == current_user.id)
       gon.user_id = current_user.id
       gon.note_id = @note.id
+    else
+      render nothing: true, status: :forbidden
     end
   end
   
   def update
-    note_params = params.permit(:title, :description, :note)
+    note_params = params.permit(:title, :description, :note, :secret, :subscriber_only)
     @note = Note.find(params[:id])
-    @note.update(note_params)
-    render json: JSON.generate({id: @note.id, title: @note.title, description: @note.description})
+    if(@note.user_id == current_user.id)
+      @note.lock!
+      @note.update!(note_params)
+      render json: JSON.generate({id: @note.id, title: @note.title, description: @note.description})
+    else
+      render nothing: true, status: :forbidden
+    end
   end
   
   def destory
@@ -54,8 +64,13 @@ class NotesController < ApplicationController
 
   def file
     @note = Note.find(params[:id])
-    full_path = @note.note.current_path
-    send_file full_path, file_name: @note.note.file.filename
+    if !@note.isAllowUser(current_user)
+      puts "----------------------------------------forbidden----------------------------------"
+      render :plain => "Forbidden", status: 403
+    else
+      full_path = @note.note.current_path
+      send_file full_path, file_name: @note.note.file.filename
+    end
   end
 
   def info

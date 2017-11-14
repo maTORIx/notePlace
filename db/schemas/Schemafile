@@ -1,0 +1,10 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require 'member_requests.schema'
+require 'members.schema'
+require 'notes.schema'
+require 'organizations.schema'
+require 'scopes.schema'
+require 'subscribers.schema'
+require 'user_infos.schema'
+require 'users.schema'

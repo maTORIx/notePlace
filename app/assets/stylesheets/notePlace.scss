@@ -32,6 +32,13 @@ form {
   flex-direction: column;
 }
 
+#notePlace-note-create-button {
+  position: fixed;
+  right: 5%;
+  bottom: 5%;
+  z-index: 1000;
+}
+
 .notePlace-markdown-parser {
   height: 50%;
   max-height: 500px;
@@ -137,6 +144,9 @@ form {
       font-size: 24px;
       color: white;
     }
+  }
+
+  .notePlace-card-body {
   }
 }
 

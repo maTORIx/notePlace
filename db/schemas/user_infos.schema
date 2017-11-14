@@ -1,0 +1,11 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+create_table "user_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.string "name"
+  t.integer "user_id", null: false
+  t.text "description"
+  t.string "hometown"
+  t.string "icon"
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+end

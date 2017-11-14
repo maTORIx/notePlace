@@ -6,6 +6,21 @@ class Note < ApplicationRecord
   has_many :scopes
   has_many :organizations, through: :scopes
 
+  def isAllowUser(user)
+    if self.secret
+      false
+    elsif self.subscriber_only
+      self.organizations.each do |org|
+        if org.isSubscriber(user) == true
+          true
+        end
+      end
+      false
+    else
+      true
+    end
+  end
+
   settings do
     mappings dynamic: "false" do
       indexes :title, type: "string", analyzer: "kuromoji"

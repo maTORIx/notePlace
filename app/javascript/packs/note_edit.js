@@ -33,9 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
       "note" : [],
       "scopes" : [],
       "scopes_change": {add: [], delete: []},
-      "orgs" : [],
       "input_scope_name": "",
-      "form": {title: "", description: "", note: null, markdown: ""},
+      "form": {title: "", description: "", note: null, markdown: "", secret: false, subscriber_only: false},
       "isFile": true
     },
     methods: {
@@ -132,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("note",this.form.note)
         formData.append("title",this.form.title)
         formData.append("description",this.form.description)
+        formData.append("secret",this.form.secret)
+        formData.append("subscriber_only",this.form.subscriber_only)
         formData.append("permit",true)
         fetch("/notes", {
           method: "POST",
@@ -156,6 +157,8 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("note",this.form.note)
         formData.append("title",this.form.title)
         formData.append("description",this.form.description)
+        formData.append("secret",this.form.secret)
+        formData.append("subscriber_only",this.form.subscriber_only)
         formData.append("permit",true)
         fetch("/notes/" + gon.note_id, {
           method: "PUT",
@@ -194,6 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       markedText: function() {
         return marked(this.form.markdown)
+      },
+      orgs: function() {
+        return this.user.members
       }
     },
   })
@@ -233,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }).then((data) => {
         app.form = JSON.parse(data)
         app.note = JSON.parse(data)
+        console.log(data)
         return fetch(`/notes/${gon.note_id}/info/organizations`)
       }).then((resp) => {
         return resp.text()
@@ -258,4 +265,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   getUserInfo();
   getNoteInfo();
+
+  setInterval(function() {
+    console.log(app.form)
+  }, 1000)
 })

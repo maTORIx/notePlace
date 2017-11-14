@@ -18,6 +18,5 @@ class SubscribersController < ApplicationController
     if @subscriber.user_id == current_user.id
       @subscriber.destroy
     end
-    
   end
 end

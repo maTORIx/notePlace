@@ -18,14 +18,26 @@ form(v-on:submit="submitNote" name="note" id="form")
     label.mdl-textfield__label description
     textarea.mdl-textfield__input(v-model="form.description" name="description")
   
-  p 
-    input(type="checkbox" v-model="isFile") File
+  p
+    label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect(for="file")
+      input#file.mdl-switch__input(type="checkbox" v-model="isFile")
+      span.mdl-switch__label Text or File
 
     div(v-if="isFile")
       input(type="file" v-on:change="selectedFile" name="note")
     div.notePlace-markdown-parser(v-else)
       textarea(v-model="form.markdown")
       div.notePlace-markdown-parsed(v-html="markedText")
+  
+  label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for="secret")
+    input#secret.mdl-checkbox__input(type="checkbox" v-model="form.secret")
+    span.mdl-checkbox__label Secret
+  
+  br
+
+  label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for="subscriber_only")
+    input#subscriber_only.mdl-checkbox__input(type="checkbox" v-model="form.subscriber_only")
+    span.mdl-checkbox__label Subscriber Only
 
   p
     button(type="submit") send

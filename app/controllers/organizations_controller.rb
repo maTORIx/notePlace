@@ -41,9 +41,9 @@ class OrganizationsController < ApplicationController
   end
 
   def update
-    @organization = Organization.find_by(name: params[:name])
+    @organization = Organization.lock.find_by(name: params[:name])
     organization_params = params.require(:organization).permit(:name, :description, :icon, :image)
-    @organization.update(organization_params)
+    @organization.update!(organization_params)
     redirect_to @organization
   end
 
