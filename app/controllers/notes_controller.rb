@@ -11,6 +11,7 @@ class NotesController < ApplicationController
                 title: @note.title,
                 user_id: @note.user_id,
                 secret: @note.secret,
+                favorite: current_user.isFavorite(@note),
                 subscriber_only: @note.subscriber_only,
                 description: @note.description,
                 filename: @note.note.file.filename
@@ -65,7 +66,6 @@ class NotesController < ApplicationController
   def file
     @note = Note.find(params[:id])
     if !@note.isAllowUser(current_user)
-      puts "----------------------------------------forbidden----------------------------------"
       render :plain => "Forbidden", status: 403
     else
       full_path = @note.note.current_path

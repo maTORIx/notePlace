@@ -1,12 +1,4 @@
 class MemberRequestsController < ApplicationController
-  def index
-    @member_requests = MemberRequest.all
-  end
-
-  def show
-    @member_request = MemberRequest.find(params[:id])
-  end
-
   def create
     member_request_params = params.require(:member_request).permit(:organization_id, :user_email)
     org = Organization.find_by(id: member_request_params[:organization_id])

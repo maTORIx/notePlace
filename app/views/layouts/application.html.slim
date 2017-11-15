@@ -66,6 +66,6 @@ html
             a.mdl-navigation__link(v-bind:href="'/org/' + org.name" v-for="org in user.subscribers")= "{{org.name}}"
         main.mdl-layout__content#app
           .page-content
-            button#notePlace-note-create-button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect(v-on:click="redirectTo('/notes/new')")
+            button#notePlace-note-create-button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--colored.mdl-js-ripple-effect(v-on:click="redirectTo('/notes/new')")
               i.material-icons edit
             = yield

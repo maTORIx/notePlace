@@ -103,6 +103,7 @@ GEM
       elasticsearch-transport (= 5.0.4)
     elasticsearch-api (5.0.4)
       multi_json
+    elasticsearch-dsl (0.1.5)
     elasticsearch-transport (5.0.4)
       faraday
       multi_json
@@ -258,6 +259,8 @@ DEPENDENCIES
   capybara (~> 2.13)
   carrierwave (~> 1.0)
   devise
+  elasticsearch
+  elasticsearch-dsl
   elasticsearch-model!
   elasticsearch-rails!
   gon

@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-  resources :subscribers, except: ["edit", "update", "new"]
+  resources :subscribers, only: [:create, :delete]
 
-  resources :scopes, except: ["edit", "update", "new"]
+  resources :scopes, only: [:create, :delete]
 
-  resources :members, except: ["edit", "update", "new"]
+  resources :members, only: [:create, :delete]
 
-  resources :member_requests, except: ["edit", "update", "new"]
+  resources :member_requests, only: [:create, :delete]
 
   resources :notes, except: [:index] do
     member do
@@ -39,6 +39,8 @@ Rails.application.routes.draw do
       get "notes(.:format)(/:text)", to: "search#notes"
     end
   end
+
+  resources :stars, only: [:create, :destroy]
 
   root "home#index"
 

@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018065523) do
+ActiveRecord::Schema.define(version: 20171115011951) do
 
   create_table "member_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "organization_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["organization_id", "user_id"], name: "index_member_requests_on_organization_id_and_user_id"
+    t.index ["organization_id", "user_id"], name: "index_member_requests_on_organization_id_and_user_id", unique: true
   end
 
   create_table "members", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -31,25 +31,37 @@ ActiveRecord::Schema.define(version: 20171018065523) do
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "note", null: false
     t.string "title", null: false
+    t.text "description"
     t.integer "user_id", null: false
+    t.boolean "secret", default: false
+    t.boolean "subscriber_only", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "organizations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
-    t.string "icon"
+    t.string "icon", default: "http://matorixx.com/home.png"
     t.string "image"
     t.text "description"
+    t.boolean "public", default: true
     t.index ["name"], name: "index_organizations_on_name", unique: true
   end
 
   create_table "scopes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "org_id", null: false
+    t.integer "organization_id", null: false
     t.integer "note_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["org_id", "note_id"], name: "index_scopes_on_org_id_and_note_id", unique: true
+    t.index ["organization_id", "note_id"], name: "index_scopes_on_organization_id_and_note_id", unique: true
+  end
+
+  create_table "stars", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "user_id", null: false
+    t.integer "note_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "note_id"], name: "index_stars_on_user_id_and_note_id", unique: true
   end
 
   create_table "subscribers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

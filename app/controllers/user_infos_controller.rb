@@ -39,8 +39,8 @@ class UserInfosController < ApplicationController
   def info
     @user = User.find(params[:id])
     @json = "[]"
-    if params[:type] == "notes"
-      notes = @user.notes.map {|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
+    if ["notes", "star_notes"].include?(params[:type])
+      notes = @user.send(params[:type]).map {|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
       @json = JSON.generate(notes)
     
     elsif params[:type] == "timeline"
@@ -58,6 +58,9 @@ class UserInfosController < ApplicationController
       @json = JSON.generate(data)
     elsif ["members", "subscribers", "member_requests"].include?(params[:type]) && params[:format] == "json"
       data = @user.send(params[:type]).map{|data| {id: data.id, user_id: data.user_id, organization_id: data.organization_id}}
+      @json = JSON.generate(data)
+    elsif "stars" == params[:type]
+      data = @user.stars.map{|data| {id: data.id, user_id: data.user.id, note_id: data.note_id}}
       @json = JSON.generate(data)
     end
 

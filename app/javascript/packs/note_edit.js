@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getNoteInfo() {
     if(gon.note_id) {
-      fetch(`/notes/${gon.note_id}.json`).then((resp) => {
+      fetch(`/notes/${gon.note_id}.json`, {credentials: "same-origin"}).then((resp) => {
         return resp.text()
       }).then((data) => {
         app.form = JSON.parse(data)
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }).then((data) => {
         var orgs = JSON.parse(data)
         app.scopes = orgs
-        return fetch(`/notes/${gon.note_id}/file`)
+        return fetch(`/notes/${gon.note_id}/file`, {credentials: "include"})
       }).then((resp) => {
         var extension = app.note.filename.split(".").pop();
 

@@ -29,15 +29,13 @@ form(v-on:submit="submitNote" name="note" id="form")
       textarea(v-model="form.markdown")
       div.notePlace-markdown-parsed(v-html="markedText")
   
-  label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for="secret")
-    input#secret.mdl-checkbox__input(type="checkbox" v-model="form.secret")
-    span.mdl-checkbox__label Secret
+  label(for="secret")
+    input#secret.mdl-checkbox__input(type="checkbox" v-model="form.secret") Secret
   
   br
 
-  label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for="subscriber_only")
-    input#subscriber_only.mdl-checkbox__input(type="checkbox" v-model="form.subscriber_only")
-    span.mdl-checkbox__label Subscriber Only
+  label(for="subscriber_only")
+    input#subscriber_only(type="checkbox" v-model="form.subscriber_only") Subscriber Only
 
   p
     button(type="submit") send

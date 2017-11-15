@@ -1,12 +1,4 @@
 class SubscribersController < ApplicationController
-  def index
-    @subscribers = Subscriber.all
-  end
-
-  def show
-    @subscriber = Subscriber.find(params[:id])
-  end
-
   def create
     subs_params = params.require(:subscriber).permit(:organization_id)
     @subscriber = current_user.subscribers.create(subs_params)

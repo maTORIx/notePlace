@@ -5,26 +5,52 @@ class Note < ApplicationRecord
   mount_uploader :note, NoteFileUploader
   has_many :scopes
   has_many :organizations, through: :scopes
+  has_many :stars
+  has_many :star_notes, through: :scopes, source: :users
 
   def isAllowUser(user)
     if self.secret
-      false
+      if(user = self.user)
+        return true
+      else
+        return false
+      end
     elsif self.subscriber_only
       self.organizations.each do |org|
         if org.isSubscriber(user) == true
-          true
+          return true
         end
       end
-      false
+      return false
     else
-      true
+      return true
     end
   end
+
+  # def as_indexed_json(options={})
+  #   as_json(
+  #     only: [:title, :description],
+  #     include: {
+  #       user: {
+  #         only: [],
+  #         include: {
+  #           user_info: {only: [:name]}
+  #         }
+  #       }
+  #     }
+  #   )
+  # end
 
   settings do
     mappings dynamic: "false" do
       indexes :title, type: "string", analyzer: "kuromoji"
       indexes :description, type: "text", analyzer: "kuromoji"
+
+      indexes :user do
+        indexes :user_info do
+          indexes :name, analyzer: 'keyword', index: 'not_analyzed'
+        end
+      end
     end
   end
 
@@ -32,7 +58,7 @@ class Note < ApplicationRecord
     __elasticsearch__.search({
       query: {
         multi_match: {
-          fields: %w(title description),
+          fields: %w(title description user.user_info.name),
           fuzziness: "AUTO",
           query: query
         }

@@ -1,12 +1,4 @@
 class ScopesController < ApplicationController
-  def index
-    @scopes = Scope.all
-  end
-
-  def show
-    @scope = Scope.find(params[:id])
-  end
-
   def create
     p "-----------------"
     p params

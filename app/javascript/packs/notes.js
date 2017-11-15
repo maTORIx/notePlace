@@ -14,12 +14,22 @@ document.addEventListener('DOMContentLoaded', () => {
     smartypants: false
   });
 
+  const getCsrfToken = () => {
+    const metas = document.getElementsByTagName('meta');
+    for (let meta of metas) {
+      if (meta.getAttribute('name') === 'csrf-token') {
+        console.log(meta.getAttribute('content'));
+        return meta.getAttribute('content');
+      }
+    }
+    return '';
+  }
   
   var app = new Vue({
     el: '#app',
     data: {
       "user" : {},
-      "note" : {title: "John Doe", description: "none"},
+      "note" : {title: "", description: "", favorite: false},
       "author": {},
       "noteFile": "",
       "scopes" : [],
@@ -43,6 +53,60 @@ document.addEventListener('DOMContentLoaded', () => {
       redirectTo: function(url) {
         location.href = url
         return
+      },
+      favorite: function() {
+        fetch("/stars", {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': getCsrfToken()
+          },
+          body: JSON.stringify({"star":{
+                                  "user_id": this.user.id,
+                                  "note_id": this.note.id
+                                }
+          })
+        }).then((resp) => {
+          if(resp.status >= 200 && resp.status <= 300) {
+            var note = this.note
+            note.favorite = true
+            this.note = note
+          } else {
+            window.alert("Internal Server Error")
+            throw resp.status
+          }
+        })
+        },
+      unFavorite: function() {
+        fetch("/users/" + this.user.id + "/info/stars.json", {credentials: "same-origin"}).then((resp) => {
+          return resp.text()
+        }).then((data) => {
+          var stars = JSON.parse(data);
+          console.log("a")
+          var star = stars.filter(function(data) {
+            return data.note_id = app.note.id
+          })
+          console.log("b")
+          if(star.length !== 1) {
+            throw "user not found"
+          }
+          star = star[0]
+
+          return fetch(`/stars/${star.id}`, {
+            method: "DELETE",
+            credentials: "same-origin",
+            headers: {
+              "X-CSRF-Token": getCsrfToken()
+            }
+          })
+        }).then((resp) => {
+          if(resp.status <= 300 && resp.status >= 200) {
+            var note = this.note
+            note.favorite = false
+            this.note = note
+          }
+        })
       },
     },
     computed: {
@@ -92,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getNote() {
     if(gon.note_id) {
-      fetch("/notes/" + gon.note_id + ".json").then((resp) => {
+      fetch("/notes/" + gon.note_id + ".json", {credentials: "same-origin"}).then((resp) => {
         return resp.text();
       }).then((data) => {
         var note = JSON.parse(data);
@@ -109,9 +173,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return resp.text()
       }).then((data) => {
         app.scopes = JSON.parse(data);
-        return fetch("/notes/" + gon.note_id + "/file")
+        return fetch("/notes/" + gon.note_id + "/file", {credentials: "include"})
       }).then((resp) => {
-        var extension = app.note.filename.split(".").pop();
+        if (!(resp.status >= 200 && resp.status <= 300)) {
+          if(resp.status == 403) {
+            window.alert("このノートを見るには公開範囲の団体を登録する必要があります")
+            throw "You don't have permission"
+          }
+          throw "Internal Server Error"
+        }
+        var extension = app.note_extension
 
         // check extension
         switch (extension) {
@@ -141,6 +212,8 @@ document.addEventListener('DOMContentLoaded', () => {
           default:
             return
         }
+      }).catch((error) => {
+        console.error(error.toString())
       })
     }
   }

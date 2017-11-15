@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
       "notes" : [],
       "users": [],
       "timeline": [],
+      "star_notes": [],
+      "star_timeline": [],
       "show_user": {name: "none", description: "none", members: [], subscribers: [],member_requests: []},
     },
     methods: {
@@ -56,6 +58,20 @@ document.addEventListener('DOMContentLoaded', () => {
           note["user"] = this.getUser(app.notes[i])
           app.timeline.push(note)
         }
+        return
+      },
+      addStarTimeline: function() {
+        var show_length = this.star_timeline + 100
+        if(this.star_notes.length < 100) {
+          show_length = this.star_notes.length
+        }
+        for(var i = 0; i < show_length; i++) {
+          var note = this.star_notes[i]
+          note["user"] = this.getUser(note)
+          app.star_timeline.push(note)
+        }
+        console.log(app.star_timeline)
+        console.log("--------------------------")
         return
       }
     },
@@ -117,12 +133,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function getNote() {
+  function getNotes() {
+    var notes = []
     fetch("/users/" + gon.show_user_id + "/info/notes.json").then((resp) => {
       return resp.text();
     }).then((data) => {
+      notes = JSON.parse(data)
+      return fetch(`/users/${gon.show_user_id}.json`)
+    }).then((resp) => {
+      return resp.text()
+    }).then((data) => {
+      app.users.push(JSON.parse(data))
+      
+      app.notes = notes.sort(function(note1, note2) {
+        return note2.id > note1.id
+      })
+      app.timeline = []
+      app.addTimeline()
+    })
+  }
+
+  function getStarNotes() {
+    var star_notes = []
+    fetch("/users/" + gon.show_user_id + "/info/star_notes.json").then((resp) => {
+      return resp.text();
+    }).then((data) => {
     var notes = JSON.parse(data)
-    app.notes = notes
+    star_notes = notes
 
     var user_ids = notes.map(function(data){
       return data.user_id
@@ -143,19 +180,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }))
 
     }).then((texts) => {
-      var users = texts.map(function(data) {
-        return JSON.parse(data)
+      var users = texts.forEach(function(data) {
+        app.users.push(JSON.parse(data))
       })
-      app.users = users
-      
-      app.notes = app.notes.sort(function(note1, note2) {
+
+      app.star_notes = star_notes.sort(function(note1, note2) {
         return note2.id > note1.id
       })
-      app.timeline = []
-      app.addTimeline()
+      app.star_timeline = []
+      app.addStarTimeline()
     })
   }
+
   getUserInfo()
   getShowUserInfo()
-  getNote()
+  getNotes()
+  getStarNotes()
 })

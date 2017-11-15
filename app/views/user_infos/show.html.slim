@@ -17,14 +17,30 @@
   .notePlace-card-body
     p(v-html="parseHTML(show_user.description)")
 
-.mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
-  button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-on:click="redirectTo('/notes/new')" v-if="isCurrentUser()") Add Note
-  .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="note in timeline")
-    .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
-      h5 = "{{note.title}}"
-      p(v-html="parseHTML(note.description)")
-    .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
-      img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
-      div = "{{note.user.name}}"
-button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="timeline.length != notes.length" v-on:click="addTimeline()") Read More
-div(v-else) Readed all notes
+.mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
+  .mdl-tabs__tab-bar
+    a.mdl-tabs__tab.is-active(href="#note") Note
+    a.mdl-tabs__tab(href="#star") Star
+  
+  #note.mdl-tabs__panel.is-active
+    .mdl-card.mdl-shadow--2dp.notePlace-ground-card
+      .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="note in timeline")
+        .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
+          h5 = "{{note.title}}"
+          p(v-html="parseHTML(note.description)")
+        .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
+          img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
+          div = "{{note.user.name}}"
+    button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="timeline.length != notes.length" v-on:click="addTimeline()") Read More
+    div(v-else) Readed all notes
+  #star.mdl-tabs__panel
+    .mdl-card.mdl-shadow--2dp.notePlace-ground-card
+      .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="note in star_timeline")
+        .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
+          h5 = "{{note.title}}"
+          p(v-html="parseHTML(note.description)")
+        .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
+          img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
+          div = "{{note.user.name}}"
+    button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="timeline.length != notes.length" v-on:click="addStarTimeline()") Read More
+    div(v-else) Readed all notes
