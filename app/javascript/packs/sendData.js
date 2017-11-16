@@ -107,13 +107,9 @@ module.exports = {
         }
       })
     }).then((resp) => {
-      if (resp.status >= 200 && resp.status <= 300) {
-        return resp.text()
-      } else {
+      if (!(resp.status >= 200 && resp.status <= 300)) {
         throw "Internal server error"
       }
-    }).then((data) => {
-      return data
     })
   },
   acceptMemberRequest: function(org, user) {

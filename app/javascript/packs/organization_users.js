@@ -60,17 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       addMemberRequest: function(user_email) {
         sendData.sendMemberRequest(this.organization, user_email).then((user) => {
-          this.user.push(user)
+          this.users.push(user)
+        }).catch((err) => {
+          window.alert(err)
         })
       },
       deleteMemberRequest: function(user) {
-        sendData.deleteMemberRequest(this.organization, user).then((user) => {
-          this.users.slice(this.users.indexOf(user), 1)
+        sendData.destroyMemberRequest(this.organization, user).then((user) => {
+          this.users.splice(this.users.indexOf(user), 1)
         })
       },
       deleteMember: function(user) {
-        sendData.deleteMember(this.organization, user).then((user) => {
-          this.users.slice(this.users.indexOf(user), 1)
+        sendData.destroyMember(this.organization, user).then((user) => {
+          this.users.splice(this.users.indexOf(user), 1)
         })
       }
     },
@@ -82,7 +84,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }).then((org) => {
     app.organization = org
     app.users = org[gon.type]
-    console.log(gon.type)
-    console.log(org)
   })
 })

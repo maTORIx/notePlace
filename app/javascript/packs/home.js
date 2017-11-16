@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   })
 
-  getData.getNoteData(gon.user_id).then((user) => {
+  getData.getUserInfo(gon.user_id).then((user) => {
     app.user = user
     return getData.getTimelineNotes(gon.user_id)
   }).then((notes) => {

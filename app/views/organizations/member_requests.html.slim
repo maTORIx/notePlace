@@ -15,8 +15,10 @@
       .notePlace-button-text="{{organization.subscribers.length}}"
     button.notePlace-button.notePlace-button-success(v-if="isSubscriber()" v-on:click="unsubscribe(organization)") subscribe
     button.notePlace-button.notePlace-button-skeleton-white(v-else v-on:click="subscribe(organization)") subscribe
-    button.notePlace-button.notePlace-button-skeleton-white(v-on:click="redirectTo('/org/' + organization.name)") back
-    button.notePlace-button.notePlace-button-skeleton-white(v-if="isMember()" v-on:click="redirectTo('/org/' + organization.name + '/edit')") edit
+    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginR10(v-on:click="redirectTo('/org/' + organization.name)")
+      i.material-icons undo
+    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginR10(v-if="isMember()" v-on:click="redirectTo('/org/' + organization.name + '/edit')")
+      i.material-icons edit
   .notePlace-card-body
     p(v-html="parseHTML(organization.description)")
     .mdl-card.mdl-shadow--2dp.notePlace-info-card
@@ -28,12 +30,13 @@
         button.notePlace-button.notePlace-button-primary.notePlace-button-large(type="submit") send
 
 .notePlace-ground
-  .mdl-card.mdl-shadow--2dp.notePlace-ground-card#grid
-    .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="user in users")
-      .notePlace-user-info-field
+  .mdl-card.mdl-shadow--2dp.notePlace-ground-card
+    .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="user in users")
+      .notePlace-user-info-field.notePlace-card-header
         img.notePlace-user-icon(alt="Not Found" v-bind:src="user.icon" v-on:click="redirectTo('/users/' + user.id)")
         div = "{{user.name}}"
-        button.notePlace-button.notePlace-button-danger(v-on:click="deleteMemberRequest(user)") delete
+        button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginR10(v-on:click="deleteMemberRequest(user)")
+          i.material-icons delete
       .notePlace-card-text-field(v-on:click="redirectTo('/users/' + user.id)")
         p(v-html="parseHTML(user.description)")
       

@@ -3,11 +3,11 @@ class MemberRequestsController < ApplicationController
     member_request_params = params.require(:member_request).permit(:organization_id, :user_email)
     org = Organization.find_by(id: member_request_params[:organization_id])
     user = User.find_by(email: member_request_params[:user_email])
-    if org != nil && org.member_users.include?(current_user) && !org.member_users.include?(user)
+    if org != nil && org.member_users.include?(current_user) && !(org.member_users.include?(user))
       @member_request = MemberRequest.new({organization_id: org.id, user_id: user.id})
       @member_request.save
+      render json: user.user_info.toJSON
     end
-    redirect_to @member_request
   end
 
   def destroy
