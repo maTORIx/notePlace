@@ -35,7 +35,6 @@ gem 'elasticsearch'
 gem 'elasticsearch-dsl'
 gem 'elasticsearch-model', github: 'elastic/elasticsearch-rails', branch: '5.x'
 gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', branch: '5.x'
-gem  "html2slim"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
