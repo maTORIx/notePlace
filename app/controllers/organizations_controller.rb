@@ -74,7 +74,7 @@ class OrganizationsController < ApplicationController
     @org = Organization.find_by(name: params[:name])
     gon.user_id = current_user.id
     gon.organization_name = @org.name
-    gon.type = "member"
+    gon.type = "members"
     render "members"
   end
   
@@ -82,7 +82,7 @@ class OrganizationsController < ApplicationController
     @org = Organization.find_by(name: params[:name])
     gon.user_id = current_user.id
     gon.organization_name = @org.name
-    gon.type = "member_request"
+    gon.type = "member_requests"
     render "member_requests"
   end
   
@@ -90,7 +90,7 @@ class OrganizationsController < ApplicationController
     @org = Organization.find_by(name: params[:name])
     gon.user_id = current_user.id
     gon.organization_name = @org.name
-    gon.type = "subscriber"
+    gon.type = "subscribers"
     render "subscribers"
   end
 end

@@ -5,8 +5,8 @@
     img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="author.icon" v-on:click="redirectTo('/users/' + author.id)")
     .notePlace-card-header-text= "{{note.title}}"
     nav.mdl-navigation
-    i.material-icons.marginLR(v-if="!note.favorite" v-on:click="favorite()") favorite_border
-    i.material-icons.marginLR(v-if="note.favorite" v-on:click="unFavorite()") favorite
+    i.material-icons.marginLR(v-if="!note.favorite" v-on:click="star()") star_border
+    i.material-icons.marginLR(v-if="note.favorite" v-on:click="unStar()") star
     button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginLR(v-on:click="redirectTo('/notes/' + note.id + '/edit')")
       i.material-icons edit
   .notePlace-card-body

@@ -1,5 +1,7 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
+import getData from "./getData.js"
+import sendData from "./sendData.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   // marked settings
@@ -39,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return user.id === note.user_id
         })
         if (note_users.length < 1) {
-          return {"user_icon": "http://matorixx.com.home.png", "name": "John Doe"}
+          return {"user_icon": "", "name": ""}
         } else {
           return note_users[0]
         }
@@ -70,130 +72,32 @@ document.addEventListener('DOMContentLoaded', () => {
           note["user"] = this.getUser(note)
           app.star_timeline.push(note)
         }
-        console.log(app.star_timeline)
-        console.log("--------------------------")
         return
       }
     },
   })
 
-  function getUserInfo() {
-    var user = {}
-    if(gon.user_id) {
-      fetch("/users/" + gon.user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        user = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.user = user
-      })
-    }
-  }
+  Promise.all([
+    getData.getUserInfo(gon.user_id).then((user) => {
+      app.user = user
+      return getData.getUserInfo(gon.show_user_id)
+    }).then((user) => {
+      app.show_user = user
+      app.users.push(user)
+    }),
+    
+    getData.getUserNotes(gon.show_user_id).then((notes) => {
+      app.notes = notes
+    }),
 
-  function getShowUserInfo() {
-    var show_user = {}
-    if(gon.show_user_id) {
-      fetch("/users/" + gon.show_user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        show_user = JSON.parse(data)
-        return fetch(`/users/${gon.show_user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        show_user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.show_user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        show_user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.show_user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        show_user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.show_user = show_user
-      })
-    }
-  }
-
-  function getNotes() {
-    var notes = []
-    fetch("/users/" + gon.show_user_id + "/info/notes.json").then((resp) => {
-      return resp.text();
-    }).then((data) => {
-      notes = JSON.parse(data)
-      return fetch(`/users/${gon.show_user_id}.json`)
-    }).then((resp) => {
-      return resp.text()
-    }).then((data) => {
-      app.users.push(JSON.parse(data))
-      
-      app.notes = notes.sort(function(note1, note2) {
-        return note2.id > note1.id
-      })
-      app.timeline = []
-      app.addTimeline()
+    getData.getUserStarNotes(gon.show_user_id).then((notes) => {
+      app.star_notes = notes
+      return getData.getNotesUsers(notes)
+    }).then((users) => {
+      app.users = app.users.concat(users)
     })
-  }
-
-  function getStarNotes() {
-    var star_notes = []
-    fetch("/users/" + gon.show_user_id + "/info/star_notes.json").then((resp) => {
-      return resp.text();
-    }).then((data) => {
-    var notes = JSON.parse(data)
-    star_notes = notes
-
-    var user_ids = notes.map(function(data){
-      return data.user_id
-    })
-        
-    user_ids = user_ids.filter(function(x, i, self) {
-      return self.indexOf(x) === i
-    })
-
-    var urls = user_ids.map(function(user_id) {
-      return `/users/${user_id}.json`
-    })
-
-    return Promise.all(urls.map((url) => {
-      return fetch(url).then((resp) => {
-        return resp.text()
-      })
-    }))
-
-    }).then((texts) => {
-      var users = texts.forEach(function(data) {
-        app.users.push(JSON.parse(data))
-      })
-
-      app.star_notes = star_notes.sort(function(note1, note2) {
-        return note2.id > note1.id
-      })
-      app.star_timeline = []
-      app.addStarTimeline()
-    })
-  }
-
-  getUserInfo()
-  getShowUserInfo()
-  getNotes()
-  getStarNotes()
+  ]).then(() => {
+    app.addStarTimeline()
+    app.addTimeline()
+  })
 })

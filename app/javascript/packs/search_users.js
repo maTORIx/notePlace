@@ -1,5 +1,7 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
+import getData from "./getData.js"
+import sendData from "./sendData.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   // marked settings
@@ -13,17 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     smartLists: true,
     smartypants: false
   });
-
-  const getCsrfToken = () => {
-    const metas = document.getElementsByTagName('meta');
-    for (let meta of metas) {
-      if (meta.getAttribute('name') === 'csrf-token') {
-        console.log(meta.getAttribute('content'));
-        return meta.getAttribute('content');
-      }
-    }
-    return '';
-  }
 
   var app = new Vue({
     el: '#app',
@@ -54,55 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return organizations.length === 1
       },
       subscribe: function(org) {
-        fetch("/subscribers", {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-Token': getCsrfToken()
-          },
-          body: JSON.stringify({"subscriber":{
-                                  "user_id": this.user.id,
-                                  "organization_id": org.id
-                                }
-          })
-        }).then((resp) => {
-          if (resp.status >= 200 && resp.status <= 300) {
-            getUserInfo()
-          } else {
-            throw "Internal server error"
-          }
+        sendData.subscribe(org, this.user).then((user) => {
+          this.user.subscribers.push(org)
         })
-        getUserInfo()
       },
       unsubscribe: function(org) {
-        fetch(`/users/${gon.user_id}/info/subscribers.json`).then((resp) => {
-          return resp.text()
-        }).then((data) => {
-          var subscribers_data = JSON.parse(data)
-          var subscriber_data = subscribers_data.filter(function(data) {
-            return data.organization_id == org.id
-          })
-
-          if (subscriber_data.length !== 1) {
-            throw "Not found"
-          }
-          subscriber_data = subscriber_data[0]
-
-          return fetch(`/subscribers/${subscriber_data.id}`, {
-            method: 'DELETE',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': getCsrfToken()
-            },
-          })
-        }).then((resp) => {
-          if (resp.status >= 200 && resp.status <= 300) {
-            getUserInfo()
-          } else {
-            throw "Internal server error"
-          }
+        sendData.unsubscribe(org, this.user).then(() => {
+          this.user.subscribers.splice(this.user.indexOf(org), 1)
         })
       },
     },
@@ -110,33 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  function getUserInfo() {
-    var user = {}
-    if(gon.user_id) {
-      fetch("/users/" + gon.user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        user = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.user = user
-      })
-    }
-  }
+  getData.getUserInfo(gon.user_id).then((user) => {
+    app.user = user
+  })
 
   function getTargetUsers() {
     if(gon.search_text) {
@@ -148,6 +73,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  getUserInfo()
   getTargetUsers()
 })

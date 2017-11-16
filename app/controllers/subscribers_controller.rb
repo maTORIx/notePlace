@@ -2,7 +2,7 @@ class SubscribersController < ApplicationController
   def create
     subs_params = params.require(:subscriber).permit(:organization_id)
     @subscriber = current_user.subscribers.create(subs_params)
-    redirect_to @subscriber
+    render json: current_user.user_info.toJSON
   end
 
   def destroy

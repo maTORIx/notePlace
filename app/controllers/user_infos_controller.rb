@@ -74,7 +74,7 @@ class UserInfosController < ApplicationController
     @user = User.find(params[:id])
     gon.user_id = current_user.id
     gon.show_user_id = @user.id
-    gon.type = "member"
+    gon.type = "members"
     render "organizations"
   end
   
@@ -82,7 +82,7 @@ class UserInfosController < ApplicationController
     @user = User.find(params[:id])
     gon.user_id = current_user.id
     gon.show_user_id = @user.id
-    gon.type = "member_request"
+    gon.type = "member_requests"
     render "member_requests"
   end
   
@@ -90,7 +90,7 @@ class UserInfosController < ApplicationController
     @user = User.find(params[:id])
     gon.user_id = current_user.id
     gon.show_user_id = @user.id
-    gon.type = "subscriber"
+    gon.type = "subscribers"
     render "organizations"
   end
 end

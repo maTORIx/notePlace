@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const metas = document.getElementsByTagName('meta');
     for (let meta of metas) {
       if (meta.getAttribute('name') === 'csrf-token') {
-        console.log(meta.getAttribute('content'));
+        // console.log(meta.getAttribute('content'));
         return meta.getAttribute('content');
       }
     }
@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       getUser: function(note) {
         var note_users = this.users.filter(function(user, idx, users) {
-          console.log(user, idx, users)
           return user.id === note.user_id
         })
         if (note_users.length < 1) {
@@ -54,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         location.href = url
         return
       },
-      favorite: function() {
+      star: function() {
         fetch("/stars", {
           method: 'POST',
           credentials: 'same-origin',
@@ -77,18 +76,18 @@ document.addEventListener('DOMContentLoaded', () => {
             throw resp.status
           }
         })
-        },
-      unFavorite: function() {
+      },
+      unStar: function() {
         fetch("/users/" + this.user.id + "/info/stars.json", {credentials: "same-origin"}).then((resp) => {
           return resp.text()
         }).then((data) => {
           var stars = JSON.parse(data);
-          console.log("a")
+
           var star = stars.filter(function(data) {
             return data.note_id = app.note.id
           })
-          console.log("b")
-          if(star.length !== 1) {
+
+          if(star.length < 1) {
             throw "user not found"
           }
           star = star[0]
@@ -114,22 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return app.note.filename.split(".").pop();
       }
     },
-    watch: {
-      notes: {
-        handler: function(val) {
-          this.$nextTick(function() {
-            console.log("update")
-          })
-        },
-        deep: true
-      },
-    }
   })
   
   function getUserInfo() {
     var user = {}
     if(gon.user_id) {
-      fetch("/users/" + gon.user_id + ".json").then((resp) => {
+      return fetch("/users/" + gon.user_id + ".json").then((resp) => {
         return resp.text();
       }).then((data) => {
         user = JSON.parse(data)
@@ -156,12 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getNote() {
     if(gon.note_id) {
-      fetch("/notes/" + gon.note_id + ".json", {credentials: "same-origin"}).then((resp) => {
+      return fetch("/notes/" + gon.note_id + ".json", {credentials: "same-origin"}).then((resp) => {
         return resp.text();
       }).then((data) => {
         var note = JSON.parse(data);
         app.note = note;
-        console.log(note)
         return fetch(`/users/${note.user_id}.json`);
       }).then((resp) => {
         return resp.text();
@@ -194,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return null
         }
       }).then((data) => {
-        console.log(data)
         app.noteFile = data;
       }).then(() => {
         var note_body = document.querySelector("#note_body")
@@ -217,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     }
   }
-
+  
   getUserInfo();
   getNote();
 

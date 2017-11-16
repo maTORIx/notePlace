@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
+import getData from "./getData.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   //marked settings
@@ -55,86 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return
       }
     },
-    watch: {
-      notes: {
-        handler: function(val) {
-          this.$nextTick(function() {
-            console.log("update")
-          })
-        },
-        deep: true
-      },
-    }
   })
 
-  function getUserInfo() {
-    var user = {}
-    if(gon.user_id) {
-      fetch("/users/" + gon.user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        user = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.user = user
-      })
-    }
-  }
+  getData.getNoteData(gon.user_id).then((user) => {
+    app.user = user
+    return getData.getTimelineNotes(gon.user_id)
+  }).then((notes) => {
+    app.notes = notes
+    return getData.getNotesUsers(notes)
+  }).then((users) => {
+    app.users = users
+  }).then(() => {
+    app.addTimeline()
+  })
   
-  function getTimeLine() {
-    if(gon.user_id) {
-      fetch("/users/" + gon.user_id + "/info/timeline.json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        var notes = JSON.parse(data)
-        app.notes = notes
-
-        var user_ids = notes.map(function(data){
-          return data.user_id
-        })
-        
-        user_ids = user_ids.filter(function(x, i, self) {
-          return self.indexOf(x) === i
-        })
-
-        var urls = user_ids.map(function(user_id) {
-          return `/users/${user_id}.json`
-        })
-
-        return Promise.all(urls.map((url) => {
-          return fetch(url).then((resp) => {
-            return resp.text()
-          })
-        }))
-      }).then((texts) => {
-        console.log(texts)
-        var users = texts.map(function(data) {
-          return JSON.parse(data)
-        })
-        app.users = users
-        app.notes = app.notes.sort(function(note1, note2) {
-          return note2.id > note1.id
-        })
-        app.timeline = []
-        app.addTimeline()
-      })
-    }
-  }
-
-  getUserInfo()
-  getTimeLine()
 })

@@ -1,5 +1,7 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
+import getData from "./getData.js"
+import sendData from "./sendData.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   // marked settings
@@ -78,156 +80,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return organizations.length === 1
       },
       subscribe: function(org) {
-        fetch("/subscribers", {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-Token': getCsrfToken()
-          },
-          body: JSON.stringify({"subscriber":{
-                                  "user_id": this.user.id,
-                                  "organization_id": org.id
-                                }
-          })
-        }).then((resp) => {
-          if (resp.status >= 200 && resp.status <= 300) {
-            getUserInfo()
-          } else {
-            throw "Internal server error"
-          }
+        sendData.subscribe(org, this.user).then((user) => {
+          app.user.subscribers.push(org)
         })
-        getUserInfo()
       },
       unsubscribe: function(org) {
-        fetch(`/users/${gon.user_id}/info/subscribers.json`).then((resp) => {
-          return resp.text()
-        }).then((data) => {
-          var subscribers_data = JSON.parse(data)
-          var subscriber_data = subscribers_data.filter(function(data) {
-            return data.organization_id == org.id
-          })
-
-          if (subscriber_data.length !== 1) {
-            throw "Not found"
-          }
-          subscriber_data = subscriber_data[0]
-
-          return fetch(`/subscribers/${subscriber_data.id}`, {
-            method: 'DELETE',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': getCsrfToken()
-            },
-          })
-        }).then((resp) => {
-          if (resp.status >= 200 && resp.status <= 300) {
-            getUserInfo()
-          } else {
-            throw "Internal server error"
-          }
+        sendData.unsubscribe(org, this.user).then(() => {
+          app.user.subscribers.splice(app.user.subscribers.indexOf(org), 1)
         })
-      }
-    },
+      },
+    }
   })
 
-  function getUserInfo() {
-    var user = {}
-    if(gon.user_id) {
-      fetch("/users/" + gon.user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        user = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.user = user
-      })
-    }
-  }
-
-  function getNote() {
-    fetch("/org/" + gon.organization_name + "/info/notes.json").then((resp) => {
-      return resp.text();
-    }).then((data) => {
-    var notes = JSON.parse(data)
+  getData.getUserInfo(gon.user_id).then((user) => {
+    app.user = user
+    return getData.getOrganizationInfo(gon.organization_name)
+  }).then((org) => {
+    app.organization = org
+    return getData.getOrgNotes(gon.organization_name)
+  }).then((notes) => {
     app.notes = notes
-
-    var user_ids = notes.map(function(data){
-      return data.user_id
-    })
-        
-    user_ids = user_ids.filter(function(x, i, self) {
-      return self.indexOf(x) === i
-    })
-
-    var urls = user_ids.map(function(user_id) {
-      return `/users/${user_id}.json`
-    })
-
-    return Promise.all(urls.map((url) => {
-      return fetch(url).then((resp) => {
-        return resp.text()
-      })
-    }))
-
-    }).then((texts) => {
-      var users = texts.map(function(data) {
-        return JSON.parse(data)
-      })
-      app.users = users
-      
-      app.notes = app.notes.sort(function(note1, note2) {
-        return note2.id > note1.id
-      })
-      app.timeline = []
-      app.addTimeline()
-    })
-  }
-
-  function getOrganizationInfo() {
-    if(gon.organization_name) {
-      var organization = {}
-      fetch(`/org/${gon.organization_name}.json`).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        organization = JSON.parse(data);
-        return fetch(`/org/${gon.organization_name}/info/member_users.json`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        organization["members"] = JSON.parse(data)
-        return fetch(`/org/${gon.organization_name}/info/subscriber_users.json`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        organization["subscribers"] = JSON.parse(data)
-        return fetch(`/org/${gon.organization_name}/info/member_request_users.json`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        organization["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.organization = organization
-      })
-    }
-  }
-
-  getUserInfo()
-  getNote()
-  getOrganizationInfo()
+    return getData.getNotesUsers(notes)
+  }).then((users) => {
+    app.users = users
+  }).then(() => {
+    app.addTimeline()
+  })
 })

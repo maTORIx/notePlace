@@ -1,6 +1,6 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
-
+import getData from "./getData.js"
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -11,15 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     body.style.display = "block"
     load_bar.style.display = "none"
   }, 400)
-
-  //localStrage
-  var user = localStorage.getItem(user)
-  if(user) {
-    console.log(user)
-    user = JSON.parse(user)
-  } else {
-    user = {id: null, name: "", description: "", members: [], member_requests: [], subscribers: []}
-  }
 
   //marked settings
   marked.setOptions({
@@ -32,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     smartLists: true,
     smartypants: false
   });
+
+  var user = {id: null, name: "", description: "", members: [], subscriber: []}
 
   var header = new Vue({
     el: '#header',
@@ -68,36 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  function getUserInfo() {
-    var user = {}
-    if(gon.user_id) {
-      fetch("/users/" + gon.user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        user = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        header.user = user
-        header_drawer.user = user
-        localStorage.setItem("user", JSON.stringify(user))
-      })
-    }
-  }
-
-  getUserInfo()
-
+  getData.getUserInfo(gon.user_id).then((data) => {
+    header.user = data
+    header_drawer.user = data
+  })
 })

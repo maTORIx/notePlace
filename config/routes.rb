@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-  resources :subscribers, only: [:create, :delete]
+  resources :subscribers, only: [:create, :destroy]
 
-  resources :scopes, only: [:create, :delete]
+  resources :scopes, only: [:create, :destroy]
 
-  resources :members, only: [:create, :delete]
+  resources :members, only: [:create, :destroy]
 
-  resources :member_requests, only: [:create, :delete]
+  resources :member_requests, only: [:create, :destroy]
 
   resources :notes, except: [:index] do
     member do
@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :organizations, path: "org", except: [:delete, :index], param: :name do
+  resources :organizations, path: "org", except: [:destroy, :index], param: :name do
     member do
       get "info/:type", to: "organizations#info"
       get "members", to: "organizations#showMembers"

@@ -134,7 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("secret",this.form.secret)
         formData.append("subscriber_only",this.form.subscriber_only)
         formData.append("permit",true)
-        fetch("/notes", {
+        
+        return fetch("/notes", {
           method: "POST",
           credentials: 'same-origin',
           headers: {
@@ -148,8 +149,10 @@ document.addEventListener('DOMContentLoaded', () => {
             throw "Can not send data"
           }
         }).then((data) => {
+          console.log(data)
           this.note = JSON.parse(data)
           this.updateScope()
+          return this.note
         })
       },
       updateNote: function() {
@@ -160,7 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("secret",this.form.secret)
         formData.append("subscriber_only",this.form.subscriber_only)
         formData.append("permit",true)
-        fetch("/notes/" + gon.note_id, {
+
+        return fetch("/notes/" + gon.note_id, {
           method: "PUT",
           credentials: 'same-origin',
           headers: {
@@ -265,8 +269,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   getUserInfo();
   getNoteInfo();
-
-  setInterval(function() {
-    console.log(app.form)
-  }, 1000)
 })
