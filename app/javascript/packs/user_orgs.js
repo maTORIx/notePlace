@@ -35,36 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return this.user.id == this.show_user.id
       },
       addMember: function(org) {
-        fetch(`/users/${gon.show_user_id}/info/member_requests.json`).then((resp) => {
-          return resp.text()
-        }).then((data) => {
-          var member_requests_data = JSON.parse(data);
-          console.log(member_requests_data)
-
-          var member_request_data = member_requests_data.filter(function(data) {
-            return data.organization_id == org.id
-          })
-          if(member_request_data.length !== 1) {
-            throw "Request not found"
-          }
-
-          member_request_data = member_request_data[0]
-
-          return fetch(`/members`, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': getCsrfToken()
-            },
-            body: JSON.stringify({member: {request_id: member_request_data.id}})
-          })
-        }).then((resp) => {
-          if (resp.status >= 200 && resp.status <= 300) {
-          } else {
-            window.alert("Internal Server Error")
-            throw "Internal server error"
-          }
+        sendData.acceptMemberRequest(org, this.user).then((data) => {
+          this.organizations.splice(this.organizations.indexOf(org), 1)
+        }).catch((err) => {
+          window.alert(err.toString())
         })
       },
       deleteMemberRequest: function(org) {

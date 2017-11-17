@@ -2,6 +2,7 @@ import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
 import getData from "./getData.js"
 import sendData from "./sendData.js"
+import tools from "./tools.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   // marked settings

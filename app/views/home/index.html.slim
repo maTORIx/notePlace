@@ -5,7 +5,7 @@
     .mdl-card.mdl-shadow--2dp.notePlace-default-card.grid-item(v-for="note in timeline")
       .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
         h5 = "{{note.title}}"
-        p(v-html="parseHTML(note.description)")
+        p(v-html="parseNoteDescription(note.description)")
       .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
         img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
         div = "{{note.user.name}}"
