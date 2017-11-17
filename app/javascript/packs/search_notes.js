@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
+import tools from './tools.js'
 
 document.addEventListener('DOMContentLoaded', () => {
   // marked settings
@@ -25,9 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     methods: {
       parseHTML: function(src) {
-        console.log(src)
-        return marked(src)
-        // return src
+        return tools.parseNoteDescription(src)
       },
       isCurrentUser: function() {
         return this.user.id == this.show_user.id

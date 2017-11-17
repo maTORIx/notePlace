@@ -15,7 +15,7 @@
     button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginLR(v-if="user.id == show_user.id" v-on:click="redirectTo('/users/' + show_user.id + '/edit')")
       i.material-icons edit
   .notePlace-card-body
-    p(v-html="parseHTML(show_user.description)")
+    p(v-html="parseMarkdown(show_user.description)")
 
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
@@ -27,7 +27,7 @@
       .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="note in timeline")
         .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
           h5 = "{{note.title}}"
-          p(v-html="parseHTML(note.description)")
+          p(v-html="parseNoteDescription(note.description)")
         .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
           img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
           div = "{{note.user.name}}"
@@ -38,7 +38,7 @@
       .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="note in star_timeline")
         .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
           h5 = "{{note.title}}"
-          p(v-html="parseHTML(note.description)")
+          p(v-html="parseNoteDescription(note.description)")
         .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
           img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
           div = "{{note.user.name}}"

@@ -26,6 +26,8 @@ class SearchController < ApplicationController
     if(params[:format] == "json")
       @notes = Note.search(params[:text]).results.results
       data = @notes.map{|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
+      p "--------------------------------------------"
+      p params[:text]
       render json: JSON.generate(data)
     else
       gon.user_id = current_user.id

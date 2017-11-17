@@ -27,20 +27,6 @@ class Note < ApplicationRecord
     end
   end
 
-  # def as_indexed_json(options={})
-  #   as_json(
-  #     only: [:title, :description],
-  #     include: {
-  #       user: {
-  #         only: [],
-  #         include: {
-  #           user_info: {only: [:name]}
-  #         }
-  #       }
-  #     }
-  #   )
-  # end
-
   settings do
     mappings dynamic: "false" do
       indexes :title, type: "string", analyzer: "kuromoji"
@@ -64,5 +50,8 @@ class Note < ApplicationRecord
         }
       }
     })
+  end
+
+  
   end
 end

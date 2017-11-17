@@ -66,6 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   if(gon.search_text) {
-    header.header_search_text = search_text
+    header.header_search_text = gon.search_text
   }
 })
