@@ -27,6 +27,21 @@ class Note < ApplicationRecord
     end
   end
 
+  def as_indexed_json(option={})
+    self.as_json({
+      include: {
+        user: {
+          only: [],
+          include: {
+            user_info: {
+              only: [:name]
+            }
+          }
+        }
+      }
+    })
+  end
+
   settings do
     mappings dynamic: "false" do
       indexes :title, type: "string", analyzer: "kuromoji"
@@ -52,6 +67,16 @@ class Note < ApplicationRecord
     })
   end
 
-  
+  def self.searchByTag(query)
+    __elasticsearch__.search({
+      query: {
+        bool: {
+          should: [
+            {match: {description: query}}
+            # wildcard: {description: "*#{query}*"}
+          ]
+        }
+      }
+    })
   end
 end
