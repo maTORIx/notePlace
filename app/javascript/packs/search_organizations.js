@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     data: {
       "user" : {id: undefined, name: "none", icon: ""},
       "organizations": [],
-      "search_text": gon.search_text,
+      "search_text": encodeURIComponent(gon.search_text),
     },
     methods: {
       parseHTML: function(src) {
@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getOrganizations() {
     if(gon.search_text) {
-      fetch(`/search/organizations.json/${gon.search_text}`).then((resp) => {
+      var text = encodeURIComponent(gon.search_text)
+      fetch(`/search/organizations.json/${text}`).then((resp) => {
         return resp.text()
       }).then((data) => {
         app.organizations = JSON.parse(data);

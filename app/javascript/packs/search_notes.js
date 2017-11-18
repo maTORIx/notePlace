@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "notes" : [],
       "users": [],
       "timeline": [],
-      "search_text": gon.search_text,
+      "search_text": encodeURIComponent(gon.search_text),
     },
     methods: {
       parseHTML: function(src) {
@@ -89,29 +89,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getNote() {
-    fetch("/search/notes.json/" + gon.search_text).then((resp) => {
+    fetch("/search/notes.json/" + encodeURIComponent(gon.search_text)).then((resp) => {
       return resp.text();
     }).then((data) => {
-    var notes = JSON.parse(data)
-    app.notes = notes
+      var notes = JSON.parse(data)
+      app.notes = notes
 
-    var user_ids = notes.map(function(data){
-      return data.user_id
-    })
-        
-    user_ids = user_ids.filter(function(x, i, self) {
-      return self.indexOf(x) === i
-    })
-
-    var urls = user_ids.map(function(user_id) {
-      return `/users/${user_id}.json`
-    })
-
-    return Promise.all(urls.map((url) => {
-      return fetch(url).then((resp) => {
-        return resp.text()
+      var user_ids = notes.map(function(data){
+        return data.user_id
       })
-    }))
+          
+      user_ids = user_ids.filter(function(x, i, self) {
+        return self.indexOf(x) === i
+      })
+
+      var urls = user_ids.map(function(user_id) {
+        return `/users/${user_id}.json`
+      })
+
+      return Promise.all(urls.map((url) => {
+        return fetch(url).then((resp) => {
+          return resp.text()
+        })
+      }))
 
     }).then((texts) => {
       var users = texts.map(function(data) {

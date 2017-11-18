@@ -34,9 +34,9 @@ Rails.application.routes.draw do
 
   resources :search, only: [:index] do
     collection do
-      get "organizations(.:format)(/:text)", to: "search#organizations"
-      get "users(.:format)(/:text)", to: "search#users"
-      get "notes(.:format)(/:text)", to: "search#notes"
+      get "organizations(.:format)/:text", to: "search#organizations"
+      get "users(.:format)/:text", to: "search#users"
+      get "notes(.:format)/:text", to: "search#notes"
     end
   end
 

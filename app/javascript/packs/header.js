@@ -34,8 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     methods: {
       search: function() {
-        var text = encodeURIComponent(this.header_search_text)
-        location.href = `/search/notes/${text}`
+        location.href = `/search/notes/${this.header_search_text}`
       },
       redirectTo: function(url) {
         location.href = url

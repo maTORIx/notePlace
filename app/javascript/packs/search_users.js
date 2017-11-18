@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "user" : {name: "none", description: "none", members: [], subscribers: []},
       "users": [],
       "form": {search_text: ""},
-      "search_text": gon.search_text,
+      "search_text": encodeURIComponent(gon.search_text),
     },
     methods: {
       parseHTML: function(src) {
@@ -65,7 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getTargetUsers() {
     if(gon.search_text) {
-      fetch(`/search/users.json/${gon.search_text}`).then((resp) => {
+      var text = encodeURIComponent(gon.search_text)
+      fetch(`/search/users.json/${text}`).then((resp) => {
         return resp.text()
       }).then((data) => {
         app.users = JSON.parse(data)
