@@ -70,11 +70,9 @@ class Note < ApplicationRecord
   def self.searchByTag(query)
     __elasticsearch__.search({
       query: {
-        bool: {
-          should: [
-            {match: {description: query}}
-            # wildcard: {description: "*#{query}*"}
-          ]
+        multi_match: {
+          fields: %w(description),
+          query: query
         }
       }
     })
