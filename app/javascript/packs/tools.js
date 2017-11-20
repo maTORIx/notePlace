@@ -1,3 +1,5 @@
+// const marked = require("marked/marked.min.js")
+
 module.exports = {
   parseNoteDescription: function(src) {
     if(typeof src !== 'string') {
