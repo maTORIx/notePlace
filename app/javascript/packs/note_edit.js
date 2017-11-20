@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
+import getData from "./getData.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   var original_scopes = [];
@@ -215,33 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   })
 
-  function getUserInfo() {
-    var user = {}
-    if(gon.user_id) {
-      fetch("/users/" + gon.user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        user = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.user = user
-      })
-    }
-  }
+  getData.getUserInfo(gon.user_id).then((user) => {
+    app.user = user
+  })
 
   function getNoteInfo() {
     if(gon.note_id) {
@@ -273,6 +250,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }) 
     }
   }
-  getUserInfo();
   getNoteInfo();
 })
