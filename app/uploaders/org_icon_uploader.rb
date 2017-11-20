@@ -22,6 +22,10 @@ class OrgIconUploader < CarrierWave::Uploader::Base
     "/images/fallback/" + "default.png"
   end
 
+  def size_range
+    0..10.megabytes
+  end
+
   # Process files as they are uploaded:
   # process scale: [200, 300]
   #
