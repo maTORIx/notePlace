@@ -24,4 +24,8 @@ class User < ApplicationRecord
   def isFavorite(note)
     self.star_notes.include? note
   end
+
+  def toMap()
+    self.user_info.toMap
+  end
 end

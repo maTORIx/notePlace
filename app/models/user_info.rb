@@ -4,8 +4,8 @@ class UserInfo < ApplicationRecord
   belongs_to :user
   mount_uploader :icon, UserIconUploader
 
-  def toJSON
-    JSON.generate(id: self.id, name: self.name, description: self.description, icon: self.icon.url)
+  def toMap
+    {id: self.id, name: self.name, description: self.description, icon: self.icon.url}
   end
 
   settings do

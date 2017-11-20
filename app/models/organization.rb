@@ -28,6 +28,19 @@ class Organization < ApplicationRecord
     self.member_request_users.include?(user)
   end
 
+  def toMap(user = nil)
+    result = {
+      id: self.id,
+      name: self.name,
+      description: self.description,
+      icon: self.icon.url,
+      image: self.image.url,
+      subscribers: self.subscriber_users,
+      members: self.member_users,
+      member_requests: self.member_request_users,
+    }
+  end
+
   settings do
     mappings dynamic: "false" do
       indexes :title, type: "string", analyzer: "kuromoji"

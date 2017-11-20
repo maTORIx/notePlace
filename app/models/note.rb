@@ -8,6 +8,26 @@ class Note < ApplicationRecord
   has_many :stars
   has_many :star_notes, through: :scopes, source: :users
 
+  def toMap(user = nil)
+    result = {
+      id: self.id,
+      title: self.title,
+      user_id: self.user_id,
+      secret: self.secret,
+      star: {
+        length: self.stars.length,
+      },
+      subscriber_only: self.subscriber_only,
+      description: self.description,
+      filename: self.note.file.filename
+    }
+    if user != nil
+      result[:star][:stared] = user.isFavorite(self)
+    end
+
+    result
+  end
+
   def isAllowUser(user)
     if self.secret
       if(user = self.user)
