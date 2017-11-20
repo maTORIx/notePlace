@@ -254,6 +254,29 @@ form {
   font-family: Arial;
 }
 
+.notePlace-star {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+
+  flex-flow: row nowrap;
+  align-items: center;
+
+  .star {
+    color: rgb(255,171,64);
+  }
+
+  .unStar {
+    color: white;
+  }
+
+  div {
+    color: white;
+  }
+}
+
 .notePlace-layout-header {
   display: -webkit-flex;
   display: -moz-flex;

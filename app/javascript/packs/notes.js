@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
+import getData from "./getData.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   //marked settings
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     el: '#app',
     data: {
       "user" : {},
-      "note" : {title: "", description: "", favorite: false},
+      "note" : {title: "", description: "", star: {stared: false}},
       "author": {},
       "noteFile": "",
       "scopes" : [],
@@ -69,7 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resp) => {
           if(resp.status >= 200 && resp.status <= 300) {
             var note = this.note
-            note.favorite = true
+            note.star.stared = true
+            note.star.length += 1
             this.note = note
           } else {
             window.alert("Internal Server Error")
@@ -102,7 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resp) => {
           if(resp.status <= 300 && resp.status >= 200) {
             var note = this.note
-            note.favorite = false
+            note.star.stared = false
+            note.star.length -= 1
             this.note = note
           }
         })
@@ -117,34 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     },
   })
-  
-  function getUserInfo() {
-    var user = {}
-    if(gon.user_id) {
-      return fetch("/users/" + gon.user_id + ".json").then((resp) => {
-        return resp.text();
-      }).then((data) => {
-        user = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["members"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/subscriber_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["subscribers"] = JSON.parse(data)
-        return fetch(`/users/${gon.user_id}/info/member_request_organizations`)
-      }).then((resp) => {
-        return resp.text()
-      }).then((data) => {
-        user["member_requests"] = JSON.parse(data)
-      }).then(() => {
-        app.user = user
-      })
-    }
-  }
+
+  getData.getUserInfo(gon.user_id).then((user) => {
+    app.user = user;
+  })
 
   function getNote() {
     if(gon.note_id) {
@@ -207,8 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     }
   }
-  
-  getUserInfo();
   getNote();
 
 })

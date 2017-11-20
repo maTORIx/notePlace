@@ -6,16 +6,7 @@ class NotesController < ApplicationController
     end
 
     @note = Note.find(params[:id])
-    note_json = JSON.generate({
-                id: @note.id,
-                title: @note.title,
-                user_id: @note.user_id,
-                secret: @note.secret,
-                favorite: current_user.isFavorite(@note),
-                subscriber_only: @note.subscriber_only,
-                description: @note.description,
-                filename: @note.note.file.filename
-              })
+    note_json = JSON.generate(@note.toMap(current_user))
     respond_to do |format|
       format.html
       format.json { render json: note_json }
