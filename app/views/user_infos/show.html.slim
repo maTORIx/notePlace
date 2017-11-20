@@ -17,6 +17,12 @@
   .notePlace-card-body
     p(v-html="parseMarkdown(show_user.description)")
 
+.notePlace-layout-header
+  .notePlace-header-search
+    input.notePlace-search-text(type="text" v-bind:placeholder="'Search in ' + show_user.name")
+    button.mdl-button.mdl-js-button.mdl-button--icon.mdl-button--raised.notePlace-search-button(v-on:click="search()")
+      i.material-icons search
+
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
     a.mdl-tabs__tab.is-active(href="#note") Note

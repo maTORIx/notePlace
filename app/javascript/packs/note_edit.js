@@ -250,5 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }) 
     }
   }
+  
   getNoteInfo();
 })
