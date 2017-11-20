@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return resp.text();
     }).then((data) => {
       var notes = JSON.parse(data)
-      app.notes = notes
+      app.notes = notes.reverse()
 
       var user_ids = notes.map(function(data){
         return data.user_id
@@ -118,10 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return JSON.parse(data)
       })
       app.users = users
-      
-      app.notes = app.notes.sort(function(note1, note2) {
-        return note2.id > note1.id
-      })
       app.timeline = []
       app.addTimeline()
     })

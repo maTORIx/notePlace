@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(gon.note_id) {
           return this.note.user_id == this.user.id
         } else {
-          true
+          return true
         }
       }
     },
@@ -250,6 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }) 
     }
   }
-  
+
   getNoteInfo();
 })

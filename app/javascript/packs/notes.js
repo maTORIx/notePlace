@@ -1,6 +1,7 @@
 import Vue from 'vue/dist/vue.min.js'
 import marked from 'marked/marked.min.js'
 import getData from "./getData.js"
+import tools from "./tools.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   //marked settings
@@ -39,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
       parseHTML: function(src) {
         var result = marked(src)
         return result
+      },
+      parseNoteDescription: function(src) {
+        return tools.parseNoteDescription(src)
       },
       getUser: function(note) {
         var note_users = this.users.filter(function(user, idx, users) {

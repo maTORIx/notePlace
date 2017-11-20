@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch(`/search/organizations.json/${text}`).then((resp) => {
         return resp.text()
       }).then((data) => {
-        app.organizations = JSON.parse(data);
+        app.organizations = JSON.parse(data).reverse();
       })
     }
   }

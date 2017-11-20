@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch(`/search/users.json/${text}`).then((resp) => {
         return resp.text()
       }).then((data) => {
-        app.users = JSON.parse(data)
+        app.users = JSON.parse(data).reverse()
       })
     }
   }
