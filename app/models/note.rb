@@ -48,6 +48,8 @@ class Note < ApplicationRecord
   end
 
   def as_indexed_json(option={})
+    note = self
+
     self.as_json({
       include: {
         user: {
@@ -59,14 +61,18 @@ class Note < ApplicationRecord
           }
         }
       }
-    })
+    }).merge("tags" => self.getTags)
+  end
+
+  def getTags
+    self.description.scan(/(?:\s|^)(#[^#\s]+)/).map {|tags| tags[0]}
   end
 
   settings do
     mappings dynamic: "false" do
       indexes :title, type: "string", analyzer: "kuromoji"
       indexes :description, type: "text", analyzer: "kuromoji"
-
+      indexes :tags, type: "text", analyzer: "kuromoji"
       indexes :user do
         indexes :user_info do
           indexes :name, analyzer: 'keyword', index: 'not_analyzed'
@@ -79,10 +85,11 @@ class Note < ApplicationRecord
     __elasticsearch__.search({
       query: {
         multi_match: {
-          fields: %w(title description user.user_info.name),
+          fields: %w(title description user.user_info.name tags^100),
           fuzziness: "AUTO",
+          type: "most_fields",
           query: query
-        }
+        },
       }
     })
   end
@@ -91,7 +98,7 @@ class Note < ApplicationRecord
     __elasticsearch__.search({
       query: {
         multi_match: {
-          fields: %w(description),
+          fields: %w(tags),
           query: query
         }
       }

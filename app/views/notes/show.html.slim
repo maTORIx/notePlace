@@ -12,7 +12,7 @@
     button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginLR(v-on:click="redirectTo('/notes/' + note.id + '/edit')" v-if="isAuthor")
       i.material-icons edit
   .notePlace-card-body
-    p(v-html="parseHTML(note.description)")
+    p(v-html="parseNoteDescription(note.description)")
     div.notePlace-center
       i.material-icons visibility
       span.mdl-chip.marginL10.mdl-chip--contact(v-for="scope in scopes" v-on:click="redirectTo('/org/' + scope.name)")
