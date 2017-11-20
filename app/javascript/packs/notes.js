@@ -111,6 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
     computed: {
       note_extension : function() {
         return app.note.filename.split(".").pop();
+      },
+      isAuthor: function() {
+        return this.note.user_id == this.user.id
       }
     },
   })

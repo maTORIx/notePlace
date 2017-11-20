@@ -1,41 +1,44 @@
-div.notePlace-center
-  div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.marginR10
-    label.mdl-textfield__label add scope...
-    input.mdl-textfield__input(autocomplete="on" list="orglist" v-model="input_scope_name")
-    datalist#orglist
-      option(v-bind:value="org.name" v-for="org in orgs")
-  button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent(v-on:click="addScopeData(input_scope_name)") add
-br
-span.mdl-chip.mdl-chip--deletable(v-for="scope in scopes")
-  span.mdl-chip__text = "{{scope.name}}"
-  button.mdl-chip__action(style="font-size: 18px;" v-on:click="deleteScopeData(scope)") ×
-form(v-on:submit="submitNote" name="note" id="form")
-  div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-    label.mdl-textfield__label title
-    input.mdl-textfield__input(v-model="form.title" name="title")
+div(v-if="isAuthor")
+  div.notePlace-center
+    div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.marginR10
+      label.mdl-textfield__label add scope...
+      input.mdl-textfield__input(autocomplete="on" list="orglist" v-model="input_scope_name")
+      datalist#orglist
+        option(v-bind:value="org.name" v-for="org in orgs")
+    button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent(v-on:click="addScopeData(input_scope_name)") add
   br
-  div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-    label.mdl-textfield__label description
-    textarea.mdl-textfield__input(v-model="form.description" name="description")
-  
-  p
-    label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect(for="file")
-      input#file.mdl-switch__input(type="checkbox" v-model="isFile")
-      span.mdl-switch__label Text or File
+  span.mdl-chip.mdl-chip--deletable(v-for="scope in scopes")
+    span.mdl-chip__text = "{{scope.name}}"
+    button.mdl-chip__action(style="font-size: 18px;" v-on:click="deleteScopeData(scope)") ×
+  form(v-on:submit="submitNote" name="note" id="form")
+    div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+      label.mdl-textfield__label title
+      input.mdl-textfield__input(v-model="form.title" name="title")
+    br
+    div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+      label.mdl-textfield__label description
+      textarea.mdl-textfield__input(v-model="form.description" name="description")
+    
+    p
+      label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect(for="file")
+        input#file.mdl-switch__input(type="checkbox" v-model="isFile")
+        span.mdl-switch__label Text or File
 
-    div(v-if="isFile")
-      input(type="file" v-on:change="selectedFile" name="note")
-    div.notePlace-markdown-parser(v-else)
-      textarea(v-model="form.markdown")
-      div.notePlace-markdown-parsed(v-html="markedText")
-  
-  label(for="secret")
-    input#secret.mdl-checkbox__input(type="checkbox" v-model="form.secret") Secret
-  
-  br
+      div(v-if="isFile")
+        input(type="file" v-on:change="selectedFile" name="note")
+      div.notePlace-markdown-parser(v-else)
+        textarea(v-model="form.markdown")
+        div.notePlace-markdown-parsed(v-html="markedText")
+    
+    label(for="secret")
+      input#secret.mdl-checkbox__input(type="checkbox" v-model="form.secret") Secret
+    
+    br
 
-  label(for="subscriber_only")
-    input#subscriber_only(type="checkbox" v-model="form.subscriber_only") Subscriber Only
+    label(for="subscriber_only")
+      input#subscriber_only(type="checkbox" v-model="form.subscriber_only") Subscriber Only
 
-  p
-    button(type="submit") send
+    p
+      button(type="submit") send
+div(v-if="!isAuthor")
+  h2 権限がありません

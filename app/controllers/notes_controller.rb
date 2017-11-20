@@ -37,8 +37,8 @@ class NotesController < ApplicationController
   
   def edit
     @note = Note.find(params[:id])
+    gon.user_id = current_user.id
     if(@note.user_id == current_user.id)
-      gon.user_id = current_user.id
       gon.note_id = @note.id
     else
       render nothing: true, status: :forbidden

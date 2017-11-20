@@ -204,6 +204,13 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       orgs: function() {
         return this.user.members
+      },
+      isAuthor: function() {
+        if(gon.note_id) {
+          return this.note.user_id == this.user.id
+        } else {
+          true
+        }
       }
     },
   })
@@ -266,7 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }) 
     }
   }
-
   getUserInfo();
   getNoteInfo();
 })
