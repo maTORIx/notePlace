@@ -1,7 +1,7 @@
 = javascript_pack_tag 'search_notes.js'
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
   .mdl-tabs__tab-bar
-    a.mdl-tabs__tab(v-bind:href="'/search/notes/' + search_text") Notes
+    a.mdl-tabs__tab.is-active(v-bind:href="'/search/notes/' + search_text") Notes
     a.mdl-tabs__tab(v-bind:href="'/search/users/' + search_text") Users
     a.mdl-tabs__tab(v-bind:href="'/search/organizations/' + search_text") Organizations
 .notePlace-ground
