@@ -1,20 +1,10 @@
 import Vue from 'vue/dist/vue.min.js'
-import marked from 'marked/marked.min.js'
+import marked from './marked.js'
 import getData from "./getData.js"
 import tools from "./tools.js"
 
 document.addEventListener('DOMContentLoaded', () => {
-  //marked settings
-  marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false
-  });
+
 
   const getCsrfToken = () => {
     const metas = document.getElementsByTagName('meta');
@@ -42,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return result
       },
       parseNoteDescription: function(src) {
-        return tools.parseNoteDescription(src)
+        return tools.parseHTML(src)
       },
       getUser: function(note) {
         var note_users = this.users.filter(function(user, idx, users) {

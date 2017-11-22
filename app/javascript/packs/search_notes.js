@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     methods: {
       parseHTML: function(src) {
-        return tools.parseNoteDescription(src)
+        return tools.parseHTML(src)
       },
       isCurrentUser: function() {
         return this.user.id == this.show_user.id

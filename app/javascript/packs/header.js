@@ -1,6 +1,6 @@
 import Vue from 'vue/dist/vue.min.js'
-import marked from 'marked/marked.min.js'
 import getData from "./getData.js"
+import tools from "./tools.js"
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -11,18 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     body.style.display = "block"
     load_bar.style.display = "none"
   }, 400)
-
-  //marked settings
-  marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false
-  });
 
   var user = {id: null, name: "", description: "", members: [], subscriber: []}
 
@@ -50,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     methods: {
       parseHTML: function(src) {
-        return marked(src)
+        return tools.parseHTML(src)
       },
       search: function() {
         location.href = `/search/notes/${this.search_text}`

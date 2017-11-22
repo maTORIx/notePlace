@@ -29,11 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
       "show_user": {name: "none", description: "none", members: [], subscribers: [],member_requests: []},
     },
     methods: {
-      parseMarkdown: function(src) {
-        return marked(src)
-      },
-      parseNoteDescription: function(src) {
-        return tools.parseNoteDescription(src)
+      parseHTML: function(src) {
+        return tools.parseHTML(src)
       },
       isCurrentUser: function() {
         return this.user.id == this.show_user.id

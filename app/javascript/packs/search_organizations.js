@@ -1,21 +1,9 @@
 import Vue from 'vue/dist/vue.min.js'
-import marked from 'marked/marked.min.js'
 import getData from "./getData.js"
 import sendData from "./sendData.js"
+import tools from "./tools.js"
 
 document.addEventListener('DOMContentLoaded', () => {
-  // marked settings
-  marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false
-  });
-
   var app = new Vue({
     el: '#app',
     data: {
@@ -25,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     methods: {
       parseHTML: function(src) {
-        return marked(src)
+        return tools.parseHTML(src)
       },
       redirectTo: function(url) {
         location.href = url

@@ -1,20 +1,9 @@
 import Vue from 'vue/dist/vue.min.js'
-import marked from 'marked/marked.min.js'
+import marked from './marked.js'
 import getData from "./getData.js"
 
 document.addEventListener('DOMContentLoaded', () => {
   var original_scopes = [];
-  //marked settings
-  marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false
-  });
 
   const getCsrfToken = () => {
     const metas = document.getElementsByTagName('meta');
