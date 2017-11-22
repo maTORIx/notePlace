@@ -30,7 +30,6 @@ class UserInfosController < ApplicationController
 
   def update
     @user_info = current_user.user_info
-    @user_info.lock!
     user_info_params = params.require(:user_info).permit(:hometown, :description, :name, :icon)
     @user_info.update!(user_info_params)
     redirect_to @user_info

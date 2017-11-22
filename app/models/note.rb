@@ -49,8 +49,6 @@ class Note < ApplicationRecord
   end
 
   def as_indexed_json(option={})
-    note = self
-
     self.as_json({
       include: {
         user: {
@@ -66,7 +64,7 @@ class Note < ApplicationRecord
   end
 
   def tags
-    self.description.scan(/(?:\s|^)#[^#\s]+/)
+    self.description.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
   end
 
   settings do
