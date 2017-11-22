@@ -62,10 +62,10 @@ class Note < ApplicationRecord
           }
         }
       }
-    }).merge("tags" => self.getTags)
+    }).merge("tags" => self.tags)
   end
 
-  def getTags
+  def tags
     self.description.scan(/(?:\s|^)#[^#\s]+/)
   end
 
