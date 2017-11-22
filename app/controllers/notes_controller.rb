@@ -43,13 +43,15 @@ class NotesController < ApplicationController
       @note.update!(note_params)
       render json: JSON.generate({id: @note.id, title: @note.title, description: @note.description})
     else
-      render nothing: true, status: :forbidden
+      render plain: "403 Forbidden", status: :forbidden
     end
   end
   
   def destory
     @note = Note.find(params[:id])
-    @note.destory
+    if(@note.user_id == current_user.id)
+      @note.destory
+    end
     redirect_to "/"
   end
 
@@ -68,7 +70,7 @@ class NotesController < ApplicationController
     @json = "[]"
     if params[:type] == "organizations"
       data = @note.organizations.map do |org|
-        {id: org.id, name: org.name, description: org.description, icon: org.icon.url}
+        org.toSmallMap
       end
       @json = JSON.generate(data)
     elsif params[:type] == "scopes"

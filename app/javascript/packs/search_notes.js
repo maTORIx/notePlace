@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return resp.text();
     }).then((data) => {
       var notes = JSON.parse(data)
-      app.notes = notes.reverse()
+      app.notes = notes
 
       var user_ids = notes.map(function(data){
         return data.user_id
