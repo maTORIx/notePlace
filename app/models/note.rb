@@ -1,6 +1,7 @@
 class Note < ApplicationRecord
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
+  include Elasticsearch::DSL
   belongs_to :user
   mount_uploader :note, NoteFileUploader
   has_many :scopes
@@ -65,14 +66,15 @@ class Note < ApplicationRecord
   end
 
   def getTags
-    self.description.scan(/(?:\s|^)(#[^#\s]+)/).map {|tags| tags[0]}
+    self.description.scan(/(?:\s|^)#[^#\s]+/)
   end
 
   settings do
     mappings dynamic: "false" do
+      indexes :user_id, type: "integer", index: "not_analyzed"
       indexes :title, type: "string", analyzer: "kuromoji"
       indexes :description, type: "text", analyzer: "kuromoji"
-      indexes :tags, type: "text", analyzer: "kuromoji"
+      indexes :tags, type: "string", index: "not_analyzed"
       indexes :user do
         indexes :user_info do
           indexes :name, analyzer: 'keyword', index: 'not_analyzed'
@@ -81,27 +83,61 @@ class Note < ApplicationRecord
     end
   end
 
-  def self.search(query)
-    __elasticsearch__.search({
-      query: {
-        multi_match: {
-          fields: %w(title description user.user_info.name tags^100),
-          fuzziness: "AUTO",
-          type: "most_fields",
-          query: query
-        },
-      }
-    })
+  def self.search(query, tags=[])
+    p tags
+    p query
+    search_definition = Elasticsearch::DSL::Search.search do
+      query do
+        bool do
+          must do
+            multi_match do
+              fields %w(title description user.user_info.name)
+              fuzziness "AUTO"
+              type "most_fields"
+              query query
+            end
+          end
+          filter do
+            if(tags.length == 0)
+              match_all
+            else
+              terms tags: tags
+            end
+          end
+        end
+      end
+    end
+    __elasticsearch__.search(search_definition)
   end
 
-  def self.searchByTag(query)
-    __elasticsearch__.search({
-      query: {
-        multi_match: {
-          fields: %w(tags),
-          query: query
-        }
-      }
-    })
+  def self.searchWithUser(keyword, tags=[], user)
+    search_definition = Elasticsearch::DSL::Search.search do
+      query do
+        bool do
+          must do
+            multi_match do
+              fields %w(title description user.user_info.name)
+              fuzziness "AUTO"
+              type "most_fields"
+              query keyword
+            end
+          end
+        
+          filter do
+            bool do
+              must do
+                term user_id: user.id
+                if tags.length != 0
+                  terms tags: tags
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    
+    __elasticsearch__.search(search_definition)
   end
 end

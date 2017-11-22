@@ -35,10 +35,22 @@ class Organization < ApplicationRecord
       description: self.description,
       icon: self.icon.url,
       image: self.image.url,
-      subscribers: self.subscriber_users,
-      members: self.member_users,
-      member_requests: self.member_request_users,
+      subscribers: self.subscriber_users.map{|user| user.toMap},
+      members: self.member_users.map{|user| user.toMap},
+      member_requests: self.member_request_users.map{|user| user.toMap},
     }
+    result
+  end
+
+  def toSmallMap()
+    result = {
+      id: self.id,
+      name: self.name,
+      description: self.description,
+      icon: self.icon.url,
+      image: self.image.url,
+    }
+    result
   end
 
   settings do
