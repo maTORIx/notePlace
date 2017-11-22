@@ -24,14 +24,9 @@ class SearchController < ApplicationController
   
   def notes
     if(params[:format] == "json")
-      puts "---------------"
-      p params
-      if params[:text].match(/^#[^\s#]+$/)
-        @notes = Note.searchByTag(params[:text]).results.results
-      else
-        @notes = Note.search(params[:text]).results.results
-      end
-      
+      tags = params[:text].scan(/(?:\s|^)#[^#\s]+/)
+      @notes = Note.search(params[:text], tags).results.results
+
       data = @notes.map{|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
 
       render json: JSON.generate(data)
