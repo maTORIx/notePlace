@@ -39,6 +39,7 @@ div(v-if="isAuthor")
       input#subscriber_only(type="checkbox" v-model="form.subscriber_only") Subscriber Only
 
     p
-      button(type="submit") send
+      button.mdl-button.mdl-js-button.mdl-button--colored.mdl-js-ripple-effect.notePlace-material-button.notePlace-button-large(type="submit")
+        i.material-icons send
 div(v-if="!isAuthor")
   h2 権限がありません

@@ -1,7 +1,5 @@
 class ScopesController < ApplicationController
   def create
-    p "-----------------"
-    p params
     scope_params = params.require(:scope).permit(:note_id, :organization_id)
     @note =  Note.find(scope_params[:note_id])
     @org = Organization.find_by(id: scope_params[:organization_id])
