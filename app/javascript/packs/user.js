@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "star_notes": [],
       "star_timeline": [],
       "show_user": {name: "none", description: "none", members: [], subscribers: [],member_requests: []},
+      "search_text": ""
     },
     methods: {
       parseHTML: function(src) {
@@ -72,6 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
           app.star_timeline.push(note)
         }
         return
+      },
+      searchInUser: function() {
+        var text = encodeURIComponent(this.search_text)
+        location.href = `/users/${gon.show_user_id}/search/notes/${text}`
       }
     },
   })

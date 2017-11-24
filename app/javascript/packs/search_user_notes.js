@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "users": [],
       "show_notes": [],
       "show_user": {name: "none", description: "none", members: [], subscribers: [],member_requests: []},
-      "search_text": encodeURIComponent(gon.show_user)
+      "search_text": gon.search_text
     },
     methods: {
       parseHTML: function(src) {

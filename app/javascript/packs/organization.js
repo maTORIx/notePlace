@@ -47,17 +47,16 @@ document.addEventListener('DOMContentLoaded', () => {
         var organizations = this.user.members.filter(function(data) {
           return gon.organization_name == data.name
         })
-        console.log(organizations)
         return organizations.length === 1
       },
       isSubscriber: function() {
         var organizations = this.user.subscribers.filter(function(data) {
           return gon.organization_name == data.name
         })
-        return organizations.length === 1
+        return organizations.length != 0
       },
       subscribe: function(org) {
-        sendData.subscribe(org, this.user).then((user) => {
+        sendData.subscribe(org, this.user).then((resp) => {
           app.user.subscribers.push(org)
         })
       },
