@@ -54,9 +54,7 @@ class Organization < ApplicationRecord
   end
 
   def as_indexed_json(option={})
-    self.as_json({
-      only: [:name, :description]
-    }).merge("tags" => self.tags)
+    self.as_json().merge("tags" => self.tags)
   end
 
   def tags
@@ -71,7 +69,8 @@ class Organization < ApplicationRecord
     end
   end
 
-  def self.search(query, tags=[])
+  def self.search(query)
+    tags = query.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
     search_definition = Elasticsearch::DSL::Search.search do
       query do
         bool do

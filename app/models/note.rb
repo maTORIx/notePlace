@@ -81,7 +81,8 @@ class Note < ApplicationRecord
     end
   end
 
-  def self.search(query, tags=[])
+  def self.search(query)
+    tags = query.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
     p tags
     p query
     search_definition = Elasticsearch::DSL::Search.search do
@@ -108,7 +109,8 @@ class Note < ApplicationRecord
     __elasticsearch__.search(search_definition)
   end
 
-  def self.searchWithUser(keyword, tags=[], user)
+  def self.searchWithUser(query, user)
+    tags = query.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
     search_definition = Elasticsearch::DSL::Search.search do
       query do
         bool do
@@ -117,7 +119,7 @@ class Note < ApplicationRecord
               fields %w(title description user.user_info.name)
               fuzziness "AUTO"
               type "most_fields"
-              query keyword
+              query query
             end
           end
         
