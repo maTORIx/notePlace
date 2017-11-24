@@ -19,8 +19,8 @@
 
 .notePlace-layout-header
   .notePlace-header-search
-    input.notePlace-search-text(type="text" v-bind:placeholder="'Search in ' + show_user.name")
-    button.mdl-button.mdl-js-button.mdl-button--icon.mdl-button--raised.notePlace-search-button(v-on:click="search()")
+    input.notePlace-search-text(type="text" v-bind:placeholder="'Search in ' + show_user.name" v-model="search_text")
+    button.mdl-button.mdl-js-button.mdl-button--icon.mdl-button--raised.notePlace-search-button(v-on:click="searchInUser()")
       i.material-icons search
 
 .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect

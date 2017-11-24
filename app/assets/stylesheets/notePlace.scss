@@ -298,14 +298,14 @@ form {
     display: flex;
 
     .notePlace-search-text {
-      background-color: white;
+      background-color: #e8e8e8;
       border-radius: 5px;
       width: 100px;
       flex-grow: 10;
       min-width: 0px;
       height: 24px;
       font-size: 14px;
-      opacity: 0.4
+      color: black;
     }
     .notePlace-search-button {
       margin: 0 5px;

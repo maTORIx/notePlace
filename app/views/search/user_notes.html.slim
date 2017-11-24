@@ -31,5 +31,5 @@
     .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
       img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
       div = "{{note.user.name}}"
-button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="show_notes.length != notes.length" v-on:click="addTimeline()") Read More
+button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="show_notes.length != notes.length" v-on:click="addShowNote()") Read More
 div(v-else) Readed all notes
