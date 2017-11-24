@@ -1,0 +1,35 @@
+= javascript_pack_tag 'search_user_notes.js'
+.mdl-card.mdl-shadow--2dp.notePlace-info-card
+  .notePlace-card-header
+    img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="show_user.icon")
+    .notePlace-card-header-text= "{{show_user.name}}"
+    div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/members')")
+      label Belonging
+      .notePlace-button-text="{{show_user.members.length}}"
+    div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/member_requests')" v-if="isCurrentUser()")
+      label MemberRequests
+      .notePlace-button-text="{{show_user.member_requests.length}}" 
+    div.notePlace-info-button(v-on:click="redirectTo('/users/' + show_user.id + '/subscribers')")
+      label Subscribe
+      .notePlace-button-text="{{show_user.subscribers.length}}" 
+    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginLR(v-if="user.id == show_user.id" v-on:click="redirectTo('/users/' + show_user.id + '/edit')")
+      i.material-icons edit
+  .notePlace-card-body
+    p(v-html="parseHTML(show_user.description)")
+
+.notePlace-layout-header
+  .notePlace-header-search
+    input.notePlace-search-text(type="text" v-bind:placeholder="'Search in ' + show_user.name")
+    button.mdl-button.mdl-js-button.mdl-button--icon.mdl-button--raised.notePlace-search-button(v-on:click="search()")
+      i.material-icons search
+  
+.mdl-card.mdl-shadow--2dp.notePlace-ground-card
+  .mdl-card.mdl-shadow--2dp.notePlace-default-card(v-for="note in show_notes")
+    .notePlace-card-text-field(v-on:click="redirectTo('/notes/' + note.id)")
+      h5 = "{{note.title}}"
+      p(v-html="parseHTML(note.description)")
+    .notePlace-user-info-field(v-on:click="redirectTo('/users/' + note.user.id)")
+      img.notePlace-user-icon(alt="Not Found" v-bind:src="note.user.icon")
+      div = "{{note.user.name}}"
+button.notePlace-button.notePlace-button-skeleton-black.notePlace-button-large(v-if="show_notes.length != notes.length" v-on:click="addTimeline()") Read More
+div(v-else) Readed all notes

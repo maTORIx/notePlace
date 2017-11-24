@@ -18,7 +18,7 @@ html
           .mdl-layout__header-row.notePlace-layout-header
             img.notePlace-icon(alt="notePlace" src="http://matorixx.com/notePlace.png" v-on:click="redirectTo('/')")
             .notePlace-header-search
-              input.notePlace-search-text(type="text" placeholder="Search NotePlace" v-model="header_search_text" v-on:keydown="search()")
+              input.notePlace-search-text(type="text" placeholder="Search NotePlace" v-model="header_search_text")
               button.mdl-button.mdl-js-button.mdl-button--icon.mdl-button--raised.notePlace-search-button(v-on:click="search()")
                 i.material-icons search
             
