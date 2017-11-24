@@ -58,7 +58,7 @@ class Organization < ApplicationRecord
   end
 
   def tags
-    self.description.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
+    self.description.scan(/(?:\s|^)#([^#\s]+)/).map {|data| data[0]}
   end
 
   settings do
@@ -70,13 +70,13 @@ class Organization < ApplicationRecord
   end
 
   def self.search(query)
-    tags = query.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
+    tags = query.scan(/(?:\s|^)#([^#\s]+)/).map {|data| data[0]}
     search_definition = Elasticsearch::DSL::Search.search do
       query do
         bool do
           must do
             multi_match do
-              fields %w(title description tags^10)
+              fields %w(title description tags^100)
               fuzziness "AUTO"
               type "most_fields"
               query query

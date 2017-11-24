@@ -13,7 +13,7 @@ class UserInfo < ApplicationRecord
   end
   
   def tags
-    self.description.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
+    self.description.scan(/(?:\s|^)#([^#\s]+)/).map {|data| data[0]}
   end
 
   settings do
@@ -26,7 +26,7 @@ class UserInfo < ApplicationRecord
   end
 
   def self.search(query)
-    tags = query.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
+    tags = query.scan(/(?:\s|^)#([^#\s]+)/).map {|data| data[0]}
     search_definition = Elasticsearch::DSL::Search.search do
       query do
         bool do

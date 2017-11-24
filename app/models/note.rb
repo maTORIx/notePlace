@@ -64,7 +64,7 @@ class Note < ApplicationRecord
   end
 
   def tags
-    self.description.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
+    self.description.scan(/(?:\s|^)#([^#\s]+)/).map {|data| data[0]}
   end
 
   settings do
@@ -82,7 +82,7 @@ class Note < ApplicationRecord
   end
 
   def self.search(query)
-    tags = query.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
+    tags = query.scan(/(?:\s|^)#([^#\s]+)/).map {|data| data[0]}
     p tags
     p query
     search_definition = Elasticsearch::DSL::Search.search do
@@ -90,7 +90,7 @@ class Note < ApplicationRecord
         bool do
           must do
             multi_match do
-              fields %w(title description user.user_info.name)
+              fields %w(title description user.user_info.name tags^100)
               fuzziness "AUTO"
               type "most_fields"
               query query
@@ -110,13 +110,13 @@ class Note < ApplicationRecord
   end
 
   def self.searchWithUser(query, user)
-    tags = query.scan(/(?:\s|^)(#[^#\s]+)/).map {|data| data[0]}
+    tags = query.scan(/(?:\s|^)#([^#\s]+)/).map {|data| data[0]}
     search_definition = Elasticsearch::DSL::Search.search do
       query do
         bool do
           must do
             multi_match do
-              fields %w(title description user.user_info.name)
+              fields %w(title description user.user_info.name tags^100)
               fuzziness "AUTO"
               type "most_fields"
               query query
