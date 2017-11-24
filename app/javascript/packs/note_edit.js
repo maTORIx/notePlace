@@ -226,6 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return fetch(`/notes/${gon.note_id}/file`, {credentials: "include"})
       }).then((resp) => {
         var extension = app.note.filename.split(".").pop();
+        if(resp.status > 300 || resp.status < 200) {
+          return ""
+        }
 
         // check extension
         switch (extension) {
