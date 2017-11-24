@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "users": [],
       "show_notes": [],
       "show_user": {name: "none", description: "none", members: [], subscribers: [],member_requests: []},
+      "search_text": encodeURIComponent(gon.show_user)
     },
     methods: {
       parseHTML: function(src) {
@@ -45,6 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       redirectTo: function(url) {
         location.href = url
+        return
+      },
+      search: function() {
+        var text = encodeURIComponent(this.search_text)
+        location.href = `/users/${gon.show_user_id}/search/notes/${text}`
         return
       },
       addShowNotes: function() {
