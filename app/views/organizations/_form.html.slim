@@ -2,19 +2,17 @@
 .notePlace-second-header.notePlace-second-header-success edit
 .notePlace-ground
   = form_for @organization, remote: false, html: {id: "#{@organization.name}"} do |f|
-    div.mdl-textfield.mdl-js-textfield
+    p.mdl-textfield.mdl-js-textfield
       = f.text_field :name, class: "mdl-textfield__input", required: true, placeholder: "name"
-    div.mdl-textfield.mdl-js-textfield
+    p.mdl-textfield.mdl-js-textfield
       = f.label :description, "description", class: "mdl-textfield__label"
       = f.text_area :description, class: "mdl-textfield__input", placeholder: "description"
-    div
+    p
       = f.label :icon, "icon"
       = f.file_field :icon
-    br
-    div
+    p
       = f.label :icon, "image"
       = f.file_field :image
-    br
     p
       button.mdl-button.mdl-js-button.mdl-button--colored.mdl-js-ripple-effect.notePlace-material-button.notePlace-button-large(type="submit")
         i.material-icons send

@@ -29,7 +29,7 @@ class OrganizationsController < ApplicationController
     if Organization.exists?(name: params[:name])
       render 'Organization_already_exists', status: :internal_server_error
     end
-    organization_params = params.require(:organization).permit(:name, :description, :icon, :image)
+    organization_params = params.require(:organization).permit(:name, :description, :icon, :image, :public)
     @organization = Organization.create(organization_params)
     Member.create(user_id: current_user.id, organization_id: @organization.id)
     redirect_to @organization 
@@ -42,7 +42,7 @@ class OrganizationsController < ApplicationController
 
   def update
     @organization = Organization.lock.find_by(name: params[:name])
-    organization_params = params.require(:organization).permit(:name, :description, :icon, :image)
+    organization_params = params.require(:organization).permit(:name, :description, :icon, :image, :public)
     @organization.update!(organization_params)
     redirect_to @organization
   end
