@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   resources :user_infos, path: "users", except: [:create, :new, :destroy] do
     member do
       get "info/:type", to: "user_infos#info"
-      get "search/notes(.:format)/:text", to: "search#user_notes"
+      get "search/notes(.:format)(/:text)", to: "search#user_notes"
       get "members", to: "user_infos#showMembers"
       get "member_requests", to: "user_infos#showMemberRequests"
       get "subscribers", to: "user_infos#showSubscribers"
@@ -36,8 +36,8 @@ Rails.application.routes.draw do
   resources :search, only: [:index] do
     collection do
       get "organizations(.:format)/:text", to: "search#organizations"
-      get "users(.:format)/:text", to: "search#users"
-      get "notes(.:format)/:text", to: "search#notes"
+      get "users(.:format)(/:text)", to: "search#users"
+      get "notes(.:format)(/:text)", to: "search#notes"
     end
   end
 
