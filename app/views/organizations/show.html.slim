@@ -16,7 +16,7 @@
     button.notePlace-button.notePlace-button-success(v-if="isSubscriber()" v-on:click="unsubscribe(organization)") subscribe
     button.notePlace-button.notePlace-button-skeleton-white(v-else v-on:click="subscribe(organization)") subscribe
     //- button.notePlace-button.notePlace-button-skeleton-white(v-if="isMember()" v-on:click="redirectTo('/org/' + organization.name + '/edit')") edit
-    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginLR(v-on:click="redirectTo('/org/' + organization.name + '/edit')")
+    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginLR(v-on:click="redirectTo('/org/' + organization.name + '/edit')" v-if="isMember()")
       i.material-icons edit
   .notePlace-card-body
     p(v-html="parseHTML(organization.description)")
