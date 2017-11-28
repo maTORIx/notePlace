@@ -21,7 +21,7 @@ class NotesController < ApplicationController
   end
 
   def create
-    note_params = params.permit(:title, :description, :note, :secret, :subscriber_only)
+    note_params = params.permit(:title, :description, :note, :secret, :member_only)
     @note = current_user.notes.create(note_params)
     render json: JSON.generate({id: @note.id, title: @note.title, description: @note.description})
   end
@@ -36,7 +36,7 @@ class NotesController < ApplicationController
   end
   
   def update
-    note_params = params.permit(:title, :description, :note, :secret, :subscriber_only)
+    note_params = params.permit(:title, :description, :note, :secret, :member_only)
     @note = Note.find(params[:id])
     if(@note.user_id == current_user.id)
       @note.lock!
@@ -67,22 +67,17 @@ class NotesController < ApplicationController
 
   def info
     @note = Note.find(params[:id])
-    @json = "[]"
+    data = []
     if params[:type] == "organizations"
       data = @note.organizations.map do |org|
         org.toSmallMap
       end
-      @json = JSON.generate(data)
     elsif params[:type] == "scopes"
       data = @note.scopes.map do |scope|
-        {id: scope.id, note_id: scope.note_id, organization_id: scope.organization_id}
+        scope.toMap
       end
-      @json = JSON.generate(data)
     end
 
-    respond_to do |format|
-      format.html { render json: @json}
-      format.json { render json: @json}
-    end
+    render json: JSON.generate(data)
   end
 end

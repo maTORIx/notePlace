@@ -18,7 +18,7 @@ class Note < ApplicationRecord
       star: {
         length: self.stars.length,
       },
-      subscriber_only: self.subscriber_only,
+      member_only: self.member_only,
       description: self.description,
       filename: self.note.file.filename
     }
@@ -36,9 +36,9 @@ class Note < ApplicationRecord
       else
         return false
       end
-    elsif self.subscriber_only
+    elsif self.member_only
       self.organizations.each do |org|
-        if org.isSubscriber(user) == true
+        if org.isMember(user) == true
           return true
         end
       end

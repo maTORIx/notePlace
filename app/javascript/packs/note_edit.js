@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "scopes" : [],
       "scopes_change": {add: [], delete: []},
       "input_scope_name": "",
-      "form": {title: "", description: "", note: null, markdown: "", secret: false, subscriber_only: false},
+      "form": {title: "", description: "", note: null, markdown: "", secret: false, member_only: false},
       "isFile": true
     },
     methods: {
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("title",this.form.title)
         formData.append("description",this.form.description)
         formData.append("secret",this.form.secret)
-        formData.append("subscriber_only",this.form.subscriber_only)
+        formData.append("member_only",this.form.subscriber_only)
         formData.append("permit",true)
         
         return fetch("/notes", {
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("title",this.form.title)
         formData.append("description",this.form.description)
         formData.append("secret",this.form.secret)
-        formData.append("subscriber_only",this.form.subscriber_only)
+        formData.append("member_only",this.form.subscriber_only)
         formData.append("permit",true)
 
         return fetch("/notes/" + gon.note_id, {

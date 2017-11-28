@@ -35,8 +35,10 @@ div(v-if="isAuthor")
     
     br
 
-    label(for="subscriber_only")
-      input#subscriber_only(type="checkbox" v-model="form.subscriber_only") Subscriber Only
+    label(for="member_only")
+      input#subscriber_only(type="checkbox" v-model="form.member_only") Subscriber Only
+
+    br
 
     p
       button.mdl-button.mdl-js-button.mdl-button--colored.mdl-js-ripple-effect.notePlace-material-button.notePlace-button-large(type="submit")

@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }).then((resp) => {
         if (!(resp.status >= 200 && resp.status <= 300)) {
           if(resp.status == 403) {
-            window.alert("このノートを見るには公開範囲の団体を登録する必要があります")
+            window.alert("このノートを見るには団体のメンバーになる必要があります")
             throw "You don't have permission"
           }
           throw "Internal Server Error"
