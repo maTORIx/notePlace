@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       getUser: function(note) {
         var note_users = this.users.filter(function(user, idx, users) {
-          console.log(user, idx, users)
           return user.id === note.user_id
         })
         if (note_users.length < 1) {
@@ -38,8 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         for(var i = this.timeline.length; i < show_length; i++) {
           var note = this.notes[i]
-          note["user"] = this.getUser(app.notes[i])
-          app.timeline.push(note)
+          if(note.readable){
+            note["user"] = this.getUser(app.notes[i])
+            app.timeline.push(note)
+          } else { console.log(note) }
         }
         return
       }

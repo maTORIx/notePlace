@@ -17,11 +17,12 @@ class NotesController < ApplicationController
     @note = Note.new
     if current_user  && [nil, "html"].include?(params[:format])
       gon.user_id = current_user.id
+      @allow_edit = Note.user_id = current_user.id
     end
   end
 
   def create
-    note_params = params.permit(:title, :description, :note, :secret, :member_only)
+    note_params = params.permit(:title, :description, :note, :scope_setting)
     @note = current_user.notes.create(note_params)
     render json: JSON.generate({id: @note.id, title: @note.title, description: @note.description})
   end
@@ -36,7 +37,7 @@ class NotesController < ApplicationController
   end
   
   def update
-    note_params = params.permit(:title, :description, :note, :secret, :member_only)
+    note_params = params.permit(:title, :description, :note, :scope_setting)
     @note = Note.find(params[:id])
     if(@note.user_id == current_user.id)
       @note.lock!

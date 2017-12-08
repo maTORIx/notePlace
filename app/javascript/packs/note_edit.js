@@ -24,13 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
       "scopes" : [],
       "scopes_change": {add: [], delete: []},
       "input_scope_name": "",
-      "form": {title: "", description: "", note: null, markdown: "", secret: false, member_only: false},
+      "form": {title: "", description: "", note: null, scope_setting: ""},
+      "markdown": "",
+      "redirect": true,
       "isFile": true
     },
     methods: {
-      parseHTML: function(src) {
-        var result 
-        return result
+      parseHTML: function(src) { 
+        return marked(src)
       },
       redirectTo: function(url) {
         location.href = url
@@ -98,13 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
           })
         })
       },
+      markToFile: function(markdown) {
+        var blob = new Blob([markdown], {"type": "text/plain"});
+        return new File([blob], "note.md")
+      },
       submitNote: function(event) {
         event.preventDefault();
         return new Promise((resolve, reject) => {
           if(!this.isFile) {
-            var blob = new Blob([this.form.markdown], {"type": "text/plain"});
-            var fileOfBlob = new File([blob], "note.md")
-            this.form.note = fileOfBlob
+            this.form.note = this.markToFile(this.markdown)
           }
           if(gon.note_id) {
             resolve(this.updateNote())
@@ -112,8 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
             resolve(this.createNote())
           }
         }).then(() => {
-          location.href = `/notes/${this.note.id}`
-          return
+          if(this.redirect) {
+            location.href = `/notes/${this.note.id}`
+            return
+          }
+        }).catch((err) => {
+          window.alert(err.toString())
         })
       },
       createNote: function() {
@@ -121,8 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("note",this.form.note)
         formData.append("title",this.form.title)
         formData.append("description",this.form.description)
-        formData.append("secret",this.form.secret)
-        formData.append("member_only",this.form.subscriber_only)
+        formData.append("scope_setting",this.form.scope_setting)
         formData.append("permit",true)
         
         return fetch("/notes", {
@@ -150,8 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("note",this.form.note)
         formData.append("title",this.form.title)
         formData.append("description",this.form.description)
-        formData.append("secret",this.form.secret)
-        formData.append("member_only",this.form.subscriber_only)
+        formData.append("scope_setting",this.form.scope_setting)
         formData.append("permit",true)
 
         return fetch("/notes/" + gon.note_id, {
@@ -190,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return []
       },
       markedText: function() {
-        return marked(this.form.markdown)
+        return marked(this.markdown)
       },
       orgs: function() {
         return this.user.members
@@ -239,7 +244,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }).then((data) => {
         app.form.markdown = data
-      }) 
+        app.markdown = data
+      }).catch((err) => {
+        console.error(err.toString())
+      })
+    } else {
+      console.error("Note ID not found")
     }
   }
 

@@ -6,7 +6,7 @@ class MemberRequestsController < ApplicationController
     if org != nil && org.member_users.include?(current_user) && !(org.member_users.include?(user))
       @member_request = MemberRequest.new({organization_id: org.id, user_id: user.id})
       @member_request.save
-      render json: user.user_info.toJSON
+      render json: JSON.generate(user.user_info.toMap)
     end
   end
 

@@ -54,7 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       },
       deleteMemberRequest: function(user) {
-        sendData.destroyMemberRequest(this.organization, user).then((user) => {
+        sendData.destroyMemberRequest(this.organization, user).then((resp) => {
+          console.log(this.users.indexOf(user))
           this.users.splice(this.users.indexOf(user), 1)
         })
       },

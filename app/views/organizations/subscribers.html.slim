@@ -1,4 +1,5 @@
-= javascript_pack_tag 'organization_users.js'
+= content_for :head
+  = javascript_pack_tag 'organization_users.js'
 .mdl-card.mdl-shadow--2dp.notePlace-info-card.notePlace-info-organization-card
   img.notePlace-organization-image(v-bind:src="organization.image")
   .notePlace-card-header
@@ -17,7 +18,7 @@
     button.notePlace-button.notePlace-button-skeleton-white(v-else v-on:click="subscribe(organization)") subscribe
     button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginR10(v-on:click="redirectTo('/org/' + organization.name)")
       i.material-icons undo
-    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginR10(v-if="isMember()" v-on:click="redirectTo('/org/' + organization.name + '/edit')" v-if="isMember()")
+    button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect.marginR10(v-if="isMember()" v-on:click="redirectTo('/org/' + organization.name + '/edit')")
       i.material-icons edit
   .notePlace-card-body
     p(v-html="parseHTML(organization.description)")

@@ -1,9 +1,10 @@
 = javascript_pack_tag 'simple_form.js'
-.notePlace-second-header.notePlace-second-header-success edit
+.notePlace-second-header.notePlace-second-header-success= action_name 
 .notePlace-ground
   = form_for @organization, remote: false, html: {id: "#{@organization.name}"} do |f|
-    p.mdl-textfield.mdl-js-textfield
-      = f.text_field :name, class: "mdl-textfield__input", required: true, placeholder: "name"
+    - if action_name == "new"
+      p.mdl-textfield.mdl-js-textfield
+        = f.text_field :name, class: "mdl-textfield__input", required: true, placeholder: "name"
     p.mdl-textfield.mdl-js-textfield
       = f.label :description, "description", class: "mdl-textfield__label"
       = f.text_area :description, class: "mdl-textfield__input", placeholder: "description"

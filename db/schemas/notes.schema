@@ -5,8 +5,7 @@ create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=u
   t.string "title", null: false
   t.text "description"
   t.integer "user_id", null: false
-  t.boolean "secret", default: false
-  t.boolean "member_only", default: true
+  t.string "scope_setting", null: false, default: "public"
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
 end

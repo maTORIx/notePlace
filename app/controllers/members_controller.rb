@@ -6,9 +6,10 @@ class MembersController < ApplicationController
       @member = Member.new(user_id: member_request.user_id, organization_id: member_request.organization_id)
       @member.save!
       member_request.destroy
-      redirect_to @member
+      render json: JSON.generate(current_user.toMap)
+    else
+      render plain: "403", status: 403
     end
-    redirect_to root
   end
 
   def destroy

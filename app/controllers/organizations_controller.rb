@@ -42,7 +42,7 @@ class OrganizationsController < ApplicationController
 
   def update
     @organization = Organization.lock.find_by(name: params[:name])
-    organization_params = params.require(:organization).permit(:name, :description, :icon, :image, :public)
+    organization_params = params.require(:organization).permit(:description, :icon, :image, :public)
     if @organization.isMember(current_user)
       @organization.update!(organization_params)
     end

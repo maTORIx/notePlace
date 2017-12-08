@@ -37,31 +37,26 @@ class UserInfosController < ApplicationController
 
   def info
     @user = User.find(params[:id])
-    @json = "[]"
+    results = []
     if ["notes", "star_notes"].include?(params[:type])
-      notes = @user.send(params[:type]).map {|data| {id: data.id, title: data.title, description: data.description, user_id: data.user_id}}
-      @json = JSON.generate(notes)
-    
+      results = @user.send(params[:type]).map {|data| data.toMap(current_user)}
     elsif params[:type] == "timeline"
       orgs = @user.subscriber_organizations
-      result = []
+      results = []
       orgs.each do |org|
         org.notes.each do |data|
-          result.push({id: data.id, title: data.title, description: data.description, user_id: data.user_id})
+          results.push(data.toMap(current_user))
         end
       end
-
-      @json = JSON.generate(result.uniq)
     elsif ["subscriber_organizations", "member_organizations", "member_request_organizations"].include? params[:type]
-      data = @user.send(params[:type]).map {|data| {id: data.id, name: data.name, description: data.description, icon: data.icon.url, image: data.image.url}}
-      @json = JSON.generate(data)
+      results = @user.send(params[:type]).map {|data| data.toMap}
     elsif ["members", "subscribers", "member_requests"].include?(params[:type]) && params[:format] == "json"
-      data = @user.send(params[:type]).map{|data| {id: data.id, user_id: data.user_id, organization_id: data.organization_id}}
-      @json = JSON.generate(data)
+      results = @user.send(params[:type]).map{|data| data.toMap}
     elsif "stars" == params[:type]
-      data = @user.stars.map{|data| {id: data.id, user_id: data.user.id, note_id: data.note_id}}
-      @json = JSON.generate(data)
+      results = @user.stars.map{|data| {id: data.id, user_id: data.user.id, note_id: data.note_id}}
     end
+
+    @json = JSON.generate results 
 
     respond_to do |format|
       format.html { render json: @json}

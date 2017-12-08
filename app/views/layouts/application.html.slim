@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+doctype html
 html
   head
     title NotePlace
@@ -9,6 +9,7 @@ html
     = javascript_include_tag 'application.js'
     = javascript_pack_tag "header.js"
     = include_gon
+    = yield :head
   
   #load-bar.mdl-progress.mdl-js-progress.mdl-progress__indeterminate
   body
@@ -45,7 +46,7 @@ html
                 = link_to "login", new_user_session_path, class: "mdl-navigation__link"
               
               ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='user-menu-lower-left')
-                a (v-bind:href="'/users/' + user.id" class="mdl-menu__item") Your Account
+                a (v-bind:href="'/users/' + user.id" class="mdl-menu__item") Account
                 a (v-bind:href="'/users/' + user.id + '/edit'" class="mdl-menu__item") Settings
                 a (href="/notes/new" class="mdl-menu__item") New Note
                 a(href="/org/new" class="mdl-menu__item") New Organization

@@ -57,8 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         for(var i = this.timeline.length; i < show_length; i++) {
           var note = this.notes[i]
-          note["user"] = this.getUser(app.notes[i])
-          app.timeline.push(note)
+          if(note.readable) {
+            note["user"] = this.getUser(app.notes[i])
+            app.timeline.push(note)
+          }
         }
         return
       },

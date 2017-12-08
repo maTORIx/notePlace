@@ -1,5 +1,5 @@
-= javascript_pack_tag 'user_orgs.js'
-.notePlace-header-space
+= content_for :head
+  = javascript_pack_tag 'user_orgs.js'
 .mdl-card.mdl-shadow--2dp.notePlace-info-card
   .notePlace-card-header
     img.notePlace-user-icon.notePlace-icon(alt="S" v-bind:src="show_user.icon" v-on:click="redirectTo('/users/' + show_user.id)")

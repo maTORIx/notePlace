@@ -7,45 +7,62 @@ class Note < ApplicationRecord
   has_many :scopes
   has_many :organizations, through: :scopes
   has_many :stars
-  has_many :star_notes, through: :scopes, source: :users
+  has_many :star_notes, through: :stars, source: :users
 
   def toMap(user = nil)
     result = {
       id: self.id,
       title: self.title,
       user_id: self.user_id,
-      secret: self.secret,
       star: {
         length: self.stars.length,
       },
-      member_only: self.member_only,
+      scope_setting: self.scope_setting,
       description: self.description,
       filename: self.note.file.filename
     }
     if user != nil
       result[:star][:stared] = user.isFavorite(self)
+      result[:readable] = self.isAllowUser(user)
     end
 
     result
   end
 
   def isAllowUser(user)
-    if self.secret
-      if(user = self.user)
+    case self.scope_setting
+      when "public" then
         return true
-      else
-        return false
-      end
-    elsif self.member_only
-      self.organizations.each do |org|
-        if org.isMember(user) == true
-          return true
+      when "member_only"
+        self.organizations.each do |org|
+          if org.isMember(user) == true
+            return true
+          end
         end
-      end
-      return false
-    else
-      return true
+        return false
+      when "secret"
+        if(user = self.user)
+          return true
+        else
+          return false
+        end
     end
+    #if self.scope_setting
+    #  if(user = self.user)
+    #    return true
+    #  else
+    #    return false
+    #  end
+    #elsif self.member_only
+    #  self.organizations.each do |org|
+    #    if org.isMember(user) == true
+    #      return true
+    #    end
+    #  end
+    #  return false
+    #else
+    #  return true
+    #end
   end
 
   def as_indexed_json(option={})

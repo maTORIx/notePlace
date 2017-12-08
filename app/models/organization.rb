@@ -63,7 +63,7 @@ class Organization < ApplicationRecord
 
   settings do
     mappings dynamic: "false" do
-      indexes :title, type: "string", analyzer: "kuromoji"
+      indexes :name, type: "string", analyzer: "kuromoji"
       indexes :description, type: "text", analyzer: "kuromoji"
       indexes :tags, type: "string", index: "not_analyzed"
     end
@@ -76,7 +76,7 @@ class Organization < ApplicationRecord
         bool do
           must do
             multi_match do
-              fields %w(title description tags^100)
+              fields %w(name description tags^100)
               fuzziness "AUTO"
               type "most_fields"
               query query

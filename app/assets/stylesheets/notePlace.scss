@@ -3,6 +3,11 @@ body {
   font-family: Arial;
 }
 
+form label {
+  color: #ff5016;
+  text-shadow: 0.5px 0.5px #b2b2b2;
+}
+
 p {
   word-wrap: break-word;
 }
@@ -11,6 +16,11 @@ input {
   width: 40%;
   min-width: 300px;
 }
+
+input[type="checkbox" i] {
+  width: auto;
+  min-width: auto;
+  }
 
 .header {
   width: 20%;

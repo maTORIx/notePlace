@@ -5,17 +5,17 @@ module.exports = {
       return resp.text();
     }).then((data) => {
       user = JSON.parse(data)
-      return fetch(`/users/${user_id}/info/member_organizations`)
+      return fetch(`/users/${user_id}/info/member_organizations`, {credentials: "include"})
     }).then((resp) => {
       return resp.text()
     }).then((data) => {
       user["members"] = JSON.parse(data)
-      return fetch(`/users/${user_id}/info/subscriber_organizations`)
+      return fetch(`/users/${user_id}/info/subscriber_organizations`, {credentials: "include"})
     }).then((resp) => {
       return resp.text()
     }).then((data) => {
       user["subscribers"] = JSON.parse(data)
-      return fetch(`/users/${user_id}/info/member_request_organizations`)
+      return fetch(`/users/${user_id}/info/member_request_organizations`, {credentials: "include"})
     }).then((resp) => {
       return resp.text()
     }).then((data) => {
@@ -26,21 +26,21 @@ module.exports = {
   },
   getOrganizationInfo: function(org_name) {
     var organization = {}
-    return fetch(`/org/${org_name}.json`).then((resp) => {
+    return fetch(`/org/${org_name}.json`, {credentials: "include"}).then((resp) => {
       return resp.text()
     }).then((data) => {
       organization = JSON.parse(data);
-      return fetch(`/org/${org_name}/info/member_users.json`)
+      return fetch(`/org/${org_name}/info/member_users.json`, {credentials: "include"})
     }).then((resp) => {
       return resp.text()
     }).then((data) => {
       organization["members"] = JSON.parse(data)
-      return fetch(`/org/${org_name}/info/subscriber_users.json`)
+      return fetch(`/org/${org_name}/info/subscriber_users.json`, {credentials: "include"})
     }).then((resp) => {
       return resp.text()
     }).then((data) => {
       organization["subscribers"] = JSON.parse(data)
-      return fetch(`/org/${org_name}/info/member_request_users.json`)
+      return fetch(`/org/${org_name}/info/member_request_users.json`, {credentials: "include"})
     }).then((resp) => {
       return resp.text()
     }).then((data) => {
@@ -63,7 +63,7 @@ module.exports = {
     })
 
     return Promise.all(urls.map((url) => {
-      return fetch(url).then((resp) => {
+      return fetch(url, {credentials: "include"}).then((resp) => {
         return resp.text()
       }).then((data) => {
         return JSON.parse(data)
@@ -72,7 +72,7 @@ module.exports = {
   },
   getOrgNotes: function(org_name) {
     var notes = []
-    return fetch("/org/" + gon.organization_name + "/info/notes.json").then((resp) => {
+    return fetch("/org/" + gon.organization_name + "/info/notes.json", {credentials: "include"}).then((resp) => {
       return resp.text();
     }).then((data) => {
       notes = JSON.parse(data)
@@ -86,7 +86,7 @@ module.exports = {
   },
   getUserNotes: function(user_id) {
     var notes = []
-    return fetch("/users/" + user_id + "/info/notes.json").then((resp) => {
+    return fetch("/users/" + user_id + "/info/notes.json", {credentials: "include"}).then((resp) => {
       return resp.text();
     }).then((data) => {
       notes = JSON.parse(data)
@@ -99,7 +99,7 @@ module.exports = {
   },
   getUserStarNotes: function(user_id) {
     var star_notes = []
-    return fetch("/users/" + user_id + "/info/star_notes.json").then((resp) => {
+    return fetch("/users/" + user_id + "/info/star_notes.json", {credentials: "include"}).then((resp) => {
       return resp.text();
     }).then((data) => {
       star_notes = JSON.parse(data)
@@ -113,7 +113,7 @@ module.exports = {
   },
   getTimelineNotes: function(user_id) {
     var notes = []
-    return fetch("/users/" + gon.user_id + "/info/timeline.json").then((resp) => {
+    return fetch("/users/" + gon.user_id + "/info/timeline.json", {credentials: "include"}).then((resp) => {
       return resp.text();
     }).then((data) => {
       notes = JSON.parse(data)
