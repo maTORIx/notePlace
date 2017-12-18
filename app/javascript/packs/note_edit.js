@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
           method: "POST",
           credentials: 'same-origin',
           headers: {
-              'X-CSRF-Token': getCsrfToken()
+            'X-CSRF-Token': getCsrfToken()
           },
           body: formData
         }).then((resp) => {
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
           method: "PUT",
           credentials: 'same-origin',
           headers: {
-              'X-CSRF-Token': getCsrfToken()
+            'X-CSRF-Token': getCsrfToken()
           },
           body: formData
         }).then((resp) => {
