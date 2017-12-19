@@ -17,7 +17,7 @@ class NotesController < ApplicationController
     @note = Note.new
     if current_user  && [nil, "html"].include?(params[:format])
       gon.user_id = current_user.id
-      @allow_edit = Note.user_id = current_user.id
+      @allow_edit = @note.user_id == current_user.id
     end
   end
 
